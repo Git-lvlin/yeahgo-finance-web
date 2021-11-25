@@ -97,8 +97,8 @@ const Login = () => {
           <img src={logo} />
         </div>
         <div className={styles.title}>
-          约购运营中心
-          <div>全力以赴帮助广大商家营收</div>
+          约购财务系统
+          <div>全力以赴帮助公司营收</div>
         </div>
       </div>
       <ProForm
