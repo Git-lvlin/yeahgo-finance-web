@@ -11,26 +11,26 @@ import ProCard from '@ant-design/pro-card'
 import { Button } from 'antd'
 
 const FormSubmit = ({ data }) => {
-  console.log(data);
   const [isSubmit, setIsSubmit] = useState(false)
   return (
     <div style={{ textAlign: 'center' }}>
       {
         isSubmit ?
-          <Button
-            onClick={() => {
-              setIsSubmit(false)
-            }}
-          >
-            修改
+        <Button
+          onClick={() => {
+            setIsSubmit(false)
+          }}
+        >
+          修改
         </Button> :
-          <Button
-            type="primary"
-            onClick={() => {
-              setIsSubmit(true)
-            }}
-          >
-            提交审批
+        <Button
+          type="primary"
+          onClick={() => {
+            setIsSubmit(true)
+            data.submit()
+          }}
+        >
+          提交审批
         </Button>
       }
     </div>
@@ -70,7 +70,7 @@ const CostManagement = () => {
                 bordered
                 extra={action}
                 style={{
-                  marginBottom: 8,
+                  marginBottom: 8
                 }}
               >
                 {listDom}
@@ -81,21 +81,12 @@ const CostManagement = () => {
           <ProForm
             layout='horizontal'
             submitter={{
-              render: (_) => <FormSubmit data={_} />
+              render: ({form}) => <FormSubmit data={form} />
             }}
             onFinish={
               (v) => { console.log(v) }
             }
           >
-            <ProFormList
-              name="labels"
-              copyIconProps={false}
-              deleteIconProps={false}
-              creatorButtonProps={false}
-            initialValue={[
-              {value: '1', label: '1',id:1},
-            ]}
-            >
               <ProFormGroup>
                 <ProFormText
                   name="value"
@@ -108,6 +99,15 @@ const CostManagement = () => {
                   width="md"
                 />
               </ProFormGroup>
+              <ProFormList
+                name="labels"
+                copyIconProps={false}
+                // deleteIconProps={false}
+                // creatorButtonProps={false}
+                initialValue={[
+                  {value: '1', label: '1',id:1}
+                ]}
+              >
               <ProFormGroup>
                 <ProFormSelect
                   name="feeState"
@@ -155,7 +155,7 @@ const CostManagement = () => {
                 />
                 <ProFormText
                   name="id"
-                  label="付款方"
+                  label="id"
                   width="md"
                   hidden
                 />
