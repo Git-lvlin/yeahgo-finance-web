@@ -45,7 +45,7 @@ const config = {
           routes: [
             {
               path: '/',
-              redirect: '/channelManagement/channel-information',
+              redirect: '/channel-management/channel-information',
             },
             // {
             //   path: '/workplace',

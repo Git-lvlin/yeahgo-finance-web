@@ -13,6 +13,6 @@ export default defineConfig({
     babelOptions: {},
   },
   define: {
-    API_URL: 'https://operationapi-dev.yeahgo.com',
+    API_URL: 'http://financeapi-dev.yeahgo.com',
   },
 });

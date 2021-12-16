@@ -8,14 +8,21 @@
 export default {
   dev: {
     '/open/': {
-      target: 'https://operationapi-dev.yeahgo.com',
+      target: 'http://financeapi-dev.yeahgo.com',
       changeOrigin: true,
       pathRewrite: {
         '^': ''
       }
     },
     '/auth/': {
-      target: 'https://operationapi-dev.yeahgo.com',
+      target: 'http://financeapi-dev.yeahgo.com',
+      changeOrigin: true,
+      pathRewrite: {
+        '^': '',
+      }
+    },
+    '/fmis/': {
+      target: 'http://192.168.3.48:8009',
       changeOrigin: true,
       pathRewrite: {
         '^': '',

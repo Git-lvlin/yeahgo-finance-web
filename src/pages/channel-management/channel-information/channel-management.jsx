@@ -1,67 +1,55 @@
 import React from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
-import { Button } from 'antd'
+
+import { channel } from '@/services/channel-management'
 
 const ChannelInformation = () =>{
 
   const columns = [
     {
+      title: '渠道编号',
+      dataIndex: 'code',
+      align: 'center'
+    },
+    {
       title: '渠道名称',
-      dataIndex: '',
+      dataIndex: 'name',
+      hideInSearch: true,
       align: 'center'
     },
     {
       title: '渠道状态',
-      dataIndex: '',
+      dataIndex: 'status',
+      valueType: "select",
+      valueEnum: {
+        '1': '启用',
+        '-1': '停用'
+      },
       hideInSearch: true,
       align: 'center'
     },
     {
-      title: '接口名称',
-      dataIndex: '',
-      hideInSearch: true,
-      align: 'center'
-    },
-    {
-      title: '交易类型',
-      dataIndex: '',
+      title: '手续费费率',
+      dataIndex: 'serviceChargeRate',
       hideInSearch: true,
       align: 'center'
     },
     {
       title: '创建时间',
-      dataIndex: '',
-      valueType: 'dateRange',
-      align: 'center'
-    },
-    {
-      title: '渠道编号',
-      dataIndex: '',
+      dataIndex: 'createTime',
       hideInSearch: true,
       align: 'center'
-    },
-    {
-      title: '操作',
-      valueType: 'option',
-      render: ()=> (
-        <>
-          <a>编辑</a>
-          <a>详情</a>
-        </>
-      ),
-      align: 'center'
     }
-
   ]
 
   return (
     <PageContainer title={false}>
       <ProTable
-        rowKey=''
+        rowKey='code'
         columns={columns}
         params={{}}
-        request={''}
+        request={channel}
         pagination={{
           showQuickJumper: true,
           pageSize: 10
@@ -69,9 +57,6 @@ const ChannelInformation = () =>{
         toolbar={{
           settings: false
         }}
-        toolBarRender={()=>(
-          <Button type='primary'>新增客户</Button>
-        )}
       />
     </PageContainer>
   )

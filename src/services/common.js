@@ -23,3 +23,55 @@ export const detailExt = (params, options = {}) => {
     ...options
   });
 }
+
+// 业务模式
+export const tradeModeList = async (params = {}, options = {}) => {
+  const res = await request('/fmis/tradeMode/list', {
+    method: 'POST',
+    data: params,
+    ...options
+  })
+  return {
+    data: res?.data,
+    success: res?.success
+  }
+}
+
+// 分账角色
+export const roleList = async (params = {}, options = {}) => {
+  const res = await request('/fmis/role/list', {
+    method: 'POST',
+    data: params,
+    ...options
+  })
+  return {
+    data: res?.data,
+    success: res?.success
+  }
+}
+
+// 公式列表
+export const formulaList = async (params = {}, options = {}) => {
+  const res = await request('/fmis/formula/list', {
+    method: 'POST',
+    data: params,
+    ...options
+  })
+  return {
+    data: res?.data,
+    success: res?.success
+  }
+}
+
+// 规则条件
+export const ruleCondList = async (params = {}, options = {}) => {
+  const res = await request('/fmis/ruleCond/list', {
+    method: 'POST',
+    data: params,
+    ...options
+  })
+  return {
+    data: res?.data,
+    success: res?.success
+  }
+}

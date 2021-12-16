@@ -3,14 +3,9 @@ export default {
   name: 'billing-center',
   routes: [
     {
-      name: 'account-management',
-      path: '/billing-center/account-management',
-      component: './billing-center/account-management',
-    },
-    {
-      name: 'cost-management',
-      path: '/billing-center/cost-management',
-      component: './billing-center/cost-management',
+      name: 'costs-set',
+      path: '/billing-center/costs-set',
+      component: './billing-center/costs-set',
     },
     {
       name: 'set-formula',

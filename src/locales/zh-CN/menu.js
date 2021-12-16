@@ -21,12 +21,11 @@ export default {
   'menu.channel-management' : '渠道管理',
   'menu.channel-management.channel-information' : '渠道信息',
 
+  'menu.billing-center' : '计费中心',
+  'menu.billing-center.costs-set' : '费用设定',
+  'menu.billing-center.set-formula' : '计费公式',
+
   'menu.trading-center' : '交易中心',
   'menu.trading-center.deal-flow' : '交易流水',
-
-  'menu.billing-center' : '计费中心',
-  'menu.billing-center.account-management' : '计费管理',
-  'menu.billing-center.cost-management' : '费用管理',
-  'menu.billing-center.set-formula' : '公式设定',
 
 };
