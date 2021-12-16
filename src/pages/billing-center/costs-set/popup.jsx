@@ -42,12 +42,12 @@ const Popup = ({ show, setShow }) => {
   const [editableKeys, setEditableRowKeys] = useState()
   const [rulesList, setRulesList] = useState([
     {
-      aa:{
+      aa: {
 
       },
-      table:[]
+      table: []
     }
-    
+
   ])
   const [list, setList] = useState([])
   const [role, setRole] = useState([])
@@ -295,82 +295,81 @@ const Popup = ({ show, setShow }) => {
       <Typography>
         <Title level={4}>费用规则</Title>
         <Divider />
-        <div onClick={()=>{
+        <div onClick={() => {
           const arr = JSON.parse(JSON.stringify(rulesList))
-          arr.push([{id:arr.length}])
+          arr.push({ id: arr.length })
           setRulesList(arr)
         }}>
           添加一块
         </div>
         {
-          rulesList&&
-          rulesList?.map((item, index)=>(
+          rulesList &&
+          rulesList?.map((item, index) => (
             <div key={index}>
-            <ProForm
-              initialValues={item}
-              layout='horizontal'
-              // onFinish={
-              //   // (v) => { console.log(v) }
-              // }
-              onValuesChange={(e,c)=>{console.log(c);}}
+              <ProForm
+                initialValues={item}
+                layout='horizontal'
+                // onFinish={
+                //   // (v) => { console.log(v) }
+                // }
+                onValuesChange={(e, c) => { console.log(c); }}
               // proFieldProps={}
-            >
-              <ProForm.Group>
-                <ProFormText
-                  label='规则名称'
-                  name='name'
-                  width='sm'
-                />
-                <ProFormSelect
-                  label='计提公式'
-                  name='formulaId'
-                  width='sm'
-                  options={formula}
-                />
-              </ProForm.Group>
-             
-            </ProForm>
-             <EditableProTable
-              rowKey="id"
-              // name='table'
-              recordCreatorProps={{
-                creatorButtonText: '添加条件',
-                // record: (index) => ({ id: Date.now() }),
-                style: {
-                  width: 120,
-                  marginTop: 20,
-                  position: 'absolute',
-                  top: -60,
-                  left: 25
-                },
-              }}
-              style={{
-                width: 750,
-                marginTop: 50
-              }}
-              actionRef={actionRef}
-              value={item.table}
-              onChange={(e, r)=>{
-                console.log(r);
+              >
+                <ProForm.Group>
+                  <ProFormText
+                    label='规则名称'
+                    name='name'
+                    width='sm'
+                  />
+                  <ProFormSelect
+                    label='计提公式'
+                    name='formulaId'
+                    width='sm'
+                    options={formula}
+                  />
+                </ProForm.Group>
+
+              </ProForm>
+              <EditableProTable
+                rowKey="id"
+                // name='table'
+                recordCreatorProps={{
+                  newRecordType: 'dataSource',
+                  creatorButtonText: '添加条件',
+                  record: () => ({ id: Date.now() }),
+                  style: {
+                    width: 120,
+                    marginTop: 20,
+                    position: 'absolute',
+                    top: -60,
+                    left: 25
+                  },
+                }}
+                style={{
+                  width: 750,
+                  marginTop: 50
+                }}
+                actionRef={actionRef}
+                value={item.table}
+                // onChange={(e, r)=>{
+                // console.log(r);
                 // const xxx  = JSON.parse(JSON.stringify(rulesList))
                 // xxx[index].table = r
                 // setRulesList(xxx)
-              }}
-              columns={columns}
-              editable={{
-                type: 'multiple',
-                editableKeys,
-                onChange: setEditableRowKeys,
-                // onValuesChange:(e,r)=>{
-                //   console.log(r);
-                //   const xxx  = JSON.parse(JSON.stringify(rulesList))
-                //   xxx[index].table = r
-
-                //   console.log('xxx', xxx)
-                //   setRulesList(xxx);
-                // }
-              }}
-            />
+                // }}
+                // controlled
+                columns={columns}
+                editable={{
+                  type: 'multiple',
+                  editableKeys,
+                  onChange: setEditableRowKeys,
+                  onValuesChange: (e, r) => {
+                    const xxx = JSON.parse(JSON.stringify(rulesList))
+                    xxx[index].table = r
+                    setRulesList(xxx);
+                  }
+                }}
+              />
             </div>
           ))
         }
