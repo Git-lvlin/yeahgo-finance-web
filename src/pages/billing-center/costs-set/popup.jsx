@@ -30,25 +30,13 @@ import {
 
 const { Title, Paragraph } = Typography
 
-const defaultData = [
-  // {id: 1, matchKey: 1, symbol: 2, value: 3, maxValue: 4}
-]
+const defaultData = [{}]
 
 const Popup = ({ show, setShow }) => {
   const [flag, setFlag] = useState(true)
   const [status, setStatus] = useState(false)
   const [ruleCond, setRuleCond] = useState([])
-  // const [dataSource, setDataSource] = useState([])
-  const [editableKeys, setEditableRowKeys] = useState()
-  const [rulesList, setRulesList] = useState([
-    {
-      aa:{
-
-      },
-      table:[]
-    }
-    
-  ])
+  const [editableKeys, setEditableRowKeys] = useState(defaultData.map((item) => item.id),)
   const [list, setList] = useState([])
   const [role, setRole] = useState([])
   const [formula, setFormula] = useState([])
@@ -57,19 +45,6 @@ const Popup = ({ show, setShow }) => {
   const actionRef = useRef(null)
   const formRef = useRef(null)
   const data = tradeModeId ? tradeModeId : list?.[0]?.value
-
-  // const arr = [{
-  //   a:{
-
-  //   },
-  //   b:[]
-  // }]
-
-  // setArr 
-
-  // index
-
-  // setArr(arr[index].a)
 
   useEffect(() => {
     tradeModeList({}).then(res => {
@@ -118,7 +93,6 @@ const Popup = ({ show, setShow }) => {
     ruleCondList().then(res => {
       if (res?.data?.assignType === 2) {
         setStatus(true)
-
       } else {
         setStatus(false)
         setRuleCond(res?.data?.map(item => (
@@ -295,7 +269,7 @@ const Popup = ({ show, setShow }) => {
       <Typography>
         <Title level={4}>费用规则</Title>
         <Divider />
-        <div onClick={()=>{
+        {/* <div onClick={()=>{
           const arr = JSON.parse(JSON.stringify(rulesList))
           arr.push([{id:arr.length}])
           setRulesList(arr)
@@ -335,7 +309,7 @@ const Popup = ({ show, setShow }) => {
               // name='table'
               recordCreatorProps={{
                 creatorButtonText: '添加条件',
-                // record: (index) => ({ id: Date.now() }),
+                record: (index) => ({ id: Date.now() }),
                 style: {
                   width: 120,
                   marginTop: 20,
@@ -349,13 +323,8 @@ const Popup = ({ show, setShow }) => {
                 marginTop: 50
               }}
               actionRef={actionRef}
-              value={item.table}
-              onChange={(e, r)=>{
-                console.log(r);
-                // const xxx  = JSON.parse(JSON.stringify(rulesList))
-                // xxx[index].table = r
-                // setRulesList(xxx)
-              }}
+              value={rulesList.table}
+              // onChange={setRulesList}
               columns={columns}
               editable={{
                 type: 'multiple',
@@ -373,15 +342,9 @@ const Popup = ({ show, setShow }) => {
             />
             </div>
           ))
-        }
-        {/* <ProFormList
-          name='rule'
-          initialValue={[
-            {
-              name: '333',
-              formulaId: '333'
-            }
-          ]}
+        } */}
+        <ProFormList
+          name='rules'
           formRef={formRef}
           copyIconProps={false}
           itemRender={({ listDom, action }) => {
@@ -400,7 +363,7 @@ const Popup = ({ show, setShow }) => {
             )
           }}
         >
-          <ProFormGroup>
+          {/* <ProForm.Group>
             <ProFormText
               label='规则名称'
               name='name'
@@ -412,19 +375,20 @@ const Popup = ({ show, setShow }) => {
               width='sm'
               options={formula}
             />
-          </ProFormGroup>
+          </ProForm.Group> */}
           <ProForm.Item
-            name='table'
+            label="数组数据"
+            name="dataSource"
+            initialValue={defaultData}
+            trigger="onValuesChange"
             // initialValue={defaultData}
           >
             <EditableProTable
               rowKey="id"
               recordCreatorProps={{
-                newRecordType: 'table',
+                newRecordType: 'dataSource',
                 creatorButtonText: '添加条件',
-                record: () => {
-                  return { id: Date.now() }
-                },
+                record: () => ({ id: Date.now() }),
                 style: {
                   width: 120,
                   marginTop: 20,
@@ -445,7 +409,7 @@ const Popup = ({ show, setShow }) => {
               }}
             />
           </ProForm.Item>
-        </ProFormList> */}
+        </ProFormList>
       </Typography>
     </DrawerForm>
   )
