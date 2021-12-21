@@ -1,24 +1,28 @@
 import React, {
   useState,
-  useRef,
   useEffect
 } from 'react'
 import {
   Form,
   Typography,
-  Divider
+  Divider,
+  Tooltip,
+  message,
+  Spin,
+  Modal,
+  Radio,
+  Space,
+  Select
 } from 'antd'
 import ProForm, {
   DrawerForm,
   ProFormText,
   ProFormSelect,
-  ProFormCheckbox,
-  ProFormList,
-  ProFormGroup
+  ProFormCheckbox
 } from '@ant-design/pro-form'
 import ProCard from '@ant-design/pro-card'
 import { EditableProTable } from '@ant-design/pro-table'
-import { PlusOutlined } from '@ant-design/icons'
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons'
 
 import styles from './style.less'
 import {
@@ -27,30 +31,70 @@ import {
   formulaList,
   ruleCondList
 } from '@/services/common'
+import { feeItemAdd, feeItemUpdate } from '@/services/billing-center/costs-set'
 
 const { Title, Paragraph } = Typography
+const { Option } = Select
 
-const defaultData = [{}]
+const MSelect = ({
+  handleChange,
+  state
+}) => {
+  return (
+    <Select 
+      style={{ width: 120 }}
+      onChange={(e)=> handleChange(e, state)}
+      defaultValue='1'
+    >
+      <Option value="1">1</Option>
+      <Option value="2">2</Option>
+      <Option value="3">3</Option>
+      <Option value="4">4</Option>
+      <Option value="5">5</Option>
+      <Option value="6">6</Option>
+      <Option value="7">7</Option>
+    </Select>
+  )
+}
 
-const Popup = ({ show, setShow }) => {
+const Popup = ({ 
+  show,
+  setShow,
+  actionRef,
+  dataSource,
+  isEdit
+}) => {
   const [flag, setFlag] = useState(true)
+  const [symbol, setSymbol] = useState({})
   const [status, setStatus] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [ruleCond, setRuleCond] = useState([])
-  const [editableKeys, setEditableRowKeys] = useState(defaultData.map((item) => item.id),)
+  const [editableKeys, setEditableRowKeys] = useState()
   const [list, setList] = useState([])
   const [role, setRole] = useState([])
+  const [clear, setClear] = useState()
+  const [value, setValue] = useState([])
+  const [radioValue, setRadioValue] = useState(1)
+  const [selectData, setSelectData] = useState([])
   const [formula, setFormula] = useState([])
   const [tradeModeId, setTradeModeId] = useState(null)
+  const [showModal, setShowModal] = useState(false)
+  const [obj, setObj] = useState({})
+  const [selectObj, setSelectObj] = useState({})
+  const [rulesList, setRulesList] = useState([])
+
   const [form] = Form.useForm()
-  const actionRef = useRef(null)
-  const formRef = useRef(null)
   const data = tradeModeId ? tradeModeId : list?.[0]?.value
+  
 
   useEffect(() => {
+    setLoading(true)
     tradeModeList({}).then(res => {
       setList(res?.data?.map(item => (
         { label: item.name, value: item.id }
       )))
+    }).finally(()=>{
+      setLoading(false)
     })
     return () => {
       setList([])
@@ -91,25 +135,123 @@ const Popup = ({ show, setShow }) => {
 
   useEffect(() => {
     ruleCondList().then(res => {
-      if (res?.data?.assignType === 2) {
-        setStatus(true)
-      } else {
-        setStatus(false)
-        setRuleCond(res?.data?.map(item => (
-          { label: item.name, value: item.id }
-        )))
-      }
+      setSelectData(res.data)
+      setRuleCond(res.data?.map(item => (
+        {label: item.name, value: item.code}
+      )))
     })
   }, [])
+
+  useEffect(()=>{
+    if(dataSource){
+      form.setFieldsValue({
+        name: dataSource?.name,
+        tradeModeId: dataSource?.tradeModeId,
+        status: dataSource?.status,
+        recvRoleId: dataSource?.recvRoleId,
+        payRoleId: dataSource?.payRoleId,
+        serviceChargeRoleId: dataSource?.serviceChargeRoleId,
+        agentRecvRoleId: dataSource?.agentRecvRoleId,
+        isAgentRecv: dataSource?.isAgentRecv,
+        clearingType: dataSource?.clearingRuleDesc
+      })
+      setRulesList(dataSource?.rules?.map(item=>{
+        item?.conds?.forEach(res=> {
+          selectObj[res.id] = {name: res.configRuleCondName, id: res.configRuleCondId}
+        })
+        setSelectObj(selectObj)
+        return ({
+          formText: {ruleName: item.name, formulaId: item.formulaId},
+          table: item?.conds
+        })
+      }))
+    } else if(!isEdit){
+      setRulesList([
+        {formText: {}, table: []}
+      ])
+    }
+  }, [dataSource, list])
+
+  const formTransform = (rulesList) => {
+    if (!Array.isArray(rulesList)) {
+      return {}
+    }
+    let formulaName = []
+    const rules = []
+    rulesList?.forEach(item => {
+      const conds = []
+      formulaName = formula?.filter(res => item.formText?.formulaId === res.value)
+      item.table?.forEach(data =>{
+        conds.push({
+          id: data.id,
+          configRuleCondName: selectObj?.[data.id].name, 
+          configRuleCondId: selectObj?.[data.id].id,
+          matchKey: data.matchKey,
+          symbol: data.symbol,
+          value: data.value,
+          maxValue: data.maxValue
+        })
+      })
+      rules?.push({
+        name: item?.formText?.ruleName,
+        formulaId: item.formText?.formulaId,
+        formulaName: formulaName?.[0]?.label,
+        conds
+      })
+    })
+    return rules
+  }
+
+  const onChange = (e) => {
+    setRadioValue(e.target.value)
+  }
+
+  const handleChange = (e, state) => {
+    const clearType = JSON.parse(JSON.stringify(obj))
+    clearType[state] = e
+    setObj(clearType)
+    setClear(e)
+  }
+
+  const handleOk = () => {
+    const formObj = {
+      '1': '实时',
+      '2': 'T+' + (obj[radioValue] || '1'),
+      '3': 'D+' + (obj[radioValue] || '1'),
+      '4': '确认收货',
+      '5': '确认收货+' + (obj[radioValue] || '1')
+    }
+    form.setFieldsValue({
+      clearingType: formObj[radioValue]
+    })
+    setShowModal(false)
+  }
+
+  const cancel = () => {
+    setShowModal(false)
+  }
 
   const columns = [
     {
       title: '条件',
       dataIndex: 'matchKey',
       valueType: 'select',
-      valueEnum: {
-        0: '1',
-        1: '2'
+      fieldProps:(e, records)=> {
+        return {
+          allowClear: false,
+          onChange: (e, r)=>{
+            const arr = selectData?.find(item=>(item.name === r?.label))
+            selectObj[records.rowKey] = arr
+            setSelectObj(selectObj)
+            if(arr?.assignType === 2) {
+              setValue(arr.optionValueList)
+              setStatus(true)
+            } else {
+              setStatus(false)
+            }
+          },
+          options: ruleCond
+        }
       },
       align: 'center'
     },
@@ -118,11 +260,25 @@ const Popup = ({ show, setShow }) => {
       dataIndex: 'symbol',
       valueType: 'select',
       valueEnum: {
-        0: '>',
-        1: '<',
-        2: '>=',
-        3: '<=',
-        4: '=='
+        'between': '范围',
+        '>': '>',
+        '<': '<',
+        '>=': '>=',
+        '<=': '<=',
+        '==': '=='
+      },
+      fieldProps: (e, r)=> {
+        return {
+          onChange: (e) => {
+            if(e === 'between') {
+              symbol[r?.rowKey] = false
+              setSymbol(symbol)
+            } else {
+              symbol[r?.rowKey] = true
+              setSymbol(symbol)
+            }
+          }
+        }
       },
       align: 'center'
     },
@@ -130,13 +286,45 @@ const Popup = ({ show, setShow }) => {
       title: '值1',
       dataIndex: 'value',
       width: '20%',
-      align: 'center'
+      align: 'center',
+      hideInTable: status
+    },
+    {
+      title: '值1',
+      dataIndex: 'value',
+      width: '20%',
+      align: 'center',
+      valueType: 'select',
+      fieldProps: {
+        options: value
+      },
+      hideInTable: !status
     },
     {
       title: '值2',
       dataIndex: 'maxValue',
       width: '20%',
-      align: 'center'
+      align: 'center',
+      fieldProps: (e, r)=> {
+        return {
+          disabled: symbol[r.rowKey]
+        }
+      },
+      hideInTable: status
+    },
+    {
+      title: '值2',
+      dataIndex: 'maxValue',
+      width: '20%',
+      align: 'center',
+      valueType: 'select',
+      fieldProps:(e, r)=> {
+        return {
+          options: value,
+          disabled: symbol[r.rowKey]
+        }
+      },
+      hideInTable: !status
     },
     {
       title: '操作',
@@ -161,7 +349,34 @@ const Popup = ({ show, setShow }) => {
       visible={show}
       onVisibleChange={setShow}
       onFinish={async (e) => {
-        console.log(e)
+        const rules = formTransform(rulesList)
+        if(!isEdit) {
+          feeItemAdd({
+            ...e, 
+            clearingPeriodInterval: clear,
+            clearingType: radioValue,
+            status: 1,
+            rules
+          }).then(res=>{
+            if(res.success) {
+              actionRef.current.reload()
+              message.success('费用新建成功')
+            }
+          })
+        } else {
+          feeItemUpdate({
+            id: dataSource?.id,
+            ...e, 
+            clearingPeriodInterval: clear,
+            clearingType: radioValue,
+            rules
+          }).then(res=> {
+            if(res.success) {
+              actionRef.current.reload()
+              message.success('费用修改成功')
+            }
+          })
+        }
         return true
       }}
       layout='horizontal'
@@ -177,240 +392,248 @@ const Popup = ({ show, setShow }) => {
           resetText: '取消',
         },
       }}
-
     >
-      <Typography>
-        <Title level={4}>基本信息</Title>
-        <Divider />
-        <Paragraph>
-          <ProForm.Group>
-            <ProFormText
-              label='费用名称'
-              name='name'
-              width='sm'
-            />
-            <ProFormSelect
-              label='业务模式'
-              name='tradeModeId'
-              width='sm'
-              options={list}
-              allowClear={false}
-              proFieldProps={{
-                onChange: (e) => {
-                  setTradeModeId(e)
-                }
-              }}
-            />
-          </ProForm.Group>
-          <ProForm.Group>
-            <ProFormSelect
-              label='费用状态'
-              name='status'
-              width='sm'
-              options={[
-                {
-                  value: 0,
-                  label: '启用'
-                },
-                {
-                  value: 1,
-                  label: '停用'
-                }
-              ]}
-            />
-            <ProFormSelect
-              label='收款方'
-              name='recvRoleId'
-              width='sm'
-              options={role}
-            />
-          </ProForm.Group>
-          <ProForm.Group>
-            <ProFormSelect
-              label='付款方'
-              name='payRoleId'
-              width='sm'
-              labelCol={{ span: 5 }}
-              wrapperCol={{ span: 18 }}
-              options={role}
-            />
-            <ProFormSelect
-              label='手续费承担方'
-              name='serviceChargeRoleId'
-              width='sm'
-              labelCol={{ span: 9 }}
-              wrapperCol={{ span: 13 }}
-              options={role}
-            />
-          </ProForm.Group>
-          <ProForm.Group>
-            <ProFormSelect
-              label='代收方'
-              name='agentRecvRoleId'
-              width='sm'
-              disabled={flag}
-              options={role}
-            />
-            <ProFormCheckbox
-              name='isAgentRecv'
-              onChange={(e) => {
-                if (e.target.checked) {
-                  setFlag(false)
-                } else {
-                  setFlag(true)
-                }
-              }}
-            >
-              是否代收
-            </ProFormCheckbox>
-          </ProForm.Group>
-        </Paragraph>
-      </Typography>
-      <Typography>
-        <Title level={4}>费用规则</Title>
-        <Divider />
-        {/* <div onClick={()=>{
-          const arr = JSON.parse(JSON.stringify(rulesList))
-          arr.push([{id:arr.length}])
-          setRulesList(arr)
-        }}>
-          添加一块
-        </div>
-        {
-          rulesList&&
-          rulesList?.map((item, index)=>(
-            <div key={index}>
-            <ProForm
-              initialValues={item}
-              layout='horizontal'
-              // onFinish={
-              //   // (v) => { console.log(v) }
-              // }
-              onValuesChange={(e,c)=>{console.log(c);}}
-              // proFieldProps={}
-            >
-              <ProForm.Group>
-                <ProFormText
-                  label='规则名称'
-                  name='name'
-                  width='sm'
-                />
-                <ProFormSelect
-                  label='计提公式'
-                  name='formulaId'
-                  width='sm'
-                  options={formula}
-                />
-              </ProForm.Group>
-             
-            </ProForm>
-             <EditableProTable
-              rowKey="id"
-              // name='table'
-              recordCreatorProps={{
-                creatorButtonText: '添加条件',
-                record: (index) => ({ id: Date.now() }),
-                style: {
-                  width: 120,
-                  marginTop: 20,
-                  position: 'absolute',
-                  top: -60,
-                  left: 25
-                },
-              }}
-              style={{
-                width: 750,
-                marginTop: 50
-              }}
-              actionRef={actionRef}
-              value={rulesList.table}
-              // onChange={setRulesList}
-              columns={columns}
-              editable={{
-                type: 'multiple',
-                editableKeys,
-                onChange: setEditableRowKeys,
-                // onValuesChange:(e,r)=>{
-                //   console.log(r);
-                //   const xxx  = JSON.parse(JSON.stringify(rulesList))
-                //   xxx[index].table = r
-
-                //   console.log('xxx', xxx)
-                //   setRulesList(xxx);
-                // }
-              }}
-            />
-            </div>
-          ))
-        } */}
-        <ProFormList
-          name='rules'
-          formRef={formRef}
-          copyIconProps={false}
-          itemRender={({ listDom, action }) => {
-            return (
-              <ProCard
-                bordered
-                extra={action}
-                title={false}
-                style={{
-                  marginBottom: 8,
-                  width: 800
+      <Spin spinning={loading}>
+        <Typography>
+          <Title level={4}>基本信息</Title>
+          <Divider />
+          <Paragraph>
+            <ProForm.Group>
+              <ProFormText
+                label='费用名称'
+                name='name'
+                width='sm'
+              />
+              <ProFormSelect
+                label='业务模式'
+                name='tradeModeId'
+                width='sm'
+                options={list}
+                allowClear={false}
+                proFieldProps={{
+                  onChange: (e) => {
+                    setTradeModeId(e)
+                  }
+                }}
+              />
+            </ProForm.Group>
+            <ProForm.Group>
+              <ProFormSelect
+                label='收款方'
+                name='recvRoleId'
+                width='sm'
+                options={role}
+              />
+              <ProFormSelect
+                label='费用状态'
+                name='status'
+                width='sm'
+                options={[
+                  {
+                    value: 1,
+                    label: '启用'
+                  },
+                  {
+                    value: 2,
+                    label: '保存'
+                  }
+                ]}
+                hidden={!dataSource}
+              />
+            </ProForm.Group>
+            <ProForm.Group>
+              <ProFormSelect
+                label='付款方'
+                name='payRoleId'
+                width='sm'
+                labelCol={{ span: 5 }}
+                wrapperCol={{ span: 18 }}
+                options={role}
+              />
+              <ProFormSelect
+                label='手续费承担方'
+                name='serviceChargeRoleId'
+                width='sm'
+                labelCol={{ span: 9 }}
+                wrapperCol={{ span: 13 }}
+                options={role}
+              />
+            </ProForm.Group>
+            <ProForm.Group>
+              <ProFormSelect
+                label='代收方'
+                name='agentRecvRoleId'
+                width='sm'
+                disabled={flag}
+                options={role}
+              />
+              <ProFormCheckbox
+                name='isAgentRecv'
+                fieldProps={{
+                  onChange:(e) => {
+                    if (e.target.checked) {
+                      setFlag(false)
+                    } else {
+                      setFlag(true)
+                    }
+                  }
                 }}
               >
-                {listDom}
-              </ProCard>
-            )
-          }}
-        >
-          {/* <ProForm.Group>
+                是否代收
+              </ProFormCheckbox>
+            </ProForm.Group>
             <ProFormText
-              label='规则名称'
-              name='name'
+              label='结算周期'
+              name='clearingType'
               width='sm'
+              fieldProps={{
+                onClick: ()=> setShowModal(true)
+              }}
             />
-            <ProFormSelect
-              label='计提公式'
-              name='formulaId'
-              width='sm'
-              options={formula}
-            />
-          </ProForm.Group> */}
-          <ProForm.Item
-            label="数组数据"
-            name="dataSource"
-            initialValue={defaultData}
-            trigger="onValuesChange"
-            // initialValue={defaultData}
+          </Paragraph>
+        </Typography>
+        <Typography>
+          <Title level={4}>费用规则</Title>
+          <Divider />
+          <a
+            className={styles.addRules}
+            onClick={() => {
+              const arr = JSON.parse(JSON.stringify(rulesList))
+              arr.push({})
+              setRulesList(arr)
+            }}
           >
-            <EditableProTable
-              rowKey="id"
-              recordCreatorProps={{
-                newRecordType: 'dataSource',
-                creatorButtonText: '添加条件',
-                record: () => ({ id: Date.now() }),
-                style: {
-                  width: 120,
-                  marginTop: 20,
-                  position: 'absolute',
-                  top: -60,
-                  left: 25
-                },
-              }}
-              style={{
-                width: 750,
-                marginTop: 50
-              }}
-              actionRef={actionRef}
-              columns={columns}
-              editable={{
-                editableKeys,
-                onChange: setEditableRowKeys
-              }}
-            />
-          </ProForm.Item>
-        </ProFormList>
-      </Typography>
+            <PlusOutlined/>
+            添加计费规则
+          </a>
+          {
+            rulesList?.[0] &&
+            rulesList?.map((item, index) => (
+              <ProCard
+                bordered
+                key={index}
+                className={styles.rulesCard}
+              >
+                <span
+                  className={styles.delRules}
+                  onClick={()=>{
+                    const arr = JSON.parse(JSON.stringify(rulesList))
+                    arr.splice(index, 1)
+                    setRulesList(arr)
+                  }}
+                >
+                  <Tooltip title='删除该规则'>
+                    <DeleteOutlined />
+                  </Tooltip>
+                </span>
+                <ProForm
+                  initialValues={item.formText}
+                  layout='horizontal'
+                  onValuesChange={(e, r) => { 
+                    const data = JSON.parse(JSON.stringify(rulesList))
+                    data[index].formText = r
+                    setRulesList(data)
+                  }}
+                  submitter={false}
+                >
+                  <ProForm.Group>
+                    <ProFormText
+                      label='规则名称'
+                      name='ruleName'
+                      width='sm'
+                    />
+                    <ProFormSelect
+                      label='计提公式'
+                      name='formulaId'
+                      width='sm'
+                      options={formula}
+                    />
+                  </ProForm.Group>
+                </ProForm>
+                <EditableProTable
+                  rowKey="id"
+                  recordCreatorProps={{
+                    newRecordType: 'dataSource',
+                    creatorButtonText: '添加条件',
+                    record: () => ({ id: Date.now() }),
+                    style: {
+                      width: 120,
+                      marginTop: 20,
+                      position: 'absolute',
+                      top: -60,
+                      left: 25
+                    },
+                  }}
+                  style={{
+                    width: 750,
+                    marginTop: 50
+                  }}
+                  value={item.table}
+                  columns={columns}
+                  editable={{
+                    type: 'multiple',
+                    editableKeys,
+                    onChange: setEditableRowKeys,
+                    onValuesChange: (e, r) => {
+                      const data = JSON.parse(JSON.stringify(rulesList))
+                      data[index].table = r
+                      setRulesList(data)
+                    }
+                  }}
+                />
+              </ProCard>
+            ))
+          }
+        </Typography>
+      </Spin>
+      {
+        showModal&&
+        <Modal
+          visible={showModal}
+          onOk={handleOk}
+          onCancel={cancel}
+        >
+          <Radio.Group 
+            onChange={onChange}
+            value={radioValue}
+          >
+            <Space direction="vertical">
+              <Radio value={1}>实时</Radio>
+              <div style={{display: 'flex', alignItems: 'center'}}>
+                <Radio value={2}>
+                  T+
+                </Radio>
+                <MSelect
+                  handleChange={handleChange}
+                  state={2}
+                  initValue={1}
+                />
+              </div>
+              <div style={{display: 'flex', alignItems: 'center'}}>
+                <Radio value={3}>
+                  D+
+                </Radio>
+                <MSelect 
+                  handleChange={handleChange}
+                  state={3}
+                  initValue={1}
+                />
+              </div>
+              <Radio value={4}>确认收货</Radio>
+              <div style={{display: 'flex', alignItems: 'center'}}>
+                <Radio value={5}>
+                  确认收货+
+                </Radio>
+                <MSelect
+                  handleChange={handleChange}
+                  state={5}
+                  initValue={1}
+                />
+              </div>
+            </Space>
+          </Radio.Group>
+        </Modal>
+      }
     </DrawerForm>
   )
 }

@@ -25,7 +25,7 @@ export default {
   'menu.billing-center.costs-set' : '费用设定',
   'menu.billing-center.set-formula' : '计费公式',
 
-  'menu.trading-center' : '交易中心',
-  'menu.trading-center.deal-flow' : '交易流水',
+  'menu.trading-center': '交易中心',
+  'menu.trading-center.cost-detail': '交易明细'
 
 };

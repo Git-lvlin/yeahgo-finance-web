@@ -19,6 +19,19 @@ export const feeItemPage = async (params, options = {}) => {
   }
 }
 
+// 费用详细
+export const feeItemId = async (params = {}, options = {}) => {
+  const res = await request('/fmis/feeItem/id', {
+    method: 'POST',
+    data: params,
+    ...options
+  })
+  return {
+    data: res?.data,
+    success: res?.success
+  }
+}
+
 // 新增费用
 export const feeItemAdd = async (params = {}, options = {}) => {
   const res = await request('/fmis/feeItem/add', {

@@ -3,9 +3,9 @@ export default {
   name: 'trading-center',
   routes: [
     {
-      name: 'deal-flow',
-      path: '/trading-center/deal-flow',
-      component: './trading-center/deal-flow',
+      name: 'cost-detail',
+      path: '/trading-center/cost-detail',
+      component: './trading-center/cost-detail',
     }
   ]
 }

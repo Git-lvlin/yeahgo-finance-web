@@ -1,14 +1,40 @@
-import React, { useState } from 'react'
+import React, { 
+  useState,
+  useEffect,
+  useRef
+} from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
 import { Button } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 
 import Popup from './popup'
-import { feeItemPage } from '@/services/billing-center/costs-set'
+import { tradeModeList } from '@/services/common'
+import { feeItemPage, feeItemId } from '@/services/billing-center/costs-set'
 
 const CostsSet = () => {
   const [visible, setVisible ] = useState(false)
+  const [tradeList, setTradeList ] = useState([])
+  const [data, setData] = useState(null)
+  const [flag, setFlag] = useState(false)
+  const actionRef = useRef(null)
+
+  useEffect(() => {
+    tradeModeList().then(res=>{
+      setTradeList(res?.data?.map(item => (
+        { label: item.name, value: item.id }
+      )))
+    })
+    return () => {
+      setTradeList([])
+    }
+  }, [])
+
+  const getDetail = (id) => {
+    feeItemId({id}).then(res=> {
+      setData(res?.data)
+    })
+  }
 
   const columns = [
     {
@@ -20,10 +46,8 @@ const CostsSet = () => {
       title: '业务模式',
       dataIndex: 'tradeModeId',
       valueType: 'select',
-      valueEnum: {
-        1: '秒约',
-        2: '集约',
-        3: '1688'
+      fieldProps: {
+        options: tradeList
       },
       align: 'center'
     },
@@ -67,7 +91,11 @@ const CostsSet = () => {
       align: 'center',
       render: (_, records)=> {
         if(records.status === 1 || records.status === 1) {
-          return <a>修改</a>
+          return <a onClick={()=>{
+            setVisible(true)
+            getDetail(records?.id)
+            setFlag(true)
+          }}>修改</a>
         } else {
           return <span>修改</span>
         }
@@ -81,6 +109,7 @@ const CostsSet = () => {
         rowKey='name'
         request={feeItemPage}
         params={{}}
+        actionRef={actionRef}
         pagination={{
           showQuickJumper: true,
           pageSize: 10
@@ -94,7 +123,9 @@ const CostsSet = () => {
             type='primary'
             icon={<PlusOutlined />}
             onClick={()=>(
-              setVisible(true)
+              setVisible(true),
+              setData(null),
+              setFlag(false)
             )}
           >
             新建
@@ -103,7 +134,13 @@ const CostsSet = () => {
       />
       {
         visible&&
-        <Popup show={visible} setShow={setVisible}/>
+        <Popup 
+          show={visible}
+          setShow={setVisible}
+          actionRef={actionRef}
+          dataSource={data}
+          isEdit={flag}
+        />
       }
     </PageContainer>
   )

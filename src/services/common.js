@@ -75,3 +75,16 @@ export const ruleCondList = async (params = {}, options = {}) => {
     success: res?.success
   }
 }
+
+// 费用列表（不包含系统默认费用）
+export const feeItemList = async (params = {}, options = {}) => {
+  const res = await request('/fmis/feeItem/list', {
+    method: 'POST',
+    data: params,
+    ...options
+  })
+  return {
+    data: res?.data,
+    success: res?.success
+  }
+}
