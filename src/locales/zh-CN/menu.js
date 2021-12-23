@@ -26,6 +26,11 @@ export default {
   'menu.billing-center.set-formula' : '计费公式',
 
   'menu.trading-center': '交易中心',
-  'menu.trading-center.cost-detail': '交易明细'
+  'menu.trading-center.transaction-details': '交易明细',
+  'menu.trading-center.cost-detail': '费用明细',
+  'menu.trading-center.billing-details': '结算明细',
+
+  'menu.account-management': '账户管理',
+  'menu.account-management.account-detail': '账户管理',
 
 };

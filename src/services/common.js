@@ -88,3 +88,19 @@ export const feeItemList = async (params = {}, options = {}) => {
     success: res?.success
   }
 }
+
+// 订单类型
+export const orderTypes = async (params={}, options= {}) => {
+  const res = await request('/auth/jump/url', {
+    method: 'POST',
+    data: {
+      requestUrl: '/java-admin/financial/common/orderTypes',
+      ...params
+    },
+    ...options
+  })
+
+  return {
+    data: res.data.records
+  }
+}

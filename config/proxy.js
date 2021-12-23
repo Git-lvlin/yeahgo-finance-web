@@ -22,7 +22,7 @@ export default {
       }
     },
     '/fmis/': {
-      target: 'http://192.168.3.24:8080',
+      target: 'http://192.168.14.202:50036/',
       changeOrigin: true,
       pathRewrite: {
         '^': '',
