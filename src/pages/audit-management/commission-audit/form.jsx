@@ -161,7 +161,7 @@ export default (props) => {
                         label={ele.label}
                         readonly={true}
                         fieldProps={{
-                          value:ele.value
+                          value:ele.value,
                         }}
                     />
                     }
