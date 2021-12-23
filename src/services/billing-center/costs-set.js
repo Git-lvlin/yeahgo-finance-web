@@ -31,7 +31,7 @@ export const feeItemId = async (params = {}, options = {}) => {
     ...options
   })
   return {
-    data: res?.data,
+    data: res?.data?.records,
     success: res?.success
   }
 }
@@ -47,7 +47,7 @@ export const feeItemAdd = async (params = {}, options = {}) => {
     ...options
   })
   return {
-    data: res?.data,
+    data: res?.data?.records,
     success: res?.success
   }
 }
@@ -63,7 +63,7 @@ export const feeItemUpdate = async (params = {}, options = {}) => {
     ...options
   })
   return {
-    data: res?.data,
+    data: res?.data?.records,
     success: res?.success
   }
 }

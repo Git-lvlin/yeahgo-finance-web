@@ -51,7 +51,7 @@ export const roleList = async (params = {}, options = {}) => {
     ...options
   })
   return {
-    data: res?.data,
+    data: res?.data?.records,
     success: res?.success
   }
 }
@@ -67,7 +67,7 @@ export const formulaList = async (params = {}, options = {}) => {
     ...options
   })
   return {
-    data: res?.data,
+    data: res?.data?.records,
     success: res?.success
   }
 }
@@ -83,7 +83,7 @@ export const ruleCondList = async (params = {}, options = {}) => {
     ...options
   })
   return {
-    data: res?.data,
+    data: res?.data?.records,
     success: res?.success
   }
 }
@@ -99,7 +99,7 @@ export const feeItemList = async (params = {}, options = {}) => {
     ...options
   })
   return {
-    data: res?.data,
+    data: res?.data?.records,
     success: res?.success
   }
 }

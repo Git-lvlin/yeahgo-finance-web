@@ -31,7 +31,7 @@ export const accountDetail = async (params, options = {}) => {
     ...options
   })
   return {
-    data: res?.data,
+    data: res?.data?.records,
     success: res?.success
   }
 }
@@ -47,7 +47,7 @@ export const updateStatus = async (params, options = {}) => {
     ...options
   })
   return {
-    data: res?.data,
+    data: res?.data?.records,
     success: res?.success
   }
 }
