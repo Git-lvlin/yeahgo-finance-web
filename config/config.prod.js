@@ -2,6 +2,6 @@ import { defineConfig } from 'umi';
 
 export default defineConfig({
   define: {
-    API_URL: 'http://financeapi.yeahgo.com',
+    API_URL: 'https://financeapi.yeahgo.com',
   },
 });

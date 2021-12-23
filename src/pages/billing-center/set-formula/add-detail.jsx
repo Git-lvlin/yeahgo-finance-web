@@ -28,7 +28,7 @@ const AddDetail = ({
   const [selectData, setSelectData] = useState([])
   const [list, setList] = useState([])
   const [tradeMode, setTradeMode] = useState(undefined)
-  const areaInput = useRef(null)
+  const areaInput = useRef()
   const [form] = Form.useForm()
 
   useEffect(() => {
@@ -132,28 +132,7 @@ const AddDetail = ({
       </ProForm.Group>
       <ProForm.Group>
         <ProFormSelect
-          label='公式状态'
-          name='status'
-          width='sm'
-          rules={[
-            {
-              required: true,
-              message: '请选择公式状态'
-            }
-          ]}
-          options={[
-            {
-              value: 1,
-              label: '启用'
-            },
-            {
-              value: -1,
-              label: '禁用'
-            }
-          ]}
-        />
-        <ProFormSelect
-          label='公式设定'
+          label='变量选择'
           width='sm'
           name='set'
           allowClear={false}
@@ -181,6 +160,30 @@ const AddDetail = ({
           }}
           options={selectData}
         />
+        {
+          data&&
+          <ProFormSelect
+            label='公式状态'
+            name='status'
+            width='sm'
+            rules={[
+              {
+                required: true,
+                message: '请选择公式状态'
+              }
+            ]}
+            options={[
+              {
+                value: 1,
+                label: '启用'
+              },
+              {
+                value: -1,
+                label: '禁用'
+              }
+            ]}
+          />
+        }
       </ProForm.Group>
       <ProFormTextArea
         label='公式脚本'

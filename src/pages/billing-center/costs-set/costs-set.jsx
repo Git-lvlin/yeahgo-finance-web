@@ -13,14 +13,14 @@ import { tradeModeList } from '@/services/common'
 import { feeItemPage, feeItemId } from '@/services/billing-center/costs-set'
 
 const CostsSet = () => {
-  const [visible, setVisible ] = useState(false)
+  const [visible, setVisible] = useState(false)
   const [tradeList, setTradeList ] = useState([])
   const [data, setData] = useState(null)
   const [flag, setFlag] = useState(false)
   const actionRef = useRef(null)
 
   useEffect(() => {
-    tradeModeList().then(res=>{
+    tradeModeList({}).then(res=>{
       setTradeList(res?.data?.map(item => (
         { label: item.name, value: item.id }
       )))

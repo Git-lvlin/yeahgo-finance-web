@@ -35,7 +35,7 @@ export const tradeModeList = async (params = {}, options = {}) => {
     ...options
   })
   return {
-    data: res?.data,
+    data: res?.data?.records,
     success: res?.success
   }
 }
