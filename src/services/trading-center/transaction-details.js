@@ -3,9 +3,10 @@ import request from '@/utils/request'
 // 交易明细-分页
 export const tradePage = async (params, options = {}) => {
   const { createTime, pageSize, current, ...rest } = params
-  const res = await request('/fmis/trade/page', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
     data: {
+      requestUrl: '/java-admin/fmis/trade/page',
       page: current,
       size: pageSize,
       createTimeBegin: createTime?.[0],
@@ -23,9 +24,12 @@ export const tradePage = async (params, options = {}) => {
 
 // 交易明细-详情
 export const tradeDetail = async (params, options = {}) => {
-  const res = await request('/fmis/trade/detail', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
-    data: params,
+    data: {
+      requestUrl: '/java-admin/fmis/trade/detail',
+      ...params
+    },
     ...options
   })
   return {

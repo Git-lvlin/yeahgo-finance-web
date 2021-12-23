@@ -21,8 +21,8 @@ export default {
         '^': '',
       }
     },
-    '/fmis/': {
-      target: 'http://192.168.14.202:50036/',
+    '/java-admin/': {
+      target: 'http://financeapi-dev.yeahgo.com',
       changeOrigin: true,
       pathRewrite: {
         '^': '',

@@ -26,9 +26,12 @@ export const detailExt = (params, options = {}) => {
 
 // 业务模式
 export const tradeModeList = async (params = {}, options = {}) => {
-  const res = await request('/fmis/tradeMode/list', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
-    data: params,
+    data: {
+      requestUrl: '/java-admin/fmis/tradeMode/list',
+      ...params
+    },
     ...options
   })
   return {
@@ -39,9 +42,12 @@ export const tradeModeList = async (params = {}, options = {}) => {
 
 // 分账角色
 export const roleList = async (params = {}, options = {}) => {
-  const res = await request('/fmis/role/list', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
-    data: params,
+    data: {
+      requestUrl: '/java-admin/fmis/role/list',
+      ...params
+    },
     ...options
   })
   return {
@@ -52,9 +58,12 @@ export const roleList = async (params = {}, options = {}) => {
 
 // 公式列表
 export const formulaList = async (params = {}, options = {}) => {
-  const res = await request('/fmis/formula/list', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
-    data: params,
+    data: {
+      requestUrl: '/java-admin/fmis/formula/list',
+      ...params
+    },
     ...options
   })
   return {
@@ -65,9 +74,12 @@ export const formulaList = async (params = {}, options = {}) => {
 
 // 规则条件
 export const ruleCondList = async (params = {}, options = {}) => {
-  const res = await request('/fmis/ruleCond/list', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
-    data: params,
+    data: {
+      requestUrl: '/java-admin/fmis/ruleCond/list',
+      ...params
+    },
     ...options
   })
   return {
@@ -78,9 +90,12 @@ export const ruleCondList = async (params = {}, options = {}) => {
 
 // 费用列表（不包含系统默认费用）
 export const feeItemList = async (params = {}, options = {}) => {
-  const res = await request('/fmis/feeItem/list', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
-    data: params,
+    data: {
+      requestUrl: '/java-admin/fmis/feeItem/list',
+      ...params
+    },
     ...options
   })
   return {

@@ -3,9 +3,10 @@ import request from '@/utils/request'
 // 费用分页列表
 export const feeItemPage = async (params, options = {}) => {
   const { pageSize, current, ...rest } = params
-  const res = await request('/fmis/feeItem/page', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
     data: {
+      requestUrl: '/java-admin/fmis/feeItem/page',
       page: current,
       size: pageSize,
       ...rest
@@ -21,9 +22,12 @@ export const feeItemPage = async (params, options = {}) => {
 
 // 费用详细
 export const feeItemId = async (params = {}, options = {}) => {
-  const res = await request('/fmis/feeItem/id', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
-    data: params,
+    data: {
+      requestUrl: '/java-admin/fmis/feeItem/id',
+      ...params
+    },
     ...options
   })
   return {
@@ -34,9 +38,12 @@ export const feeItemId = async (params = {}, options = {}) => {
 
 // 新增费用
 export const feeItemAdd = async (params = {}, options = {}) => {
-  const res = await request('/fmis/feeItem/add', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
-    data: params,
+    data: {
+      requestUrl: '/java-admin/fmis/feeItem/add',
+      ...params
+    },
     ...options
   })
   return {
@@ -47,9 +54,12 @@ export const feeItemAdd = async (params = {}, options = {}) => {
 
 // 修改费用
 export const feeItemUpdate = async (params = {}, options = {}) => {
-  const res = await request('/fmis/feeItem/update', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
-    data: params,
+    data: {
+      requestUrl: '/java-admin/fmis/feeItem/update',
+      ...params
+    },
     ...options
   })
   return {

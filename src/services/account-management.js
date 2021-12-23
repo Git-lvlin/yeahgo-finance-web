@@ -3,9 +3,10 @@ import request from '@/utils/request'
 // 账户管理-分页
 export const accountPage = async (params, options = {}) => {
   const { pageSize, current, ...rest } = params
-  const res = await request('/fmis/account/page', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
     data: {
+      requestUrl: '/java-admin/fmis/account/page',
       page: current,
       size: pageSize,
       ...rest
@@ -21,9 +22,12 @@ export const accountPage = async (params, options = {}) => {
 
 // 账户管理-详情
 export const accountDetail = async (params, options = {}) => {
-  const res = await request('/fmis/account/detail', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
-    data: params,
+    data: {
+      requestUrl: '/java-admin/fmis/account/detail',
+      ...params
+    },
     ...options
   })
   return {
@@ -34,9 +38,12 @@ export const accountDetail = async (params, options = {}) => {
 
 // 账户管理-修改状态
 export const updateStatus = async (params, options = {}) => {
-  const res = await request('/fmis/account/updateStatus', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
-    data: params,
+    data: {
+      requestUrl: '/java-admin/fmis/account/updateStatus',
+      ...params
+    },
     ...options
   })
   return {
@@ -48,9 +55,10 @@ export const updateStatus = async (params, options = {}) => {
 // 账户管理-流水分页
 export const accountLogPage = async (params, options = {}) => {
   const { pageSize, current, ...rest } = params
-  const res = await request('/fmis/account/logPage', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
     data: {
+      requestUrl: '/java-admin/fmis/account/logPage',
       page: current,
       size: pageSize,
       ...rest
