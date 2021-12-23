@@ -21,12 +21,13 @@ export default {
         '^': '',
       }
     },
-    '/fmis/': {
-      target: 'http://192.168.3.24:8080',
+    '/java-admin/': {
+      target: 'http://financeapi-dev.yeahgo.com',
       changeOrigin: true,
       pathRewrite: {
         '^': '',
       },
     }
+
   },
 };

@@ -7,6 +7,7 @@ import setting from './routes/setting'
 import channelManagement from './routes/channel-management'
 import billingCenter from './routes/billing-center'
 import tradingCenter from './routes/trading-center'
+import auditManagement from './routes/audit-management' 
 
 
 const { REACT_APP_ENV } = process.env;
@@ -57,6 +58,7 @@ const config = {
             billingCenter,
             tradingCenter,
             setting,
+            auditManagement,
             {
               component: '404',
             },
