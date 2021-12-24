@@ -4,7 +4,6 @@ import ProForm, {
   DrawerForm,
   ProFormText,
 } from '@ant-design/pro-form';
-import Upload from '@/components/upload';
 import styles from './style.less'
 import { getFlowMain,updateFlowMain } from '@/services/audit-management/audit-configuration'
 import AssessingOfficer from './assessing-model'
@@ -40,17 +39,16 @@ export default (props) => {
   const [auditVisible,setAuditVisible]=useState()
   const [adminName,setAdminName]=useState()
   const [auditData, setAuditData] = useState(false)
-  const [userLevel,setUserLevel]=useState([])
   const [form] = Form.useForm()
   const [createName,setCreateName]=useState()
 
   const onsubmit = (values) => {
-    if(userLevel.length<0){
-      message.error('审批人不能为空/表单项不能为空')
-    }
+    // if(userLevel.length<0){
+    //   message.error('审批人不能为空/表单项不能为空')
+    // }
     const params={
       id:detailData?.id,
-      flowActionList:userLevel
+      flowActionList:auditMsg
     }
     updateFlowMain(params).then(res=>{
       if(res.code==0){
@@ -63,9 +61,16 @@ export default (props) => {
   useEffect(() => {
     if (detailData?.id) {
       getFlowMain({id:detailData?.id}).then(res=>{
-        setAuditMsg(res.data?.flowActionList)
+        const Arr=[]
+        res.data?.flowActionList.map(ele=>{
+          if(ele.actionType==2){
+            Arr.push({id:ele.id,auditors:ele.auditors,autoExecute:ele.autoExecute,name:ele.name})
+          }
+        })
+        console.log('Arr',Arr)
+        setAuditMsg(Arr)
         form.setFieldsValue({
-          ...res.data
+          flowActionList:Arr
         })
       })
       api.adminList({}).then(res=>{
@@ -84,9 +89,8 @@ export default (props) => {
 
   }, [form, detailData])
 
+  //添加
   const assessingData=(data)=>{
-    // console.log('data',data)
-    //状态回显
     const auditorId=data.userLevel.map(ele=>(
       {
         auditorId:`${ele}`,
@@ -98,29 +102,24 @@ export default (props) => {
     ))
     const arr2 = JSON.parse(JSON.stringify(auditMsg));
     const knowledge=arr2.map(ele=>{
-      if(ele.actionType==2&&ele.id==data.id){
+      if(ele.id==data.id){
         return {...ele,auditors:_.uniqWith([...ele.auditors,...auditorId], _.isEqual),autoExecute:data.autoExecute}
       }
       return ele
     })
     setAuditMsg(knowledge)
+  }
 
-
-    //添加
-    const brr=knowledge?.map(ele=>{
-      if(ele.actionType==2&&ele.id==data.id){
-        return [...ele.auditors]
+  //删除
+  const deleTag=(val,id)=>{
+    const arr2 = JSON.parse(JSON.stringify(auditMsg));
+    const knowledge=arr2.map(ele=>{
+      if(ele.id==id){
+        return {...ele,auditors:ele.auditors.filter(ele=>ele.auditorId!=val.auditorId)}
       }
+      return ele
     })
-    const arr=[]
-    arr.push({
-      id:data?.id,
-      autoExecute:data?.autoExecute,
-      auditors:brr.filter(ele=>{
-          return ele!=undefined
-      })[0]
-    })
-    setUserLevel([...userLevel,...arr])
+    setAuditMsg(knowledge)
   }
 
   return (
@@ -161,29 +160,25 @@ export default (props) => {
     >
       <div className={styles.member}>
         {
-          auditMsg&&auditMsg.map(ele=>{
-            if(ele.actionType==2){
-              return <div className={styles.members}>
+          auditMsg&&auditMsg.map((ele,index)=>{
+              return <div key={index} className={styles.members}>
                         <p>{ele.name} <span className={styles.countersign}>{{0:'或签',1:'会签'}[ele.autoExecute]}</span></p>
                         <div className={styles.memberMsg}>
-                        {/* <ProForm.Group> */}
                         <ProFormText 
                           width="md"
                           label="请选择审批人"
                           readonly={true}
                           labelCol={4}
                           fieldProps={{
-                            value:ele.auditors.map(item=>{
-                                return <Tag closable onClose={()=>{}}>{adminName&&adminName[item?.auditorId]}</Tag>
+                            value:ele.auditors.map((item,index)=>{
+                                return <Tag key={index} closable onClose={()=>deleTag(item,ele.id)}>{adminName&&adminName[item?.auditorId]}</Tag>
                               })
                           }}
-                          name="audit"
+                          name="flowActionList"
                         />
                         <a style={{float:'right',marginTop:'-50px'}} onClick={()=>{setAuditData(ele);setAuditVisible(true)}}>添加</a>
-                        {/* </ProForm.Group> */}
                         </div>
                       </div>
-            }
           })
         }
         
