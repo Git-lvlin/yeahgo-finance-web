@@ -31,13 +31,27 @@ const SetFormula = () => {
       dataIndex: 'status',
       align: 'center',
       valueType: 'select',
-      width: '20%',
+      width: '10%',
       valueEnum: {
         '1': '启用',
         '-1': '停用',
         '0': '审批中',
         '2': '保存'
       },
+      hideInSearch: true
+    },
+    {
+      title: '审核状态',
+      dataIndex: 'lastFlowStatus',
+      align: 'center',
+      valueType: 'select',
+      width: '10%',
+      valueEnum: {
+        '1': '审核中',
+        '2': '审核完成',
+        '-1': '驳回'
+      },
+      hideInSearch: true,
       hideInSearch: true
     },
     {
@@ -51,7 +65,7 @@ const SetFormula = () => {
       title: '操作',
       valueType: 'option',
       render: (_, records)=>{
-        if(records?.status === 0){
+        if(records.status === 0 && records.lastFlowStatus === 1 ){
           return <span>修改</span>
         } else {
           return (

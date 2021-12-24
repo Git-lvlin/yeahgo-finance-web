@@ -86,11 +86,23 @@ const CostsSet = () => {
       align: 'center'
     },
     {
+      title: '审核状态',
+      dataIndex: 'lastFlowStatus',
+      valueType: 'select',
+      valueEnum: {
+        '1': '审核中',
+        '2': '审核完成',
+        '-1': '驳回'
+      },
+      hideInSearch: true,
+      align: 'center'
+    },
+    {
       title: '操作',
       valueType: 'option',
       align: 'center',
       render: (_, records)=> {
-        if(records.status === 1 || records.status === 1) {
+        if(records.status !== 0 && records.lastFlowStatus !== 1) {
           return <a onClick={()=>{
             setVisible(true)
             getDetail(records?.id)
