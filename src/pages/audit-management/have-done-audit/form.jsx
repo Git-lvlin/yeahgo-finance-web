@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { message, Form,Space,Button,Modal,Steps} from 'antd';
+import { message, Form,Space,Button,Modal,Steps,Col,Row} from 'antd';
 import ProForm, {
   DrawerForm,
   ProFormText,
@@ -21,7 +21,7 @@ const { Step } = Steps;
 
 
 const formItemLayout = {
-  labelCol: { span: 3 },
+  labelCol: { span: 2 },
   wrapperCol: { span: 14 },
   layout: {
     labelCol: {
@@ -148,33 +148,42 @@ export default (props) => {
           readonly={true}
         />
       <h3 className={styles.head}>审批信息</h3>
+      <Row gutter={24} style={{marginLeft:'40px'}}>
       {
-        auditMsg&&auditMsg[0][0].form?.formFields?.map(ele=>{
+        auditMsg&&auditMsg[0][0].form?.formFields.map(ele=>{
+            return <Col span={12}>
+                      {
+                        ele?.compType==='input'&&
+                        <ProFormText 
+                          width="md"
+                          name={ele.name}
+                          label={ele.label}
+                          readonly={true}
+                          labelCol={3}
+                          fieldProps={{
+                            value:ele.value,
+                          }}
+                      />
+                      }
+                  </Col>
+        })
+      }
+       </Row> 
+      {
+        auditMsg&&auditMsg[0][0].form?.formFields.map(ele=>{
             return <>
                     {
-                      ele?.compType==='input'&&
-                      <ProFormText 
-                        width="md"
-                        name={ele?.name}
-                        label={ele?.label}
-                        readonly={true}
-                        fieldProps={{
-                          value:ele?.value
-                        }}
-                    />
+                        ele?.compType==='table'&&
+                        <ProTable
+                          rowKey="orderType"
+                          columns={JSON.parse(ele.value).header}
+                          options={false}
+                          bordered
+                          search={false}
+                          dataSource={JSON.parse(ele.value).data}
+                        />
                     }
-                    {
-                       ele?.compType==='table'&&
-                       <ProTable
-                        rowKey="orderType"
-                        columns={JSON.parse(ele?.value)?.header}
-                        options={false}
-                        bordered
-                        search={false}
-                        dataSource={JSON.parse(ele?.value)?.data}
-                      />
-                    }
-                   </>
+                </>
         })
       }
       <h3 className={styles.head}>节点信息</h3>

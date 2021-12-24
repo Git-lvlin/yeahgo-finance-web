@@ -70,7 +70,6 @@ export default () => {
     ]
 
     const filtrationData=(val)=>{
-        console.log('val',val)
         const data=[]
         val.map(ele=>{
             data.push({
@@ -81,14 +80,13 @@ export default () => {
                 submitTime:ele.flowInstanceResponse[0]?.submitTime
             })
         })
-        console.log('data',data)
        return data
     }
   
     return (
       <PageContainer title={false}>
         <ProTable
-          rowKey='name'
+          rowKey='id'
           request={myInstances}
           params={{}}
           actionRef={actionRef}

@@ -166,6 +166,7 @@ export default (props) => {
               return <div className={styles.members}>
                         <p>{ele.name} <span className={styles.countersign}>{{0:'或签',1:'会签'}[ele.autoExecute]}</span></p>
                         <div className={styles.memberMsg}>
+                        {/* <ProForm.Group> */}
                         <ProFormText 
                           width="md"
                           label="请选择审批人"
@@ -174,13 +175,12 @@ export default (props) => {
                           fieldProps={{
                             value:ele.auditors.map(item=>{
                                 return <Tag closable onClose={()=>{}}>{adminName&&adminName[item?.auditorId]}</Tag>
-                              }),
-                              addonAfter:<a onClick={()=>{setAuditData(ele);setAuditVisible(true)}}>添加</a>
+                              })
                           }}
                           name="audit"
-                          // rules={[{ required: true, message: '审批人不能为空/表单项不能为空' }]}
-                          // addonAfter={<a onClick={()=>{setAuditData(ele);setAuditVisible(true)}}>添加</a>}
                         />
+                        <a style={{float:'right',marginTop:'-50px'}} onClick={()=>{setAuditData(ele);setAuditVisible(true)}}>添加</a>
+                        {/* </ProForm.Group> */}
                         </div>
                       </div>
             }

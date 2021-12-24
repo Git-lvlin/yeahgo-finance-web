@@ -40,7 +40,7 @@ export default () => {
     return (
       <PageContainer title={false}>
         <ProTable
-          rowKey='name'
+          rowKey='id'
           request={flowMainList}
           params={{}}
           actionRef={actionRef}

@@ -114,7 +114,7 @@ export default () => {
     return (
       <PageContainer title={false}>
         <ProTable
-          rowKey='name'
+          rowKey='id'
           request={myInstances}
           params={{}}
           actionRef={actionRef}
