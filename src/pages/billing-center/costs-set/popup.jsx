@@ -12,7 +12,8 @@ import {
   Modal,
   Radio,
   Space,
-  Select
+  Select,
+  Input
 } from 'antd'
 import ProForm, {
   DrawerForm,
@@ -73,7 +74,7 @@ const Popup = ({
   const [list, setList] = useState([])
   const [role, setRole] = useState([])
   const [clear, setClear] = useState()
-  const [value, setValue] = useState([])
+  const [optionValueObj, setOptionValueObj] = useState({})
   const [radioValue, setRadioValue] = useState(1)
   const [selectData, setSelectData] = useState([])
   const [formula, setFormula] = useState([])
@@ -85,7 +86,6 @@ const Popup = ({
 
   const [form] = Form.useForm()
   const data = tradeModeId ? tradeModeId : list?.[0]?.value
-  
 
   useEffect(() => {
     setLoading(true)
@@ -231,6 +231,54 @@ const Popup = ({
     setShowModal(false)
   }
 
+  const submit = (rules, e) => {
+    if(!isEdit) {
+      return new Promise((resolve, reject)=>{
+        feeItemAdd({
+          ...e, 
+          clearingPeriodInterval: clear,
+          clearingType: radioValue,
+          status: 1,
+          rules,
+        },
+        { 
+          showSuccess: true,
+          showError: true,
+          noFilterParams: true,
+          paramsUndefinedToEmpty: true
+        }).then(res=>{
+          if(res.success) {
+            actionRef.current.reload()
+            resolve()
+          } else {
+            reject()
+          }
+        })
+      })
+    } else {
+      feeItemUpdate({
+        id: dataSource?.id,
+        ...e, 
+        clearingPeriodInterval: clear,
+        clearingType: radioValue,
+        rules
+      },
+      {
+        showSuccess: true,
+        showError: true,
+        noFilterParams: true,
+        paramsUndefinedToEmpty: true
+      }).then(res=> {
+        if(res.success) {
+          actionRef.current.reload()
+          resolve()
+        } else {
+          reject()
+        }
+      })
+    }
+  }
+
   const columns = [
     {
       title: '条件',
@@ -244,9 +292,12 @@ const Popup = ({
             selectObj[records.rowKey] = arr
             setSelectObj(selectObj)
             if(arr?.assignType === 2) {
-              setValue(arr.optionValueList)
+              optionValueObj[records.rowKey] = {data: arr?.optionValueList, status: true}
+              setOptionValueObj(optionValueObj)
               setStatus(true)
             } else {
+              optionValueObj[records.rowKey] = {data: null, status: false}
+              setOptionValueObj(optionValueObj)
               setStatus(false)
             }
           },
@@ -271,10 +322,10 @@ const Popup = ({
         return {
           onChange: (e) => {
             if(e === 'between') {
-              symbol[r?.rowKey] = false
+              symbol[r?.entity?.id] = false
               setSymbol(symbol)
             } else {
-              symbol[r?.rowKey] = true
+              symbol[r?.entity?.id] = true
               setSymbol(symbol)
             }
           }
@@ -287,44 +338,65 @@ const Popup = ({
       dataIndex: 'value',
       width: '20%',
       align: 'center',
-      hideInTable: status
-    },
-    {
-      title: '值1',
-      dataIndex: 'value',
-      width: '20%',
-      align: 'center',
-      valueType: 'select',
-      fieldProps: {
-        options: value
+      renderFormItem: (_, r) => {
+        if(optionValueObj[r?.recordKey]?.status) {
+          return (
+            <Select
+              options={optionValueObj[r?.recordKey]?.data}
+              allowClear
+              placeholder="请选择"
+            />
+          )
+        } else {
+          return (
+            <Input
+              placeholder="请输入"
+              allowClear
+              value={_}
+            />
+          )
+        }
       },
-      hideInTable: !status
+      render: (_, r) =>{
+        const obj = optionValueObj[r?.id]?.data?.find(item=> item.value === _)
+        if(optionValueObj[r?.id]?.status) {
+          return obj?.['label']
+        }
+        return _
+      }
     },
     {
       title: '值2',
       dataIndex: 'maxValue',
       width: '20%',
       align: 'center',
-      fieldProps: (e, r)=> {
-        return {
-          disabled: symbol[r.rowKey]
+      renderFormItem: (_, r) => {
+        if(optionValueObj[r?.recordKey]?.status) {
+          return (
+            <Select
+              options={optionValueObj[r?.recordKey]?.data}
+              placeholder="请选择"
+              allowClear
+              disabled={symbol[r.recordKey]}
+            />
+          )
+        } else {
+          return (
+            <Input
+              placeholder="请输入"
+              allowClear
+              disabled={symbol[r.recordKey]}
+            />
+          )
         }
       },
-      hideInTable: status
-    },
-    {
-      title: '值2',
-      dataIndex: 'maxValue',
-      width: '20%',
-      align: 'center',
-      valueType: 'select',
-      fieldProps:(e, r)=> {
-        return {
-          options: value,
-          disabled: symbol[r.rowKey]
+      render: (_, r) =>{
+        const obj = optionValueObj[r?.id]?.data?.find(item=> item.value === _)
+        if(optionValueObj[r?.id]?.status) {
+          return obj?.['label']
         }
-      },
-      hideInTable: !status
+        return _
+      }
     },
     {
       title: '操作',
@@ -350,33 +422,7 @@ const Popup = ({
       onVisibleChange={setShow}
       onFinish={async (e) => {
         const rules = formTransform(rulesList)
-        if(!isEdit) {
-          feeItemAdd({
-            ...e, 
-            clearingPeriodInterval: clear,
-            clearingType: radioValue,
-            status: 1,
-            rules
-          }).then(res=>{
-            if(res.success) {
-              actionRef.current.reload()
-              message.success('费用新建成功')
-            }
-          })
-        } else {
-          feeItemUpdate({
-            id: dataSource?.id,
-            ...e, 
-            clearingPeriodInterval: clear,
-            clearingType: radioValue,
-            rules
-          }).then(res=> {
-            if(res.success) {
-              actionRef.current.reload()
-              message.success('费用修改成功')
-            }
-          })
-        }
+        await submit(rules, e)
         return true
       }}
       layout='horizontal'
