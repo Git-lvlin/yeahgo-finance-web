@@ -38,24 +38,11 @@ const formItemLayout = {
 
 
 export default (props) => {
-  const { detailData, setVisible, onClose, visible,callback } = props;
+  const { detailData, setVisible, onClose, visible} = props;
   const formRef = useRef();
   const [auditMsg,setAuditMsg]=useState()
   const [adminName,setAdminName]=useState()
   const [form] = Form.useForm()
-
-  const onsubmit = (values) => {
-    const params={
-      auditFlag:values.auditFlag,
-      auditMemo:values.auditMemo
-    }
-    process(params).then(res=>{
-      if(res.code==0){
-        setVisible(false)
-        callback(true)
-      }
-    })
-  };
 
   useEffect(() => {
     if (detailData?.id) {
@@ -96,12 +83,11 @@ export default (props) => {
         }
       }}
       className={styles.audit_detail}
-      submitter={false}
-      onFinish={async (values) => {
-        await onsubmit(values);
-        // 不返回不会关闭弹框
-        // return true;
-      }}
+      submitter={{
+        render: (props, defaultDoms) => {
+            return [];
+        },
+        }}
       {...formItemLayout}
     >
       <h3 className={styles.head}>申请信息</h3>

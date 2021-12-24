@@ -141,7 +141,6 @@ export default () => {
         visible={visible}
         setVisible={setVisible}
         detailData={detailData}
-        callback={() => { actionRef.current.reload(); setDetailData(null) }}
         onClose={() => { actionRef.current.reload(); setDetailData(null) }}
         />}
       </PageContainer>

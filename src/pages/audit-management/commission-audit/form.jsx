@@ -243,7 +243,7 @@ export default (props) => {
               value: -1,
             },
           ]}
-          initialValue={2}
+          rules={[{ required: true, message: '请审核' }]}
         />
 
         <ProFormTextArea
@@ -251,6 +251,7 @@ export default (props) => {
           name="auditMemo"
           style={{ minHeight: 32, marginTop: 15 }}
           placeholder='请输入审核意见'
+          rules={[{ required: true, message: '请输入审核意见' }]}
           rows={4}
         />
     </DrawerForm>

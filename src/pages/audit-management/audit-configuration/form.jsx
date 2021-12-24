@@ -119,6 +119,7 @@ export default (props) => {
       }
       return ele
     })
+    console.log('knowledge',knowledge)
     setAuditMsg(knowledge)
   }
 
