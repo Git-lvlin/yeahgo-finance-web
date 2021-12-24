@@ -165,7 +165,11 @@ const Popup = ({
         })
         setSelectObj(selectObj)
         return ({
-          formText: {ruleName: item.name, formulaId: item.formulaId},
+          formText: {
+            ruleName: item.name, 
+            formulaId: item.formulaId,
+            formulaExpress: item.formulaExpress
+          },
           table: item?.conds
         })
       }))
