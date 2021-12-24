@@ -30,8 +30,8 @@ export default {
   'menu.trading-center.cost-detail': '费用明细',
   'menu.trading-center.billing-details': '结算明细',
 
-  'menu.check-center': '对账中心',
-  'menu.check-center.check-management': '对账管理',
+  'menu.check-management': '对账管理',
+  'menu.check-management.transaction-reconciliation': '交易对账',
 
   'menu.account-management': '账户管理',
   'menu.account-management.account-detail': '账户管理',

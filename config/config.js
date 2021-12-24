@@ -7,7 +7,7 @@ import setting from './routes/setting'
 import channelManagement from './routes/channel-management'
 import billingCenter from './routes/billing-center'
 import tradingCenter from './routes/trading-center'
-import checkCenter from './routes/check-center'
+import checkManagement from './routes/check-management'
 import accountManagement from './routes/account-management'
 
 const { REACT_APP_ENV } = process.env;
@@ -57,7 +57,7 @@ const config = {
             channelManagement,
             billingCenter,
             tradingCenter,
-            checkCenter,
+            checkManagement,
             accountManagement,
             setting,
             {

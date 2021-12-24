@@ -2,9 +2,9 @@ import React from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
 
-import { checkTradePage } from '@/services/check-center/check-management'
+import { checkTradePage } from '@/services/check-management/transaction-reconciliation'
 
-const CheckManagement = () => {
+const TransactionReconciliation = () => {
 
   const columns = [
     {
@@ -81,4 +81,4 @@ const CheckManagement = () => {
   )
 }
 
-export default CheckManagement
+export default TransactionReconciliation

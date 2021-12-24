@@ -79,7 +79,7 @@ const Popup = ({
   const [selectData, setSelectData] = useState([])
   const [formula, setFormula] = useState([])
   const [formulaExpress, setFormulaExpress] = useState([])
-  const [formulaId, setFormulaId] = useState(undefined)
+  const [formulaId, setFormulaId] = useState({})
   const [tradeModeId, setTradeModeId] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [obj, setObj] = useState({})
@@ -603,9 +603,10 @@ const Popup = ({
                       options={formula}
                       fieldProps={{
                         onChange: (e)=> {
-                          setFormulaId(e)
-                        }
-                      }}
+                          formulaId[index] = e
+                          setFormulaId(formulaId)
+                        }}
+                      }
                     />
                   </ProForm.Group>
                   <ProFormText
@@ -613,7 +614,7 @@ const Popup = ({
                     readonly
                     label='公式内容'
                     fieldProps={{
-                      value: formulaExpress?.find(item=> item.id === formulaId)?.express
+                      value: formulaExpress?.find(item=> item.id === formulaId[index])?.express
                     }}
                   />
                 </ProForm>
