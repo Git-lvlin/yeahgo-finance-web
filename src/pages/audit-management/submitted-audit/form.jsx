@@ -91,30 +91,46 @@ export default (props) => {
       {...formItemLayout}
     >
       <h3 className={styles.head}>申请信息</h3>
-        <ProFormText 
-          width="md"
-          name="id"
-          label="审批编号"
-          readonly={true}
-        />
-         <ProFormText 
-          width="md"
-          name="submitTime"
-          label="提交时间"
-          readonly={true}
-        />
-         <ProFormText 
-          width="md"
-          name="submitorName"
-          label="提交人"
-          readonly={true}
-        />
-         <ProFormText 
-          width="md"
-          name="name"
-          label="审批事项"
-          readonly={true}
-        />
+      <Row gutter={24} style={{marginLeft:'40px'}}>
+        <Col span={12}>
+          <ProFormText 
+            width="md"
+            name="id"
+            label="审批编号"
+            labelCol={3}
+            readonly={true}
+          />
+        </Col>
+        <Col span={12}>
+          <ProFormText 
+            width="md"
+            name="name"
+            label="工单类型"
+            labelCol={3}
+            readonly={true}
+          />
+        </Col>
+      </Row>
+      <Row gutter={24} style={{marginLeft:'40px'}}>
+        <Col span={12}>
+          <ProFormText 
+            width="md"
+            name="submitorName"
+            label="提交人"
+            labelCol={3}
+            readonly={true}
+          />
+        </Col>
+        <Col span={12}>
+          <ProFormText 
+            width="md"
+            name="submitTime"
+            label="提交时间"
+            labelCol={3}
+            readonly={true}
+          />
+        </Col>
+      </Row>
       <h3 className={styles.head}>审批信息</h3>
       <Row gutter={24} style={{marginLeft:'40px'}}>
       {
