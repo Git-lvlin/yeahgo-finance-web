@@ -43,9 +43,9 @@ export default (props) => {
   const [createName,setCreateName]=useState()
 
   const onsubmit = (values) => {
-    // if(userLevel.length<0){
-    //   message.error('审批人不能为空/表单项不能为空')
-    // }
+    if(auditMsg.length==0){
+      message.error('审批人不能为空/表单项不能为空')
+    }
     const params={
       id:detailData?.id,
       flowActionList:auditMsg
@@ -67,10 +67,9 @@ export default (props) => {
             Arr.push({id:ele.id,auditors:ele.auditors,autoExecute:ele.autoExecute,name:ele.name})
           }
         })
-        console.log('Arr',Arr)
         setAuditMsg(Arr)
         form.setFieldsValue({
-          flowActionList:Arr
+          auditMsg:Arr
         })
       })
       api.adminList({}).then(res=>{
@@ -112,7 +111,6 @@ export default (props) => {
 
   //删除
   const deleTag=(val,id)=>{
-    console.log('val',val)
     const arr2 = JSON.parse(JSON.stringify(auditMsg));
     const knowledge=arr2.map(ele=>{
       if(ele.id==id){
@@ -120,7 +118,6 @@ export default (props) => {
       }
       return ele
     })
-    console.log('knowledge',knowledge)
     setAuditMsg(knowledge)
   }
 
@@ -162,13 +159,13 @@ export default (props) => {
     >
       <div className={styles.member}>
         {
-          auditMsg&&auditMsg.map((ele,index)=>{
-              return <div key={index} className={styles.members}>
+          auditMsg&&auditMsg.map(ele=>{
+              return <div key={ele.id} className={styles.members}>
                         <p>{ele.name} <span className={styles.countersign}>{{0:'或签',1:'会签'}[ele.autoExecute]}</span></p>
                         <div className={styles.memberMsg}>
                         <ProFormText 
                           width="md"
-                          label="请选择审批人"
+                          label={<div ><span className={styles.asterisk}>*</span>请选择审批人</div>}
                           readonly={true}
                           labelCol={4}
                           fieldProps={{
@@ -176,7 +173,7 @@ export default (props) => {
                               return <Tag key={item?.auditorId} closable onClose={()=>deleTag(item,ele.id)}>{adminName&&adminName[item?.auditorId]}</Tag>
                             })
                           }}
-                          name="flowActionList"
+                          name="auditMsg"
                         />
                         <a style={{float:'right',marginTop:'-50px'}} onClick={()=>{setAuditData(ele);setAuditVisible(true)}}>添加</a>
                         </div>

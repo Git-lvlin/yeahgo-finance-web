@@ -95,7 +95,6 @@ export default () => {
     ]
 
     const filtrationData=(val)=>{
-      console.log('val',val)
       const data=[]
       val.map(ele=>{
           data.push({
@@ -107,7 +106,6 @@ export default () => {
               status:ele.status
           })
       })
-      console.log('data',data)
      return data
   }
   

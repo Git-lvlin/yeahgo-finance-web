@@ -8,7 +8,6 @@ import ProForm, {
   ProFormTextArea
 } from '@ant-design/pro-form';
 import Upload from '@/components/upload';
-import { history } from 'umi';
 import styles from './style.less'
 import { getInstance,process } from '@/services/audit-management/commission-audit'
 import moment from 'moment'
@@ -78,7 +77,6 @@ export default (props) => {
         res.data.map(ele=>{
           obj[ele.id]=ele.nickname
         })
-        console.log('obj',obj)
         setAdminName(obj)
       })
       
@@ -153,12 +151,12 @@ export default (props) => {
       <Row gutter={24} style={{marginLeft:'40px'}}>
       {
         auditMsg&&auditMsg[0][0].form?.formFields.map(ele=>{
-            return <Col span={12}>
+            return <Col span={12} key={ele.name}>
                       {
                         ele?.compType==='input'&&
                         <ProFormText 
                           width="md"
-                          name={ele.name}
+                          name={ele?.name}
                           label={ele.label}
                           readonly={true}
                           labelCol={3}
@@ -172,12 +170,11 @@ export default (props) => {
       }
        </Row> 
       {
-        auditMsg&&auditMsg[0][0].form?.formFields.map(ele=>{
-            return <>
+        auditMsg&&auditMsg[0][0].form?.formFields.map((ele)=>{
+            return <div key={ele?.name}>
                     {
                         ele?.compType==='table'&&
                         <ProTable
-                          rowKey="orderType"
                           columns={JSON.parse(ele.value).header}
                           options={false}
                           bordered
@@ -185,7 +182,7 @@ export default (props) => {
                           dataSource={JSON.parse(ele.value).data}
                         />
                     }
-                </>
+                </div>
         })
       }
       <h3 className={styles.head}>节点信息</h3>
@@ -197,16 +194,17 @@ export default (props) => {
         {
           auditMsg&&auditMsg?.map((ele,index)=>{
             if(index>0){
-              return <>
+              return <div key={index}>
               {
                 ele.map(item=>{
-                 return <Step 
+                 return <Step
+                         key={item?.submitUserId} 
                          title={"审批人 • "+{ 1: '已同意', '-1': '已驳回' }[item.status]} 
                          description={<p>{adminName&&adminName[item?.submitUserId]}<span style={{marginLeft:'50px'}}>{{ 1: '已同意', '-1': '已驳回' }[item.auditFlag]} </span> • {moment(item?.approvalTime).format('YYYY-MM-DD HH:mm:ss')}</p>} 
                        />
                })
               }
-             </>
+             </div>
             }
           })
         }

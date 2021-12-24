@@ -7,8 +7,6 @@ import ProForm, {
   ProFormSelect,
   ProFormTextArea
 } from '@ant-design/pro-form';
-import Upload from '@/components/upload';
-import { history } from 'umi';
 import styles from './style.less'
 import { getInstance,process } from '@/services/audit-management/commission-audit'
 import moment from 'moment'
@@ -119,7 +117,7 @@ export default (props) => {
       <Row gutter={24} style={{marginLeft:'40px'}}>
       {
         auditMsg&&auditMsg[0][0].form?.formFields.map(ele=>{
-            return <Col span={12}>
+            return <Col span={12} key={ele?.name}>
                       {
                         ele?.compType==='input'&&
                         <ProFormText 
@@ -139,7 +137,7 @@ export default (props) => {
        </Row> 
       {
         auditMsg&&auditMsg[0][0].form?.formFields.map(ele=>{
-            return <>
+            return <div key={ele?.name}>
                     {
                         ele?.compType==='table'&&
                         <ProTable
@@ -151,7 +149,7 @@ export default (props) => {
                           dataSource={JSON.parse(ele.value).data}
                         />
                     }
-                </>
+                </div>
         })
       }
       <h3 className={styles.head}>节点信息</h3>
@@ -167,6 +165,7 @@ export default (props) => {
               {
                 ele.map(item=>{
                  return <Step 
+                         key={item?.submitUserId}
                          title={"审批人 • "+{ 1: '已同意', '-1': '已驳回' }[item.status]} 
                          description={<p>{adminName&&adminName[item?.submitUserId]}<span style={{marginLeft:'50px'}}>{{ 1: '已同意', '-1': '已驳回' }[item.auditFlag]} </span> • {moment(item?.approvalTime).format('YYYY-MM-DD HH:mm:ss')}</p>} 
                        />
