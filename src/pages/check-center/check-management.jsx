@@ -2,19 +2,26 @@ import React from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
 
+import { checkTradePage } from '@/services/check-center/check-management'
+
 const CheckManagement = () => {
 
   const columns = [
     {
-      title: '交易流水',
+      dataIndex: 'id',
+      hideInSearch: true,
+      hideInTable: true
+    },
+    {
+      title: '业务单号',
       dataIndex: ''
     },
     {
-      title: '清算流水',
+      title: '支付单号',
       dataIndex: ''
     },
     {
-      title: '渠道订单号',
+      title: '渠道流水号',
       dataIndex: ''
     },
     {
@@ -22,7 +29,7 @@ const CheckManagement = () => {
       dataIndex: ''
     },
     {
-      title: '对账状态',
+      title: '交易渠道',
       dataIndex: ''
     },
     {
@@ -30,11 +37,7 @@ const CheckManagement = () => {
       dataIndex: ''
     },
     {
-      title: '渠道名称',
-      dataIndex: ''
-    },
-    {
-      title: '业务模式',
+      title: '支付金额',
       dataIndex: ''
     },
     {
@@ -46,17 +49,25 @@ const CheckManagement = () => {
       dataIndex: ''
     },
     {
-      title: '操作人',
+      title: '对账状态',
       dataIndex: ''
+    },
+    {
+      title: '处理说明',
+      dataIndex: ''
+    },
+    {
+      title: '操作',
+      valueType: 'option'
     },
   ]
 
   return (
     <PageContainer title={false}>
       <ProTable
-        rowKey=''
+        rowKey='id'
         columns={columns}
-        request={''}
+        request={checkTradePage}
         params={{}}
         pagination={{
           showQuickJumper: true,

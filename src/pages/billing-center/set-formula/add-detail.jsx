@@ -3,7 +3,13 @@ import React, {
   useRef,
   useEffect
 } from 'react'
-import { Form, message } from 'antd'
+import { 
+  Button,
+  Form,
+  message, 
+  Tag
+} from 'antd'
+import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons'
 import ProForm, {
   ModalForm,
   ProFormText,
@@ -14,7 +20,8 @@ import ProForm, {
 import { 
   formulaAdd,
   formulaUpdate,
-  feeItemAll
+  feeItemAll,
+  formulaCheck
 } from '@/services/billing-center/set-formula'
 import { tradeModeList } from '@/services/common'
 
@@ -28,6 +35,8 @@ const AddDetail = ({
   const [selectData, setSelectData] = useState([])
   const [list, setList] = useState([])
   const [tradeMode, setTradeMode] = useState(undefined)
+  const [flag, setFlag] = useState(false)
+  const [success, setSuccess] = useState(false)
   const areaInput = useRef()
   const [form] = Form.useForm()
 
@@ -69,6 +78,22 @@ const AddDetail = ({
       setSelectData([])
     }
   }, [data, tradeMode])
+
+  const checkFormula = () => {
+    formulaCheck({
+      express: form?.getFieldsValue()?.express
+    },
+    {
+      showError: false
+    }).then(res => {
+      setFlag(true)
+      if(res.success) {
+        setSuccess(true)
+      } else {
+        setSuccess(false)
+      }
+    })
+  }
 
   return (
     <ModalForm
@@ -202,6 +227,28 @@ const AddDetail = ({
           }
         }}
       />
+      <div style={{display: 'flex', justifyContent: 'space-between'}}>
+        <Button 
+          type='primary'
+          onClick={()=>{
+            checkFormula()
+          }}
+        >
+          校验公式
+        </Button>
+        {
+          flag&&
+          (
+            success?
+            <div>
+              <Tag icon={<CheckCircleOutlined />} color="success">通过</Tag>
+            </div>:
+            <div>
+              <Tag icon={<CloseCircleOutlined  />} color="error">失败</Tag>
+            </div>
+          )
+        }
+      </div>
     </ModalForm>
   )
 }

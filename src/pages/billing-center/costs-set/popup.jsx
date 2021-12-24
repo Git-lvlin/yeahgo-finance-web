@@ -78,6 +78,8 @@ const Popup = ({
   const [radioValue, setRadioValue] = useState(1)
   const [selectData, setSelectData] = useState([])
   const [formula, setFormula] = useState([])
+  const [formulaExpress, setFormulaExpress] = useState([])
+  const [formulaId, setFormulaId] = useState(undefined)
   const [tradeModeId, setTradeModeId] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [obj, setObj] = useState({})
@@ -124,12 +126,14 @@ const Popup = ({
     formulaList({
       tradeModeId: data
     }).then(res => {
+      setFormulaExpress(res.data)
       setFormula(res?.data?.map(item => (
         { label: item.name, value: item.id }
       )))
     })
     return () => {
       setFormula([])
+      setFormulaExpress([])
     }
   }, [tradeModeId])
 
@@ -593,8 +597,21 @@ const Popup = ({
                       name='formulaId'
                       width='sm'
                       options={formula}
+                      fieldProps={{
+                        onChange: (e)=> {
+                          setFormulaId(e)
+                        }
+                      }}
                     />
                   </ProForm.Group>
+                  <ProFormText
+                    name='formulaExpress'
+                    readonly
+                    label='公式内容'
+                    fieldProps={{
+                      value: formulaExpress?.find(item=> item.id === formulaId)?.express
+                    }}
+                  />
                 </ProForm>
                 <EditableProTable
                   rowKey="id"

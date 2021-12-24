@@ -67,3 +67,18 @@ export const feeItemAll = async (params, options = {}) => {
     success: res?.success
   }
 } 
+
+// 校验公式
+export const formulaCheck = async (params, options = {}) => {
+  const res = await request('/auth/jump/url', {
+    method: 'POST',
+    data: {
+      requestUrl: '/java-admin/fmis/formula/check',
+      ...params
+    },
+    ...options
+  })
+  return {
+    success: res?.success
+  }
+} 
