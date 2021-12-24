@@ -112,6 +112,7 @@ export default (props) => {
 
   //删除
   const deleTag=(val,id)=>{
+    console.log('val',val)
     const arr2 = JSON.parse(JSON.stringify(auditMsg));
     const knowledge=arr2.map(ele=>{
       if(ele.id==id){
@@ -172,8 +173,8 @@ export default (props) => {
                           labelCol={4}
                           fieldProps={{
                             value:ele.auditors.map((item,index)=>{
-                                return <Tag key={index} closable onClose={()=>deleTag(item,ele.id)}>{adminName&&adminName[item?.auditorId]}</Tag>
-                              })
+                              return <Tag key={item?.auditorId} closable onClose={()=>deleTag(item,ele.id)}>{adminName&&adminName[item?.auditorId]}</Tag>
+                            })
                           }}
                           name="flowActionList"
                         />
