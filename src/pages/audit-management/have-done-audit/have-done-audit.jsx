@@ -33,6 +33,12 @@ export default () => {
         align: 'center'
       },
       {
+        title: '工单标题',
+        dataIndex: 'title',
+        valueType: 'text',
+        align: 'center'
+      },
+      {
         title: '审批事项',
         dataIndex: 'name',
         align: 'center',
@@ -103,7 +109,8 @@ export default () => {
               name:ele.flowInstanceResponse[0]?.name,
               submitorName:ele.flowInstanceResponse[0]?.submitorName,
               submitTime:ele.flowInstanceResponse[0]?.submitTime,
-              status:ele.status
+              status:ele.status,
+              title:ele.flowInstanceResponse[0]?.title
           })
       })
      return data

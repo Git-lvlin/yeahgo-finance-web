@@ -165,7 +165,7 @@ export default (props) => {
                         <div className={styles.memberMsg}>
                         <ProFormText 
                           width="md"
-                          label={<div ><span className={styles.asterisk}>*</span>请选择审批人</div>}
+                          label={<div ><span className={styles.asterisk}>* </span>请选择审批人</div>}
                           readonly={true}
                           labelCol={4}
                           fieldProps={{

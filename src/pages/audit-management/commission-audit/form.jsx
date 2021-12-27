@@ -210,7 +210,7 @@ export default (props) => {
         {
           auditMsg&&auditMsg?.map((ele,index)=>{
             if(index>0){
-              return <div key={index}>
+              return <>
               {
                 ele.map(item=>{
                  return <Step
@@ -220,7 +220,7 @@ export default (props) => {
                        />
                })
               }
-             </div>
+             </>
             }
           })
         }

@@ -30,6 +30,12 @@ export default () => {
         align: 'center'
       },
       {
+        title: '工单标题',
+        dataIndex: 'title',
+        valueType: 'text',
+        align: 'center'
+      },
+      {
         title: '审批事项',
         dataIndex: 'name',
         align: 'center',
