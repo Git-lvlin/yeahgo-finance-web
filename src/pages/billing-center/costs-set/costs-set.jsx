@@ -151,6 +151,7 @@ const CostsSet = () => {
           setShow={setVisible}
           actionRef={actionRef}
           dataSource={data}
+          setData={setData}
           isEdit={flag}
         />
       }

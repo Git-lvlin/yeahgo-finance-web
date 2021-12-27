@@ -7,7 +7,6 @@ import {
   Typography,
   Divider,
   Tooltip,
-  message,
   Spin,
   Modal,
   Radio,
@@ -63,11 +62,11 @@ const Popup = ({
   setShow,
   actionRef,
   dataSource,
-  isEdit
+  isEdit,
+  setData
 }) => {
   const [flag, setFlag] = useState(true)
   const [symbol, setSymbol] = useState({})
-  const [status, setStatus] = useState(false)
   const [loading, setLoading] = useState(true)
   const [ruleCond, setRuleCond] = useState([])
   const [editableKeys, setEditableRowKeys] = useState()
@@ -159,7 +158,7 @@ const Popup = ({
         isAgentRecv: dataSource?.isAgentRecv,
         clearingType: dataSource?.clearingRuleDesc
       })
-      setRulesList(dataSource?.rules?.map(item=>{
+      setRulesList(dataSource.rules.map(item=>{
         item?.conds?.forEach(res=> {
           selectObj[res.id] = {name: res.configRuleCondName, id: res.configRuleCondId}
         })
@@ -178,7 +177,7 @@ const Popup = ({
         {formText: {}, table: []}
       ])
     }
-  }, [dataSource, list])
+  }, [dataSource])
 
   const formTransform = (rulesList) => {
     if (!Array.isArray(rulesList)) {
@@ -302,11 +301,9 @@ const Popup = ({
             if(arr?.assignType === 2) {
               optionValueObj[records.rowKey] = {data: arr?.optionValueList, status: true}
               setOptionValueObj(optionValueObj)
-              setStatus(true)
             } else {
               optionValueObj[records.rowKey] = {data: null, status: false}
               setOptionValueObj(optionValueObj)
-              setStatus(false)
             }
           },
           options: ruleCond
@@ -437,7 +434,10 @@ const Popup = ({
       form={form}
       drawerProps={{
         destroyOnClose: true,
-        closable: false
+        closable: false,
+        onClose: ()=>{
+          setData(null)
+        }
       }}
       width={900}
       submitter={{
