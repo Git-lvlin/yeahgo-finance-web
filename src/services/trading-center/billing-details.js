@@ -2,13 +2,15 @@ import request from '@/utils/request'
 
 // 结算明细-分页
 export const settlePage = async (params, options = {}) => {
-  const {  pageSize, current, ...rest } = params
+  const { settleTime, pageSize, current, ...rest } = params
   const res = await request('/auth/jump/url', {
     method: 'POST',
     data: {
       requestUrl: '/java-admin/fmis/settle/page',
       page: current,
       size: pageSize,
+      settleTimeBegin: settleTime?.[0],
+      settleTimeEnd: settleTime?.[1],
       ...rest
     },
     ...options

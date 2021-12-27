@@ -2,11 +2,13 @@ import request from '@/utils/request'
 
 // 账户管理-分页
 export const accountPage = async (params, options = {}) => {
-  const { pageSize, current, ...rest } = params
+  const { settleTime, pageSize, current, ...rest } = params
   const res = await request('/auth/jump/url', {
     method: 'POST',
     data: {
       requestUrl: '/java-admin/fmis/account/page',
+      settleTimeBegin: settleTime?.[0],
+      settleTimeEnd: settleTime?.[1],
       page: current,
       size: pageSize,
       ...rest

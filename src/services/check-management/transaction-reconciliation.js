@@ -2,11 +2,18 @@ import request from '@/utils/request'
 
 // 对账管理-交易对账-分页
 export const checkTradePage = async (params, options = {}) => {
+  const { checkTime, createTime, pageSize, current, ...rest } = params
   const res = await request('/auth/jump/url', {
     method: 'POST',
     data: {
       requestUrl: '/java-admin/fmis/check/tradePage',
-      ...params
+      page: current,
+      size: pageSize,
+      createTimeBegin: createTime?.[0],
+      createTimeEnd: createTime?.[1],
+      checkTimeBegin: checkTime?.[0],
+      checkTimeEnd: checkTime?.[1],
+      ...rest
     },
     ...options
   })

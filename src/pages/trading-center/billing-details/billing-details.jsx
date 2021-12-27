@@ -65,12 +65,21 @@ const BillingDetails = () => {
       title: '实际到账金额',
       dataIndex: 'realAmount',
       align: 'center',
-      render: (_)=> amountTransform(_, '/')
+      render: (_)=> amountTransform(_, '/'),
+      hideInSearch: true
     },
     {
       title: '结算时间',
       dataIndex: 'settleTime',
-      align: 'center'
+      align: 'center',
+      hideInSearch: true
+    },
+    {
+      title: '结算时间',
+      dataIndex: 'settleTime',
+      align: 'center',
+      valueType: 'dateRange',
+      hideInTable: true
     },
     {
       title: '结算状态',
@@ -86,7 +95,8 @@ const BillingDetails = () => {
     {
       title: '备注',
       dataIndex: 'memo',
-      align: 'center'
+      align: 'center',
+      hideInSearch: true
     },
     {
       title: '操作',
