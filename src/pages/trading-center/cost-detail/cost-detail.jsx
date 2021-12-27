@@ -25,7 +25,12 @@ const CostDetail = () => {
       hideInTable: true
     },
     {
-      title: '交易流水号',
+      title: '业务单号',
+      dataIndex: 'orderNo',
+      align: 'center'
+    },
+    {
+      title: '支付单号',
       dataIndex: 'payNo',
       align: 'center'
     },

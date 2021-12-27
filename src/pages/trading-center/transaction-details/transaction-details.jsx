@@ -23,12 +23,23 @@ const TransactionDetails = () => {
 
   const columns = [
     {
-      title: '订单号',
+      title: '交易类型',
+      dataIndex: 'tradeType',
+      valueType: 'select',
+      valueEnum: {
+        'order': '订单',
+        'deposit': '保证金',
+        'recharge': '充值'
+      },
+      align: 'center'
+    },
+    {
+      title: '业务单号',
       dataIndex: 'orderNo',
       align: 'center'
     },
     {
-      title: '交易流水号',
+      title: '支付单号',
       dataIndex: 'payNo',
       align: 'center'
     },
@@ -41,17 +52,6 @@ const TransactionDetails = () => {
       title: '付款方子账户',
       dataIndex: 'buyerSn',
       hideInSearch: true,
-      align: 'center'
-    },
-    {
-      title: '交易类型',
-      dataIndex: 'tradeType',
-      valueType: 'select',
-      valueEnum: {
-        'order': '订单',
-        'deposit': '保证金',
-        'recharge': '充值'
-      },
       align: 'center'
     },
     {
