@@ -215,7 +215,13 @@ const TransactionModal = ({
     {
       title: '结算状态',
       align: 'center',
-      dataIndex: 'settleStatus'
+      dataIndex: 'settleStatus',
+      valueType: 'select',
+      valueEnum: {
+        'unSettle': '未结算',
+        'settled': '已结算',
+        'partSettled': '部分结算'
+      }
     },
     {
       title: '代收方子账户',
