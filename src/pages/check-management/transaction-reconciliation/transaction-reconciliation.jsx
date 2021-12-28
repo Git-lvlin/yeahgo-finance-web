@@ -14,6 +14,8 @@ import TradeDetail from './trade-detail'
 const TransactionReconciliation = () => {
   const [id, setId] = useState()
   const [showPopup, setShowPopup] = useState(false)
+  const [flag, setFlag] = useState(false)
+  const [status, setStatus] = useState(false)
   const actionRef = useRef()
 
   const columns = [
@@ -24,7 +26,7 @@ const TransactionReconciliation = () => {
     },
     {
       title: '业务单号',
-      dataIndex: 'billNo',
+      dataIndex: 'orderNo',
       align: 'center'
     },
     {
@@ -165,20 +167,40 @@ const TransactionReconciliation = () => {
             </a>
           </span>
         )}
-        tableAlertOptionRender={({ selectedRowKeys, onCleanSelected }) => {
+        tableAlertOptionRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => {
+          const success = selectedRowKeys&&selectedRows.every(item=> item.checkStatus === "success")
+          const failure = selectedRowKeys&&selectedRows.every(item=> item.checkStatus === "failure")
+          if(selectedRowKeys[0]&&success) {
+            setFlag(false)
+          } else {
+            setFlag(true)
+          }
+          if(selectedRowKeys[0]&&failure) {
+            setStatus(false)
+          } else {
+            setStatus(true)
+          }
           return (
             <Space size={16}>
-              <a onClick={()=>{
-                checkStatus(selectedRowKeys, 'success', onCleanSelected)
-              }}>
-                置为成功
-              </a>
-              <a onClick={()=>{
-                onCleanSelected
-                checkStatus(selectedRowKeys, 'failure', onCleanSelected)
-              }}>
-                置为失败
-              </a>
+              {
+                flag?
+                <a onClick={()=>{
+                  checkStatus(selectedRowKeys, 'success', onCleanSelected)
+                }}>
+                  置为成功
+                </a>:
+                <span>置为成功</span>
+              }
+              {
+                status?
+                <a onClick={()=>{
+                  onCleanSelected
+                  checkStatus(selectedRowKeys, 'failure', onCleanSelected)
+                }}>
+                  置为失败
+                </a>:
+                <span>置为失败</span>
+              }
               <a onClick={()=>{
                 reconciliation(selectedRowKeys, onCleanSelected)
               }}>
