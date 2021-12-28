@@ -5,17 +5,31 @@ import React, {
 } from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
-import { Button, Space, Tag } from 'antd'
+import { 
+  Button, 
+  Space, 
+  Tag,
+  Popconfirm
+} from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { useParams } from 'umi'
+import { useParams, history } from 'umi'
 
 import Popup from './popup'
 import { tradeModeList } from '@/services/common'
-import { feeItemPage, feeItemId } from '@/services/billing-center/costs-set'
+import { 
+  feeItemPage,
+  feeItemId,
+  feeItemApproveSub
+} from '@/services/billing-center/costs-set'
+import styles from './style.less'
 
 const CostsSet = () => {
   const [visible, setVisible] = useState(false)
   const [tradeList, setTradeList ] = useState([])
+  const [undoPopup, setUndoPopup] = useState(false)
+  const [approvalPopup, setApprovalPopup] = useState(false)
+  const [undoLoading, setUndoLoading] = useState(false)
+  const [approvalLoading, setApprovalLoading] = useState(false)
   const [data, setData] = useState(null)
   const [flag, setFlag] = useState(false)
   const actionRef = useRef(null)
@@ -54,6 +68,61 @@ const CostsSet = () => {
       default: 
         return ''
     }
+  }
+
+  const goBack = () => {
+    history.goBack()
+  }
+
+  const undo = () => {
+    setUndoPopup(true)
+  }
+
+  const undoSubmit = () => {
+    // setUndoLoading(true)
+    setUndoPopup(false)
+    // feeItemApproveSub(
+    //   {
+    //     tradeModeId: id
+    //   },
+    //   {
+    //     showSuccess: true,
+    //     showError: true
+    //   }
+    // ).then(res=> {
+    //   if(res.success) {
+    //     setUndoLoading(false)
+    //     setUndoPopup(false)
+    //   }
+    // })
+  }
+
+  const undoCancel = () => {
+    setUndoPopup(false)
+  }
+
+  const approval = () => {
+    setApprovalPopup(true)
+  }
+
+  const approvalSubmit = () => {
+    setApprovalLoading(true)
+    feeItemApproveSub(
+      {
+        tradeModeId: id
+      },
+      {
+        showSuccess: true,
+        showError: true
+      }
+    ).finally(()=> {
+      setApprovalLoading(false)
+      setApprovalPopup(false)
+    })
+  }
+
+  const approvalCancel = () => {
+    setApprovalPopup(false)
   }
 
   const columns = [
@@ -145,18 +214,26 @@ const CostsSet = () => {
       valueType: 'option',
       align: 'center',
       render: (_, records)=> {
-        if(records.status !== 0 && records.lastFlowStatus !== 1) {
+        if(records.status !== 0 && records.flowStatus !== 1) {
           return (
-            <a onClick={()=>{
-              setVisible(true)
-              getDetail(records?.id)
-              setFlag(true)
-            }}>
-              修改
-            </a>
+            <Space>
+              <a onClick={()=>{
+                setVisible(true)
+                getDetail(records?.id)
+                setFlag(true)
+              }}>
+                修改
+              </a>
+              <a>删除</a>
+            </Space>
           )
         } else {
-          return <span>修改</span>
+          return (
+            <Space>
+              <span>修改</span>
+              <a>删除</a>
+            </Space>
+          )
         }
       }
     }
@@ -178,10 +255,35 @@ const CostsSet = () => {
         toolbar={{
           settings: false
         }}
-        toolBarRender={()=>(
+        toolBarRender={()=>[
+          <Popconfirm
+            title="确定要执行撤销操作吗？"
+            visible={undoPopup}
+            onConfirm={undoSubmit}
+            okButtonProps={{ loading: undoLoading }}
+            onCancel={undoCancel}
+            key='undo'
+          >
+            <Button onClick={undo}>
+              撤销
+            </Button>
+          </Popconfirm>,
+          <Popconfirm
+            title="确定要执行提审操作吗？"
+            visible={approvalPopup}
+            onConfirm={approvalSubmit}
+            okButtonProps={{ loading: approvalLoading }}
+            onCancel={approvalCancel}
+            key='approval'
+          >
+            <Button onClick={approval}>
+              提审
+            </Button>
+          </Popconfirm>,
           <Button
             type='primary'
             icon={<PlusOutlined />}
+            key='add'
             onClick={()=>(
               setVisible(true),
               setData(null),
@@ -190,7 +292,7 @@ const CostsSet = () => {
           >
             新建
           </Button>
-        )}
+        ]}
       />
       {
         visible&&
@@ -203,6 +305,9 @@ const CostsSet = () => {
           isEdit={flag}
         />
       }
+      <div className={styles.back}>
+        <Button type='primary' onClick={()=> {goBack()}}>返回</Button>
+      </div>
     </PageContainer>
   )
 }

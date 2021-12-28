@@ -86,3 +86,22 @@ export const feeItemTradeMode = async (params = {}, options = {}) => {
     success: res?.success
   }
 }
+
+// 费用提交审批
+export const feeItemApproveSub = async (params = {}, options = {}) => {
+  const { pageSize, current, ...rest } = params
+  const res = await request('/auth/jump/url', {
+    method: 'POST',
+    data: {
+      requestUrl: '/java-admin/fmis/feeItem/approve/sub',
+      page: pageSize,
+      size: current,
+      ...rest
+    },
+    ...options
+  })
+  return {
+    data: res?.data?.records,
+    success: res?.success
+  }
+}
