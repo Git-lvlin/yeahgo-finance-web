@@ -23,6 +23,7 @@ export default {
 
   'menu.billing-center' : '计费中心',
   'menu.billing-center.costs-set' : '费用设定',
+  'menu.billing-center.cost-details' : '费用明细',
   'menu.billing-center.set-formula' : '计费公式',
 
   'menu.trading-center': '交易中心',

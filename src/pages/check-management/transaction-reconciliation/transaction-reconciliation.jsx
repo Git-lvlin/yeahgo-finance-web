@@ -150,6 +150,19 @@ const TransactionReconciliation = () => {
     
   }
 
+  const isClick = (keys, success, failure ) => {
+    if(keys[0]&&success) {
+      setFlag(false)
+    } else {
+      setFlag(true)
+    }
+    if(keys[0]&&failure) {
+      setStatus(false)
+    } else {
+      setStatus(true)
+    }
+  }
+
   return (
     <PageContainer title={false}>
       <ProTable
@@ -170,16 +183,7 @@ const TransactionReconciliation = () => {
         tableAlertOptionRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => {
           const success = selectedRowKeys&&selectedRows.every(item=> item.checkStatus === "success")
           const failure = selectedRowKeys&&selectedRows.every(item=> item.checkStatus === "failure")
-          if(selectedRowKeys[0]&&success) {
-            setFlag(false)
-          } else {
-            setFlag(true)
-          }
-          if(selectedRowKeys[0]&&failure) {
-            setStatus(false)
-          } else {
-            setStatus(true)
-          }
+          isClick(selectedRowKeys, success, failure)
           return (
             <Space size={16}>
               {

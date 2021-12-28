@@ -11,6 +11,12 @@ export default {
       name: 'set-formula',
       path: '/billing-center/set-formula',
       component: './billing-center/set-formula',
-    }
+    },
+    {
+      name: 'cost-details',
+      path: '/billing-center/costs-set/cost-details/:id',
+      component: './billing-center/costs-set/cost-details',
+      hideInMenu: true
+    },
   ]
 }

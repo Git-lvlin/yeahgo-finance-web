@@ -67,3 +67,22 @@ export const feeItemUpdate = async (params = {}, options = {}) => {
     success: res?.success
   }
 }
+
+// 业务模式费用
+export const feeItemTradeMode = async (params = {}, options = {}) => {
+  const { pageSize, current, ...rest } = params
+  const res = await request('/auth/jump/url', {
+    method: 'POST',
+    data: {
+      requestUrl: '/java-admin/fmis/feeItem/tradeMode',
+      page: pageSize,
+      size: current,
+      ...rest
+    },
+    ...options
+  })
+  return {
+    data: res?.data?.records,
+    success: res?.success
+  }
+}

@@ -149,7 +149,7 @@ const Popup = ({
     if(dataSource){
       form.setFieldsValue({
         name: dataSource?.name,
-        tradeModeId: dataSource?.tradeModeId,
+        orderIndex: dataSource?.orderIndex,
         status: dataSource?.status,
         recvRoleId: dataSource?.recvRoleId,
         payRoleId: dataSource?.payRoleId,
@@ -452,50 +452,34 @@ const Popup = ({
           <Title level={4}>基本信息</Title>
           <Divider />
           <Paragraph>
-            <ProForm.Group>
+            <Space size={170}>
               <ProFormText
                 label='费用名称'
                 name='name'
                 width='sm'
               />
-              <ProFormSelect
-                label='业务模式'
-                name='tradeModeId'
+              <ProFormText
+                label='计算优先级'
+                name='orderIndex'
                 width='sm'
-                options={list}
-                allowClear={false}
-                proFieldProps={{
-                  onChange: (e) => {
-                    setTradeModeId(e)
-                  }
-                }}
               />
-            </ProForm.Group>
-            <ProForm.Group>
-              <ProFormSelect
-                label='收款方'
-                name='recvRoleId'
-                width='sm'
-                options={role}
-              />
-              <ProFormSelect
-                label='费用状态'
-                name='status'
-                width='sm'
-                options={[
-                  {
-                    value: 1,
-                    label: '启用'
-                  },
-                  {
-                    value: 2,
-                    label: '保存'
-                  }
-                ]}
-                hidden={!dataSource}
-              />
-            </ProForm.Group>
-            <ProForm.Group>
+            </Space>
+            <ProFormSelect
+              label='费用状态'
+              name='status'
+              width='sm'
+              options={[
+                {
+                  value: 1,
+                  label: '启用'
+                },
+                {
+                  value: 2,
+                  label: '保存'
+                }
+              ]}
+            />
+            <Space size={210}>
               <ProFormSelect
                 label='付款方'
                 name='payRoleId'
@@ -505,14 +489,12 @@ const Popup = ({
                 options={role}
               />
               <ProFormSelect
-                label='手续费承担方'
-                name='serviceChargeRoleId'
+                label='收款方'
+                name='recvRoleId'
                 width='sm'
-                labelCol={{ span: 9 }}
-                wrapperCol={{ span: 13 }}
                 options={role}
               />
-            </ProForm.Group>
+            </Space>
             <ProForm.Group>
               <ProFormSelect
                 label='代收方'
@@ -535,6 +517,14 @@ const Popup = ({
               >
                 是否代收
               </ProFormCheckbox>
+              <ProFormSelect
+                label='通道费承担方'
+                name='serviceChargeRoleId'
+                width='sm'
+                labelCol={{ span: 9 }}
+                wrapperCol={{ span: 13 }}
+                options={role}
+              />
             </ProForm.Group>
             <ProFormText
               label='结算周期'
