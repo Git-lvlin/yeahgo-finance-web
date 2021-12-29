@@ -5,7 +5,7 @@ import React, {
   } from 'react'
   import { PageContainer } from '@ant-design/pro-layout'
   import ProTable from '@ant-design/pro-table'
-  import { getMyInstance } from '@/services/audit-management/submitted-audit'
+  import { getMyInstance,cancelInstance } from '@/services/audit-management/submitted-audit'
   import Audit from './form';
   import moment from 'moment'
 
@@ -60,7 +60,6 @@ export default () => {
         align: 'center',
         valueType:'select',
         valueEnum: {
-            0: '全部',
             '-1': '已驳回',
             2: '已通过',
             1: '审核中'
@@ -87,11 +86,17 @@ export default () => {
         title: '操作',
         valueType: 'option',
         align: 'center',
-        render: (text, record, _, action)=> {
-          return <a onClick={()=>{setDetailData(record);setVisible(true)}}>详情</a>
-        }
+        render: (text, record, _, action)=> [
+          <a onClick={()=>{setDetailData(record);setVisible(true)}}>详情</a>,
+          <a onClick={()=>{
+            cancelInstance({id:record?.id}).then(res=>{
+              actionRef.current.reload();
+            })
+          }}>撤回工单</a>
+        ]
       }
     ]
+      
   
     return (
       <PageContainer title={false}>

@@ -21,3 +21,20 @@ export const getMyInstance = async (params = {}, options = {}) => {
       success: res.success
     }
   }
+
+  export const cancelInstance = async (params = {}, options = {}) => {
+    const { ...rest } = params;
+    const res = await request('/auth/jump/url', {
+      method: 'POST',
+      data:  {
+        'requestUrl': '/java-admin/flow/cancelInstance',
+        ...rest
+      },
+      ...options
+    })
+    return {
+      data: res.data,
+      code:res.code,
+      success: res.success
+    }
+  }

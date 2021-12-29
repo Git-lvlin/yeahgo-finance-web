@@ -130,44 +130,51 @@ export default (props) => {
         </Col>
       </Row>
       <h3 className={styles.head}>审批信息</h3>
-      <Row gutter={24} style={{marginLeft:'40px'}}>
       {
-        auditMsg&&auditMsg[0][0].form?.formFields.map(ele=>{
-            return <Col span={12} key={ele?.name}>
+         auditMsg&&auditMsg[0][0].form.map(item=>{
+           return <div>
+                      <h1>{item?.name}</h1>
+                      <Row gutter={24} style={{marginLeft:'40px'}}>
                       {
-                        ele?.compType==='input'&&
-                        <ProFormText 
-                          width="md"
-                          name={ele.name}
-                          label={ele.label}
-                          readonly={true}
-                          labelCol={3}
-                          fieldProps={{
-                            value:ele.value,
-                          }}
-                      />
+                        item?.fields.map(ele=>{
+                            return <Col span={12} key={ele.name}>
+                                      {
+                                        ele?.compType==='label'&&
+                                        <ProFormText 
+                                          width="md"
+                                          name={ele?.name}
+                                          label={ele.label}
+                                          readonly={true}
+                                          labelCol={3}
+                                          fieldProps={{
+                                            value:ele.value,
+                                          }}
+                                      />
+                                      }
+                                  </Col>
+                        })
                       }
-                  </Col>
-        })
-      }
-       </Row> 
-      {
-        auditMsg&&auditMsg[0][0].form?.formFields.map(ele=>{
-            return <div key={ele?.name}>
-                    {
-                        ele?.compType==='table'&&
-                        <ProTable
-                          rowKey="orderType"
-                          columns={JSON.parse(ele.value).header}
-                          options={false}
-                          bordered
-                          search={false}
-                          dataSource={JSON.parse(ele.value).data}
-                        />
-                    }
-                </div>
-        })
-      }
+                      </Row> 
+                      {
+                        item?.fields.map((ele)=>{
+                            return <div key={ele?.name}>
+                                    {
+                                        ele?.compType==='table'&&
+                                        <ProTable
+                                          columns={JSON.parse(ele.value).header}
+                                          options={false}
+                                          bordered
+                                          search={false}
+                                          dataSource={JSON.parse(ele.value).data}
+                                        />
+                                    }
+                                </div>
+                        })
+                      }
+                 </div>
+         })
+        
+       }
       <h3 className={styles.head}>节点信息</h3>
       <Steps style={{paddingLeft:'100px'}} current={1} direction="vertical">
         <Step 
