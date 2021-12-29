@@ -132,9 +132,9 @@ export default (props) => {
       <h3 className={styles.head}>审批信息</h3>
       {
          auditMsg&&auditMsg[0][0].form.map(item=>{
-           return <div>
-                      <h1>{item?.name}</h1>
-                      <Row gutter={24} style={{marginLeft:'40px'}}>
+          return <div style={{marginBottom:'20px',backgroundColor:'#F2F2F2',padding:'20px'}}>
+                    <h1>{item?.name}</h1>
+                    <Row gutter={24} style={{marginLeft:'20px'}}>
                       {
                         item?.fields.map(ele=>{
                             return <Col span={12} key={ele.name}>
