@@ -50,21 +50,22 @@ export default () => {
             0: '全部',
             '-1': '已驳回',
             2: '已通过',
-            1: '审核中'
+            1: '审核中',
             },
         hideInTable: true
       },
       {
-        title: '审批状态',
+        title: '工单状态',
         dataIndex: 'status',
         align: 'center',
         valueType:'select',
         valueEnum: {
+            0: '已撤回',
             '-1': '已驳回',
-            2: '已通过',
-            1: '审核中'
-            },
-            hideInSearch: true,
+            1: '审核中',
+            2: '已完成'
+        },
+        hideInSearch: true,
       },
       {
         title: '提交时间',

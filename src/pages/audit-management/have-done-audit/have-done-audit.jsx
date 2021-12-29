@@ -70,6 +70,19 @@ export default () => {
         hideInTable: true
       },
       {
+        title: '工单状态',
+        dataIndex: 'falge',
+        align: 'center',
+        valueType:'select',
+        valueEnum: {
+            0: '已撤回',
+            '-1': '已驳回',
+            1: '审核中',
+            2: '已完成'
+        },
+        hideInSearch: true,
+      },
+      {
         title: '提交人',
         dataIndex: 'submitorName',
         align: 'center'
@@ -110,7 +123,8 @@ export default () => {
               submitorName:ele.flowInstanceResponse[0]?.submitorName,
               submitTime:ele.flowInstanceResponse[0]?.submitTime,
               status:ele.status,
-              title:ele.flowInstanceResponse[0]?.title
+              title:ele.flowInstanceResponse[0]?.title,
+              falge:ele.flowInstanceResponse[0]?.status
           })
       })
      return data
