@@ -89,7 +89,7 @@ const TransactionDrawer = ({
     },
     {
       title: '分账金额',
-      dataIndex: 'divideAmount',
+      dataIndex: 'divideAmountDesc',
       align: 'center',
       hideInSearch: true
     },

@@ -63,14 +63,14 @@ const Popup = ({
   actionRef,
   dataSource,
   isEdit,
-  setData
+  setData,
+  tradeModeId,
+  loading
 }) => {
   const [flag, setFlag] = useState(true)
   const [symbol, setSymbol] = useState({})
-  const [loading, setLoading] = useState(true)
   const [ruleCond, setRuleCond] = useState([])
   const [editableKeys, setEditableRowKeys] = useState()
-  const [list, setList] = useState([])
   const [role, setRole] = useState([])
   const [clear, setClear] = useState()
   const [optionValueObj, setOptionValueObj] = useState({})
@@ -79,38 +79,22 @@ const Popup = ({
   const [formula, setFormula] = useState([])
   const [formulaExpress, setFormulaExpress] = useState([])
   const [formulaId, setFormulaId] = useState({})
-  const [tradeModeId, setTradeModeId] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [obj, setObj] = useState({})
   const [selectObj, setSelectObj] = useState({})
   const [rulesList, setRulesList] = useState([])
 
   const [form] = Form.useForm()
-  const data = tradeModeId ? tradeModeId : list?.[0]?.value
-
-  useEffect(() => {
-    setLoading(true)
-    tradeModeList({}).then(res => {
-      setList(res?.data?.map(item => (
-        { label: item.name, value: item.id }
-      )))
-    }).finally(()=>{
-      setLoading(false)
-    })
-    return () => {
-      setList([])
-    }
-  }, [])
 
   useEffect(() => {
     form.setFieldsValue({
-      tradeModeId: list?.[0]?.value
+      tradeModeId
     })
-  }, [list])
+  }, [])
 
   useEffect(() => {
     roleList({
-      tradeModeId: data
+      tradeModeId
     }).then(res => {
       setRole(res?.data?.map(item => (
         { label: item.name, value: item.id }
@@ -119,11 +103,11 @@ const Popup = ({
     return () => {
       setRole([])
     }
-  }, [tradeModeId, list])
+  }, [tradeModeId])
 
   useEffect(() => {
     formulaList({
-      tradeModeId: data
+      tradeModeId
     }).then(res => {
       setFormulaExpress(res.data)
       setFormula(res?.data?.map(item => (
@@ -263,25 +247,27 @@ const Popup = ({
         })
       })
     } else {
-      feeItemUpdate({
-        id: dataSource?.id,
-        ...e, 
-        clearingPeriodInterval: clear,
-        clearingType: radioValue,
-        rules
-      },
-      {
-        showSuccess: true,
-        showError: true,
-        noFilterParams: true,
-        paramsUndefinedToEmpty: true
-      }).then(res=> {
-        if(res.success) {
-          actionRef.current.reload()
-          resolve()
-        } else {
-          reject()
-        }
+      return new Promise((resolve, reject)=>{
+        feeItemUpdate({
+          id: dataSource?.id,
+          ...e, 
+          clearingPeriodInterval: clear,
+          clearingType: radioValue,
+          rules
+        },
+        {
+          showSuccess: true,
+          showError: true,
+          noFilterParams: true,
+          paramsUndefinedToEmpty: true
+        }).then(res=> {
+          if(res.success) {
+            actionRef.current.reload()
+            resolve()
+          } else {
+            reject()
+          }
+        })
       })
     }
   }
@@ -452,6 +438,12 @@ const Popup = ({
           <Title level={4}>基本信息</Title>
           <Divider />
           <Paragraph>
+            <ProFormSelect
+              label='业务模式'
+              name='tradeModeId'
+              value={tradeModeId}
+              hidden={true}
+            />
             <Space size={170}>
               <ProFormText
                 label='费用名称'
@@ -470,11 +462,11 @@ const Popup = ({
               width='sm'
               options={[
                 {
-                  value: '1',
+                  value: 1,
                   label: '启用'
                 },
                 {
-                  value: '-1',
+                  value: -1,
                   label: '禁用'
                 }
               ]}

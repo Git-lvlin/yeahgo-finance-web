@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
+import { Button } from 'antd'
 
 import { divideFeePage } from '@/services/trading-center/cost-detail'
 import { orderTypes } from '@/services/common'
 import { amountTransform } from '@/utils/utils'
+import Export from '@/components/export-excel/export'
+import ExportHistory from '@/components/export-excel/export-history'
 
 const CostDetail = () => {
   const [orderType, setOrderType] = useState(null)
+  const [visit, setVisit] = useState(false)
 
   useEffect(() => {
     orderTypes({}).then(res=> {
@@ -152,7 +156,39 @@ const CostDetail = () => {
           settings: false
         }}
         search={{
-          labelWidth: 120
+          labelWidth: 120,
+          optionRender: ({searchText, resetText}, {form}) => [
+            <Button
+              key="search"
+              type="primary"
+              onClick={() => {
+                form?.submit()
+              }}
+            >
+              {searchText}
+            </Button>,
+            <Button
+              key="rest"
+              onClick={() => {
+                form?.resetFields()
+                form?.submit()
+              }}
+            >
+              {resetText}
+            </Button>,
+            <Export
+              change={(e)=> {setVisit(e)}}
+              key="export"
+              type=""
+              conditions={{}}
+            />,
+            <ExportHistory
+              key="exportHistory"
+              show={visit}
+              setShow={setVisit}
+              type=""
+            />
+          ]
         }}
       />
     </PageContainer>

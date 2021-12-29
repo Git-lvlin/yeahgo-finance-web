@@ -1,15 +1,19 @@
 import React, { useState } from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
+import { Button } from 'antd'
 
 import { settlePage, settleDetail } from '@/services/trading-center/billing-details'
 import { amountTransform } from '@/utils/utils'
 import BillingDrawer from './billing-drawer'
+import Export from '@/components/export-excel/export'
+import ExportHistory from '@/components/export-excel/export-history'
 
 const BillingDetails = () => {
   const [showPopup, setShowPopup] = useState(false)
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState(null)
+  const [visit, setVisit] = useState(false)
 
   const getData = (id) => {
     setLoading(true)
@@ -130,7 +134,39 @@ const BillingDetails = () => {
           settings: false
         }}
         search={{
-          labelWidth: 100
+          labelWidth: 100,
+          optionRender: ({searchText, resetText}, {form}) => [
+            <Button
+              key="search"
+              type="primary"
+              onClick={() => {
+                form?.submit()
+              }}
+            >
+              {searchText}
+            </Button>,
+            <Button
+              key="rest"
+              onClick={() => {
+                form?.resetFields()
+                form?.submit()
+              }}
+            >
+              {resetText}
+            </Button>,
+            <Export
+              change={(e)=> {setVisit(e)}}
+              key="export"
+              type=""
+              conditions={{}}
+            />,
+            <ExportHistory
+              key="exportHistory"
+              show={visit}
+              setShow={setVisit}
+              type=""
+            />
+          ]
         }}
       />
       {

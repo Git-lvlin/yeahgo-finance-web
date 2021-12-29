@@ -19,19 +19,42 @@ import { tradeModeList } from '@/services/common'
 import { 
   feeItemPage,
   feeItemId,
-  feeItemApproveSub
+  feeItemApproveSub,
+  feeItemDelete
 } from '@/services/billing-center/costs-set'
 import styles from './style.less'
+
+const DeleteItem = ({id, actionRef}) => {
+  const [delLoading, setDelLoading] = useState(false)
+
+  const delSubmit = () => {
+    setDelLoading(true)
+    feeItemDelete({id}).finally(()=>{
+      actionRef.current.reload()
+      setDelLoading(false)
+    })
+  }
+
+  return (
+    <Popconfirm
+      title="确定要执行删除操作吗？"
+      onConfirm={delSubmit}
+      okButtonProps={{ loading: delLoading }}
+    >
+      <a>
+        删除
+      </a>
+    </Popconfirm>
+  )
+}
 
 const CostsSet = () => {
   const [visible, setVisible] = useState(false)
   const [tradeList, setTradeList ] = useState([])
-  const [undoPopup, setUndoPopup] = useState(false)
-  const [approvalPopup, setApprovalPopup] = useState(false)
-  const [undoLoading, setUndoLoading] = useState(false)
   const [approvalLoading, setApprovalLoading] = useState(false)
   const [data, setData] = useState(null)
   const [flag, setFlag] = useState(false)
+  const [loading, setLoading] = useState(false)
   const actionRef = useRef(null)
   const { id }  = useParams()
 
@@ -47,8 +70,11 @@ const CostsSet = () => {
   }, [])
 
   const getDetail = (id) => {
+    setLoading(true)
     feeItemId({id}).then(res=> {
       setData(res?.data)
+    }).finally(()=> {
+      setLoading(false)
     })
   }
 
@@ -74,37 +100,6 @@ const CostsSet = () => {
     history.goBack()
   }
 
-  const undo = () => {
-    setUndoPopup(true)
-  }
-
-  const undoSubmit = () => {
-    // setUndoLoading(true)
-    setUndoPopup(false)
-    // feeItemApproveSub(
-    //   {
-    //     tradeModeId: id
-    //   },
-    //   {
-    //     showSuccess: true,
-    //     showError: true
-    //   }
-    // ).then(res=> {
-    //   if(res.success) {
-    //     setUndoLoading(false)
-    //     setUndoPopup(false)
-    //   }
-    // })
-  }
-
-  const undoCancel = () => {
-    setUndoPopup(false)
-  }
-
-  const approval = () => {
-    setApprovalPopup(true)
-  }
-
   const approvalSubmit = () => {
     setApprovalLoading(true)
     feeItemApproveSub(
@@ -116,13 +111,9 @@ const CostsSet = () => {
         showError: true
       }
     ).finally(()=> {
+      actionRef.current.reload()
       setApprovalLoading(false)
-      setApprovalPopup(false)
     })
-  }
-
-  const approvalCancel = () => {
-    setApprovalPopup(false)
   }
 
   const columns = [
@@ -139,7 +130,8 @@ const CostsSet = () => {
         '0': '未提审',
         '1': '审核中',
         '2': '审核完成',
-        '-1': '驳回'
+        '-1': '驳回',
+        '-2': '撤回'
       },
       hideInSearch: true,
       align: 'center'
@@ -224,14 +216,14 @@ const CostsSet = () => {
               }}>
                 修改
               </a>
-              <a>删除</a>
+              <DeleteItem id={records.id} actionRef={actionRef}/>
             </Space>
           )
         } else {
           return (
             <Space>
               <span>修改</span>
-              <a>删除</a>
+              <span>删除</span>
             </Space>
           )
         }
@@ -257,26 +249,12 @@ const CostsSet = () => {
         }}
         toolBarRender={()=>[
           <Popconfirm
-            title="确定要执行撤销操作吗？"
-            visible={undoPopup}
-            onConfirm={undoSubmit}
-            okButtonProps={{ loading: undoLoading }}
-            onCancel={undoCancel}
-            key='undo'
-          >
-            <Button onClick={undo}>
-              撤销
-            </Button>
-          </Popconfirm>,
-          <Popconfirm
             title="确定要执行提审操作吗？"
-            visible={approvalPopup}
             onConfirm={approvalSubmit}
             okButtonProps={{ loading: approvalLoading }}
-            onCancel={approvalCancel}
             key='approval'
           >
-            <Button onClick={approval}>
+            <Button>
               提审
             </Button>
           </Popconfirm>,
@@ -303,6 +281,8 @@ const CostsSet = () => {
           dataSource={data}
           setData={setData}
           isEdit={flag}
+          tradeModeId={id}
+          loading={loading}
         />
       }
       <div className={styles.back}>

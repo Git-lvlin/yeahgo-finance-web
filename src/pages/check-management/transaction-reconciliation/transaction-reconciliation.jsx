@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
-import { Space } from 'antd'
+import { Space, Button } from 'antd'
 
 import { 
   checkTradePage,
@@ -10,12 +10,16 @@ import {
 } from '@/services/check-management/transaction-reconciliation'
 import { amountTransform } from '@/utils/utils'
 import TradeDetail from './trade-detail'
+import Export from '@/components/export-excel/export'
+import ExportHistory from '@/components/export-excel/export-history'
 
 const TransactionReconciliation = () => {
   const [id, setId] = useState()
   const [showPopup, setShowPopup] = useState(false)
   const [flag, setFlag] = useState(false)
   const [status, setStatus] = useState(false)
+  const [visit, setVisit] = useState(false)
+
   const actionRef = useRef()
 
   const columns = [
@@ -222,6 +226,40 @@ const TransactionReconciliation = () => {
         }}
         toolbar={{
           settings: false
+        }}
+        search={{
+          optionRender: ({searchText, resetText}, {form}) => [
+            <Button
+              key="search"
+              type="primary"
+              onClick={() => {
+                form?.submit()
+              }}
+            >
+              {searchText}
+            </Button>,
+            <Button
+              key="rest"
+              onClick={() => {
+                form?.resetFields()
+                form?.submit()
+              }}
+            >
+              {resetText}
+            </Button>,
+            <Export
+              change={(e)=> {setVisit(e)}}
+              key="export"
+              type=""
+              conditions={{}}
+            />,
+            <ExportHistory
+              key="exportHistory"
+              show={visit}
+              setShow={setVisit}
+              type=""
+            />
+          ]
         }}
       />
       {
