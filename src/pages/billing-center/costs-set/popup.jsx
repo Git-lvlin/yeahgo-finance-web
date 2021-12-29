@@ -26,7 +26,6 @@ import { PlusOutlined, DeleteOutlined } from '@ant-design/icons'
 
 import styles from './style.less'
 import {
-  tradeModeList,
   roleList,
   formulaList,
   ruleCondList
@@ -131,6 +130,7 @@ const Popup = ({
 
   useEffect(()=>{
     if(dataSource){
+      setFlag(false)
       form.setFieldsValue({
         name: dataSource?.name,
         orderIndex: dataSource?.orderIndex,
