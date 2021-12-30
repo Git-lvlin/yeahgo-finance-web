@@ -119,7 +119,7 @@ const TransactionModal = ({
   const orderInfo = [
     {
       title: '订单号',
-      dataIndex: 'orderId'
+      dataIndex: 'orderNo'
     },
     {
       title: '订单类型',
