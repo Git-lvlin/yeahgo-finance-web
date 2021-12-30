@@ -31,6 +31,7 @@ const AccountInformation = ({dataSource, loading}) => {
   const [popup, setPopup] = useState(false)
   const [sn, setSn] = useState(undefined)
   const [title, setTitle] = useState(undefined)
+  const [amountType, setAmountType] = useState(undefined)
   const formRef = useRef(null)
 
   useEffect(()=>{
@@ -62,6 +63,7 @@ const AccountInformation = ({dataSource, loading}) => {
               setPopup(true)
               setSn(r?.sn)
               setTitle('账户总额-交易明细')
+              setAmountType('total')
             }}
           >
             交易明细
@@ -87,6 +89,7 @@ const AccountInformation = ({dataSource, loading}) => {
               setPopup(true)
               setSn(r?.sn)
               setTitle('可用余额-交易明细')
+              setAmountType('totalAvailable')
             }}
           >
             交易明细
@@ -112,6 +115,7 @@ const AccountInformation = ({dataSource, loading}) => {
               setPopup(true)
               setSn(r?.sn)
               setTitle('冻结金额-交易明细')
+              setAmountType('totalFreeze')
             }}
           >
             交易明细
@@ -255,6 +259,7 @@ const AccountInformation = ({dataSource, loading}) => {
           title={title}
           visible={popup}
           setVisible={setPopup}
+          amountType={amountType}
         />
       }
     </Spin>

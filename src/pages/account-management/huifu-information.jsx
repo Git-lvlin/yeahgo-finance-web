@@ -84,7 +84,7 @@ const HuifuInformation = ({
             onClick={()=> {
               setPopup(true)
               setTitle('可用余额-交易明细')
-              setAmountType('balanceAvailable')
+              setAmountType('available')
             }}
           >
             交易明细
@@ -109,7 +109,7 @@ const HuifuInformation = ({
             onClick={()=> {
               setPopup(true)
               setTitle('冻结金额-交易明细')
-              setAmountType('balanceFreeze')
+              setAmountType('freeze')
             }}
           >
             交易明细
