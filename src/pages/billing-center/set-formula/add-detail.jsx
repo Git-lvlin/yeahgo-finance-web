@@ -221,9 +221,9 @@ const AddDetail = ({
           }
         ]}
         fieldProps={{
-          ref: areaInput,
+          refs: areaInput,
           onBlur: ()=>{
-            setClient(areaInput.current.resizableTextArea.textArea.selectionEnd)
+            setClient(areaInput?.current?.resizableTextArea?.textArea?.selectionEnd)
           }
         }}
       />

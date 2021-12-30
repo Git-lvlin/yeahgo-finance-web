@@ -22,7 +22,7 @@ const BillingDrawer = ({
   const baseInfo = [
     {
       title: '业务单号',
-      dataIndex: 'settleSn',
+      dataIndex: 'orderNo',
       align: 'center'
     },
     {
