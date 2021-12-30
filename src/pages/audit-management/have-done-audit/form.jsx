@@ -40,6 +40,7 @@ export default (props) => {
   const { detailData, setVisible, onClose, visible } = props;
   const formRef = useRef();
   const [auditMsg,setAuditMsg]=useState()
+  const [auditData,setAuditData]=useState()
   const [adminName,setAdminName]=useState()
   const [form] = Form.useForm()
 
@@ -47,6 +48,7 @@ export default (props) => {
     if (detailData?.id) {
       getInstance({id:detailData?.id}).then(res=>{
         setAuditMsg(res.data?.actionLogs)
+        setAuditData(res.data?.taskLogs)
         form.setFieldsValue({
           ...res.data
         })
@@ -132,7 +134,7 @@ export default (props) => {
       </Row>
       <h3 className={styles.head}>审批信息</h3>
       {
-         auditMsg&&auditMsg[0][0].form.map(item=>{
+         auditData&&auditData[0].form.map(item=>{
           return <ProCard
                     title={item?.name}
                     bordered
@@ -167,11 +169,12 @@ export default (props) => {
                                     {
                                         ele?.compType==='table'&&
                                         <ProTable
-                                          columns={JSON.parse(ele.value).header}
+                                          columns={ele.header}
                                           options={false}
                                           bordered
                                           search={false}
-                                          dataSource={JSON.parse(ele.value).data}
+                                          dataSource={JSON.parse(ele.value)}
+                                          pagination={false}
                                         />
                                     }
                                 </div>
