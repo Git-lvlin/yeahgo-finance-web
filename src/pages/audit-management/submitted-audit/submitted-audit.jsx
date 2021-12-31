@@ -88,12 +88,16 @@ export default () => {
         valueType: 'option',
         align: 'center',
         render: (text, record, _, action)=> [
-          <a onClick={()=>{setDetailData(record);setVisible(true)}}>详情</a>,
-          <a onClick={()=>{
-            cancelInstance({id:record?.id}).then(res=>{
-              actionRef.current.reload();
-            })
-          }}>撤回工单</a>
+          <a key='detail' onClick={()=>{setDetailData(record);setVisible(true)}}>详情</a>,
+           <span key='revocation'>
+             {
+               record?.status==1&&<a onClick={()=>{
+                  cancelInstance({id:record?.id}).then(res=>{
+                    actionRef.current.reload();
+                  })
+                }}>撤回工单</a>
+             }
+           </span>
         ]
       }
     ]
