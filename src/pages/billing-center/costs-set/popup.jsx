@@ -428,7 +428,7 @@ const Popup = ({
       width={900}
       submitter={{
         searchConfig: {
-          submitText: '提交审批',
+          submitText: '保存',
           resetText: '取消',
         },
       }}
