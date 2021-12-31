@@ -52,16 +52,19 @@ const AddDetail = ({
   }, [])
 
   useEffect(() => {
-    data?
-    form.setFieldsValue({
-      name: data.name,
-      status: data.status,
-      express: data.express,
-      tradeModeId: data.tradeModeId
-    }):
-    form.setFieldsValue({
-      tradeModeId: list?.[0]?.value
-    })
+    if(data){
+      setTradeMode(data.tradeModeId)
+      form.setFieldsValue({
+        name: data.name,
+        status: data.status,
+        express: data.express,
+        tradeModeId: data.tradeModeId
+      })
+    } else {
+      form.setFieldsValue({
+        tradeModeId: list?.[0]?.value
+      })
+    }
   }, [data, list])
 
   useEffect(()=>{
