@@ -96,13 +96,16 @@ export default (props) => {
         auditorRoles:createName[ele],
         type:1,
         auditMemo:null,
-        status:null
+        status:null,
+        auditorName: null
       }
     ))
     const arr2 = JSON.parse(JSON.stringify(auditMsg));
     const knowledge=arr2.map(ele=>{
       if(ele.id==data.id){
-        return {...ele,auditors:_.uniqWith([...ele.auditors,...auditorId], _.isEqual),autoExecute:data.autoExecute}
+        return {...ele,auditors:[...ele.auditors,...auditorId].filter((item,index)=>{
+          return [...ele.auditors,...auditorId].findIndex(item1 =>item1.auditorId==item.auditorId) == index
+        }),autoExecute:data.autoExecute}
       }
       return ele
     })
