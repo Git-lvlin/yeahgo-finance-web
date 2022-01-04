@@ -73,8 +73,8 @@ const AddDetail = ({
       tradeModeId: data
     }).then(res=>{
       setSelectData(res?.data?.map(item=>({
-        label: item.name,
-        value: '${' + item.name + '}'
+        label: item.label,
+        value: '${' + item.value + '}'
       })))
     })
     return ()=>{
@@ -107,6 +107,8 @@ const AddDetail = ({
         if(!data) {
           formulaAdd(values).then(res=>{
             if(res.success) message.success('公式添加成功')
+          }).finally(()=> {
+            actRef.current.reload()
           })
         } else {
           formulaUpdate({
@@ -114,9 +116,10 @@ const AddDetail = ({
             ...values
           }).then(res=>{
             if(res.success) message.success('公式修改成功')
+          }).finally(()=> {
+            actRef.current.reload()
           })
         }
-        actRef.current.reload()
         return true
       }}
       layout='horizontal'
@@ -127,7 +130,7 @@ const AddDetail = ({
       }}
       submitter={{
         searchConfig: {
-          submitText: '提交审批',
+          submitText: '保存',
           resetText: '取消',
         },
       }}
@@ -171,6 +174,7 @@ const AddDetail = ({
                 const arr = data.split('')
                 arr.splice(client, 0, e)
                 const str = arr.join('')
+                console.log(e)
                 form.setFieldsValue({
                   express: str
                 })
@@ -224,7 +228,7 @@ const AddDetail = ({
           }
         ]}
         fieldProps={{
-          refs: areaInput,
+          ref: areaInput,
           onBlur: ()=>{
             setClient(areaInput?.current?.resizableTextArea?.textArea?.selectionEnd)
           }

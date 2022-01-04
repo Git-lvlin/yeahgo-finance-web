@@ -130,7 +130,9 @@ const Popup = ({
 
   useEffect(()=>{
     if(dataSource){
-      setFlag(false)
+      if(dataSource.isAgentRecv) {
+        setFlag(false)
+      }
       form.setFieldsValue({
         name: dataSource?.name,
         orderIndex: dataSource?.orderIndex,
@@ -449,6 +451,7 @@ const Popup = ({
                 label='费用名称'
                 name='name'
                 width='sm'
+                readonly={isEdit}
               />
               <ProFormText
                 label='计算优先级'

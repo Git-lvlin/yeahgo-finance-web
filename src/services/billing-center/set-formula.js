@@ -82,3 +82,18 @@ export const formulaCheck = async (params, options = {}) => {
     success: res?.success
   }
 } 
+
+// 删除公式
+export const formulaDelete = async (params, options = {}) => {
+  const res = await request('/auth/jump/url', {
+    method: 'POST',
+    data: {
+      requestUrl: '/java-admin/fmis/formula/delete',
+      ...params
+    },
+    ...options
+  })
+  return {
+    success: res?.success
+  }
+} 

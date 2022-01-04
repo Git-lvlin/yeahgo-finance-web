@@ -121,3 +121,19 @@ export const feeItemDelete = async (params = {}, options = {}) => {
     success: res?.success
   }
 }
+
+// 费用否在审批
+export const feeItemInApproval = async (params = {}, options = {}) => {
+  const res = await request('/auth/jump/url', {
+    method: 'POST',
+    data: {
+      requestUrl: '/java-admin/fmis/feeItem/inApproval',
+      ...params
+    },
+    ...options
+  })
+  return {
+    data: res?.data?.records,
+    success: res?.success
+  }
+}

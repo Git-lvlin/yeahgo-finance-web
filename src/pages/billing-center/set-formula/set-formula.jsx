@@ -1,11 +1,35 @@
 import React, { useRef, useState } from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
-import { Button } from 'antd'
+import { Button, Popconfirm } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 
 import AddDetail from './add-detail'
-import { formula } from '@/services/billing-center/set-formula'
+import { formula, formulaDelete } from '@/services/billing-center/set-formula'
+
+const DeleteDormula = ({id, actref}) => {
+
+  const deleteItem = () => {
+    formulaDelete(
+      { id },
+      {
+        showSuccess: true,
+        showError: true
+      }
+    ).finally(()=> {
+      actref?.current?.reload()
+    })
+  }
+
+  return (
+    <Popconfirm
+      title="确定要执行删除操作吗？"
+      onConfirm={deleteItem}
+    >
+      <a>删除</a>
+    </Popconfirm>
+  )
+}
 
 const SetFormula = () => {
   const [showAdd, setShowAdd] = useState(false)
@@ -13,6 +37,11 @@ const SetFormula = () => {
   const actionRef = useRef(null)
 
   const columns = [
+    {
+      dataIndex: 'id',
+      hideInSearch: true,
+      hideInTable: true
+    },
     {
       title: '公式名称',
       dataIndex: 'name',
@@ -41,20 +70,6 @@ const SetFormula = () => {
       hideInSearch: true
     },
     {
-      title: '审核状态',
-      dataIndex: 'lastFlowStatus',
-      align: 'center',
-      valueType: 'select',
-      width: '10%',
-      valueEnum: {
-        '1': '审核中',
-        '2': '审核完成',
-        '-1': '驳回'
-      },
-      hideInSearch: true,
-      hideInSearch: true
-    },
-    {
       title: '公式内容',
       dataIndex: 'express',
       align: 'center',
@@ -64,26 +79,7 @@ const SetFormula = () => {
     {
       title: '操作',
       valueType: 'option',
-      render: (_, records)=>{
-        if(records.status === 0 && records.lastFlowStatus === 1 ){
-          return <span>修改</span>
-        } else {
-          return (
-            <a onClick={()=>{
-              setShowAdd(true)
-              setData({
-                id: records.id,
-                name: records.name,
-                status: records.status,
-                express: records.express,
-                tradeModeId: records.tradeModeId
-              })
-            }}>
-              修改
-            </a>
-          )
-        }
-      },
+      render: (_, records)=> <DeleteDormula id={records.id} actref={actionRef}/>,
       align: 'center'
     }
   ]
@@ -91,7 +87,7 @@ const SetFormula = () => {
   return (
     <PageContainer title={false}>
       <ProTable
-        rowKey='name'
+        rowKey='id'
         columns={columns}
         params={{}}
         actionRef={actionRef}

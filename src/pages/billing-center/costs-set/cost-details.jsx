@@ -20,7 +20,8 @@ import {
   feeItemPage,
   feeItemId,
   feeItemApproveSub,
-  feeItemDelete
+  feeItemDelete,
+  feeItemInApproval
 } from '@/services/billing-center/costs-set'
 import styles from './style.less'
 
@@ -55,6 +56,7 @@ const CostsSet = () => {
   const [data, setData] = useState(null)
   const [flag, setFlag] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [isApproval, setIsApproval] = useState(false)
   const actionRef = useRef(null)
   const { id }  = useParams()
 
@@ -67,6 +69,14 @@ const CostsSet = () => {
     return () => {
       setTradeList([])
     }
+  }, [])
+
+  useEffect(()=>{
+    feeItemInApproval({
+      tradeModeId: id
+    }).then(res=>{
+      setIsApproval(res?.data)
+    })
   }, [])
 
   const getDetail = (id) => {
@@ -206,7 +216,7 @@ const CostsSet = () => {
       valueType: 'option',
       align: 'center',
       render: (_, records)=> {
-        if(records.status !== 0 && records.flowStatus !== 1) {
+        if(!isApproval) {
           return (
             <Space>
               <a onClick={()=>{
@@ -253,8 +263,9 @@ const CostsSet = () => {
             onConfirm={approvalSubmit}
             okButtonProps={{ loading: approvalLoading }}
             key='approval'
+            disabled={isApproval}
           >
-            <Button>
+            <Button disabled={isApproval}>
               提审
             </Button>
           </Popconfirm>,
@@ -267,6 +278,7 @@ const CostsSet = () => {
               setData(null),
               setFlag(false)
             )}
+            disabled={isApproval}
           >
             新建
           </Button>
