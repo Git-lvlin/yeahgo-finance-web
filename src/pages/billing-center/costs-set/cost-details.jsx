@@ -215,26 +215,30 @@ const CostsSet = () => {
       valueType: 'option',
       align: 'center',
       render: (_, records)=> {
-        if(!isApproval) {
-          return (
-            <Space>
-              <a onClick={()=>{
-                setVisible(true)
-                getDetail(records?.id)
-                setFlag(true)
-              }}>
-                修改
-              </a>
-              <DeleteItem id={records.id} actionRef={actionRef}/>
-            </Space>
-          )
-        } else {
-          return (
-            <Space>
-              <span>修改</span>
-              <span>删除</span>
-            </Space>
-          )
+        if(records.optionFlag !== 3) {
+          if(!isApproval) {
+            return (
+              <Space>
+                <a onClick={()=>{
+                  setVisible(true)
+                  getDetail(records?.id)
+                  setFlag(true)
+                }}>
+                  修改
+                </a>
+                <DeleteItem id={records.id} actionRef={actionRef}/>
+              </Space>
+            )
+          } else {
+            return (
+              <Space>
+                <span>修改</span>
+                <span>删除</span>
+              </Space>
+            )
+          }
+        }else {
+          return ''
         }
       }
     }
