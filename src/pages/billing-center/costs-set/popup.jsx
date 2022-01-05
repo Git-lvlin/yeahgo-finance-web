@@ -56,6 +56,28 @@ const MSelect = ({
   )
 }
 
+const OrderSelect = ({
+  handleChange,
+  state
+}) => {
+  return (
+    <Select 
+      style={{ width: 120 }}
+      onChange={(e)=> handleChange(e, state)}
+      defaultValue='0'
+    >
+      <Option value="0">0</Option>
+      <Option value="1">1</Option>
+      <Option value="2">2</Option>
+      <Option value="3">3</Option>
+      <Option value="4">4</Option>
+      <Option value="5">5</Option>
+      <Option value="6">6</Option>
+      <Option value="7">7</Option>
+    </Select>
+  )
+}
+
 const Popup = ({ 
   show,
   setShow,
@@ -64,7 +86,8 @@ const Popup = ({
   isEdit,
   setData,
   tradeModeId,
-  loading
+  loading,
+  id
 }) => {
   const [flag, setFlag] = useState(true)
   const [symbol, setSymbol] = useState({})
@@ -120,7 +143,9 @@ const Popup = ({
   }, [tradeModeId])
 
   useEffect(() => {
-    ruleCondList().then(res => {
+    ruleCondList({
+      tradeModeId: id
+    }).then(res => {
       setSelectData(res.data)
       setRuleCond(res.data?.map(item => (
         {label: item.name, value: item.code}
@@ -211,8 +236,8 @@ const Popup = ({
       '1': '实时',
       '2': 'T+' + (obj[radioValue] || '1'),
       '3': 'D+' + (obj[radioValue] || '1'),
-      '4': '确认收货',
-      '5': '确认收货+' + (obj[radioValue] || '1')
+      '4': '确认收货+' + (obj[radioValue] || '0'),
+      '5': '确认售后+' + (obj[radioValue] || '0')
     }
     form.setFieldsValue({
       clearingType: formObj[radioValue]
@@ -452,11 +477,13 @@ const Popup = ({
                 name='name'
                 width='sm'
                 readonly={isEdit}
+                rules={[{ required: true, message: '请输入费用名称'}]}
               />
               <ProFormText
                 label='计算优先级'
                 name='orderIndex'
                 width='sm'
+                rules={[{ required: true, message: '请输入计算优先级'}]}
               />
             </Space>
             <ProFormSelect
@@ -672,15 +699,24 @@ const Popup = ({
                   initValue={1}
                 />
               </div>
-              <Radio value={4}>确认收货</Radio>
               <div style={{display: 'flex', alignItems: 'center'}}>
-                <Radio value={5}>
+                <Radio value={4}>
                   确认收货+
                 </Radio>
-                <MSelect
+                <OrderSelect
+                  handleChange={handleChange}
+                  state={4}
+                  initValue={0}
+                />
+              </div>
+              <div style={{display: 'flex', alignItems: 'center'}}>
+                <Radio value={5}>
+                  确认售后+
+                </Radio>
+                <OrderSelect
                   handleChange={handleChange}
                   state={5}
-                  initValue={1}
+                  initValue={0}
                 />
               </div>
             </Space>

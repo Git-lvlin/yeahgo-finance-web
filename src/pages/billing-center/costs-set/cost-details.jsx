@@ -205,7 +205,6 @@ const CostsSet = () => {
       dataIndex: 'status',
       valueType: 'select',
       valueEnum: {
-        '0': '审核中',
         '1': '启用',
         '-1': '禁用'
       },
@@ -295,6 +294,7 @@ const CostsSet = () => {
           isEdit={flag}
           tradeModeId={id}
           loading={loading}
+          id={id}
         />
       }
       <div className={styles.back}>
