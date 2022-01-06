@@ -120,7 +120,11 @@ const CostsSet = () => {
         showSuccess: true,
         showError: true
       }
-    ).finally(()=> {
+    ).then((res)=>{
+      if(res.success) {
+        setIsApproval(true)
+      }
+    }).finally(()=> {
       actionRef.current.reload()
       setApprovalLoading(false)
     })
