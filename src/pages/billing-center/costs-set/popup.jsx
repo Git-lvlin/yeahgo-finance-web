@@ -88,34 +88,34 @@ const DaySelect = ({
       onChange={(e)=> handleChange(e)}
       defaultValue={1}
     >
-      <Option value={1}>1日</Option>
-      <Option value={2}>2日</Option>
-      <Option value={3}>3日</Option>
-      <Option value={4}>4日</Option>
-      <Option value={5}>5日</Option>
-      <Option value={6}>6日</Option>
-      <Option value={7}>7日</Option>
-      <Option value={8}>8日</Option>
-      <Option value={9}>9日</Option>
-      <Option value={10}>10日</Option>
-      <Option value={11}>11日</Option>
-      <Option value={12}>12日</Option>
-      <Option value={13}>13日</Option>
-      <Option value={14}>14日</Option>
-      <Option value={15}>15日</Option>
-      <Option value={16}>16日</Option>
-      <Option value={17}>17日</Option>
-      <Option value={18}>18日</Option>
-      <Option value={19}>19日</Option>
-      <Option value={20}>20日</Option>
-      <Option value={21}>21日</Option>
-      <Option value={22}>22日</Option>
-      <Option value={23}>23日</Option>
-      <Option value={24}>24日</Option>
-      <Option value={25}>25日</Option>
-      <Option value={26}>26日</Option>
-      <Option value={27}>27日</Option>
-      <Option value={28}>28日</Option>
+      <Option value={1}>1号</Option>
+      <Option value={2}>2号</Option>
+      <Option value={3}>3号</Option>
+      <Option value={4}>4号</Option>
+      <Option value={5}>5号</Option>
+      <Option value={6}>6号</Option>
+      <Option value={7}>7号</Option>
+      <Option value={8}>8号</Option>
+      <Option value={9}>9号</Option>
+      <Option value={10}>10号</Option>
+      <Option value={11}>11号</Option>
+      <Option value={12}>12号</Option>
+      <Option value={13}>13号</Option>
+      <Option value={14}>14号</Option>
+      <Option value={15}>15号</Option>
+      <Option value={16}>16号</Option>
+      <Option value={17}>17号</Option>
+      <Option value={18}>18号</Option>
+      <Option value={19}>19号</Option>
+      <Option value={20}>20号</Option>
+      <Option value={21}>21号</Option>
+      <Option value={22}>22号</Option>
+      <Option value={23}>23号</Option>
+      <Option value={24}>24号</Option>
+      <Option value={25}>25号</Option>
+      <Option value={26}>26号</Option>
+      <Option value={27}>27号</Option>
+      <Option value={28}>28号</Option>
     </Select>
   )
 }
@@ -287,7 +287,7 @@ const Popup = ({
       '3': 'D+' + (obj[radioValue] || '1'),
       '4': '确认收货+' + (obj[radioValue] || '0'),
       '5': '确认售后+' + (obj[radioValue] || '0'),
-      '6': '每月' + clear + '日'
+      '6': '每月' + clear + '号结算上一自然月'
     }
     form.setFieldsValue({
       clearingType: formObj[radioValue]
