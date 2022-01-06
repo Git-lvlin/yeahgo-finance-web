@@ -31,6 +31,7 @@ import {
   ruleCondList
 } from '@/services/common'
 import { feeItemAdd, feeItemUpdate } from '@/services/billing-center/costs-set'
+import FormWarp from './form-wrap'
 
 const { Title, Paragraph } = Typography
 const { Option } = Select
@@ -43,15 +44,15 @@ const MSelect = ({
     <Select 
       style={{ width: 120 }}
       onChange={(e)=> handleChange(e, state)}
-      defaultValue='1'
+      defaultValue={1}
     >
-      <Option value="1">1</Option>
-      <Option value="2">2</Option>
-      <Option value="3">3</Option>
-      <Option value="4">4</Option>
-      <Option value="5">5</Option>
-      <Option value="6">6</Option>
-      <Option value="7">7</Option>
+      <Option value={1}>1</Option>
+      <Option value={2}>2</Option>
+      <Option value={3}>3</Option>
+      <Option value={4}>4</Option>
+      <Option value={5}>5</Option>
+      <Option value={6}>6</Option>
+      <Option value={7}>7</Option>
     </Select>
   )
 }
@@ -64,16 +65,57 @@ const OrderSelect = ({
     <Select 
       style={{ width: 120 }}
       onChange={(e)=> handleChange(e, state)}
-      defaultValue='0'
+      defaultValue={0}
     >
-      <Option value="0">0</Option>
-      <Option value="1">1</Option>
-      <Option value="2">2</Option>
-      <Option value="3">3</Option>
-      <Option value="4">4</Option>
-      <Option value="5">5</Option>
-      <Option value="6">6</Option>
-      <Option value="7">7</Option>
+      <Option value={0}>0</Option>
+      <Option value={1}>1</Option>
+      <Option value={2}>2</Option>
+      <Option value={3}>3</Option>
+      <Option value={4}>4</Option>
+      <Option value={5}>5</Option>
+      <Option value={6}>6</Option>
+      <Option value={7}>7</Option>
+    </Select>
+  )
+}
+
+const DaySelect = ({
+  handleChange
+}) => {
+  return (
+    <Select 
+      style={{ width: 70 }}
+      onChange={(e)=> handleChange(e)}
+      defaultValue={1}
+    >
+      <Option value={1}>1日</Option>
+      <Option value={2}>2日</Option>
+      <Option value={3}>3日</Option>
+      <Option value={4}>4日</Option>
+      <Option value={5}>5日</Option>
+      <Option value={6}>6日</Option>
+      <Option value={7}>7日</Option>
+      <Option value={8}>8日</Option>
+      <Option value={9}>9日</Option>
+      <Option value={10}>10日</Option>
+      <Option value={11}>11日</Option>
+      <Option value={12}>12日</Option>
+      <Option value={13}>13日</Option>
+      <Option value={14}>14日</Option>
+      <Option value={15}>15日</Option>
+      <Option value={16}>16日</Option>
+      <Option value={17}>17日</Option>
+      <Option value={18}>18日</Option>
+      <Option value={19}>19日</Option>
+      <Option value={20}>20日</Option>
+      <Option value={21}>21日</Option>
+      <Option value={22}>22日</Option>
+      <Option value={23}>23日</Option>
+      <Option value={24}>24日</Option>
+      <Option value={25}>25日</Option>
+      <Option value={26}>26日</Option>
+      <Option value={27}>27日</Option>
+      <Option value={28}>28日</Option>
     </Select>
   )
 }
@@ -94,7 +136,7 @@ const Popup = ({
   const [ruleCond, setRuleCond] = useState([])
   const [editableKeys, setEditableRowKeys] = useState()
   const [role, setRole] = useState([])
-  const [clear, setClear] = useState('1')
+  const [clear, setClear] = useState(1)
   const [optionValueObj, setOptionValueObj] = useState({})
   const [radioValue, setRadioValue] = useState(1)
   const [selectData, setSelectData] = useState([])
@@ -222,6 +264,9 @@ const Popup = ({
 
   const onChange = (e) => {
     setRadioValue(e.target.value)
+    if(e.target.value === 4 || e.target.value === 5) {
+      setClear('0')
+    }
   }
 
   const handleChange = (e, state) => {
@@ -231,13 +276,18 @@ const Popup = ({
     setClear(e)
   }
 
+  const changeDay = (e) => {
+    setClear(e)
+  }
+
   const handleOk = () => {
     const formObj = {
       '1': '实时',
       '2': 'T+' + (obj[radioValue] || '1'),
       '3': 'D+' + (obj[radioValue] || '1'),
       '4': '确认收货+' + (obj[radioValue] || '0'),
-      '5': '确认售后+' + (obj[radioValue] || '0')
+      '5': '确认售后+' + (obj[radioValue] || '0'),
+      '6': '每月' + clear + '日'
     }
     form.setFieldsValue({
       clearingType: formObj[radioValue]
@@ -256,8 +306,9 @@ const Popup = ({
           ...e, 
           clearingPeriodInterval: clear,
           clearingType: radioValue,
+          clearingPeriod: 5,
           status: 1,
-          rules,
+          rules
         },
         { 
           showSuccess: true,
@@ -280,6 +331,7 @@ const Popup = ({
           ...e, 
           clearingPeriodInterval: clear,
           clearingType: radioValue,
+          clearingPeriod: 5,
           rules
         },
         {
@@ -706,7 +758,6 @@ const Popup = ({
                 <OrderSelect
                   handleChange={handleChange}
                   state={4}
-                  initValue={0}
                 />
               </div>
               <div style={{display: 'flex', alignItems: 'center'}}>
@@ -716,7 +767,19 @@ const Popup = ({
                 <OrderSelect
                   handleChange={handleChange}
                   state={5}
-                  initValue={0}
+                />
+              </div>
+              <div style={{display: 'flex', alignItems: 'center'}}>
+                <Radio value={6}>
+                  每月
+                </Radio>
+                <FormWarp
+                  content={()=>(
+                    <DaySelect handleChange={changeDay}/>
+                  )}
+                  right={()=>(
+                    <div>结算上一自然月（已过售后的）</div>
+                  )}
                 />
               </div>
             </Space>
