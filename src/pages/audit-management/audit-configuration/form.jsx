@@ -64,7 +64,7 @@ export default (props) => {
         const Arr=[]
         res.data?.flowActionList.map(ele=>{
           if(ele.actionType==2){
-            Arr.push({id:ele.id,auditors:ele.auditors,autoExecute:ele.autoExecute,name:ele.name})
+            Arr.push({id:ele.id,auditors:ele.auditors,auditType:ele.auditType,name:ele.name})
           }
         })
         setAuditMsg(Arr)
@@ -105,7 +105,7 @@ export default (props) => {
       if(ele.id==data.id){
         return {...ele,auditors:[...ele.auditors,...auditorId].filter((item,index)=>{
           return [...ele.auditors,...auditorId].findIndex(item1 =>item1.auditorId==item.auditorId) == index
-        }),autoExecute:data.autoExecute}
+        }),auditType:data.auditType}
       }
       return ele
     })
@@ -164,7 +164,7 @@ export default (props) => {
         {
           auditMsg&&auditMsg.map(ele=>{
               return <div key={ele.id} className={styles.members}>
-                        <p>{ele.name} <span className={styles.countersign}>{{0:'或签',1:'会签'}[ele.autoExecute]}</span></p>
+                        <p>{ele.name} <span className={styles.countersign}>{{0:'或签',1:'会签'}[ele.auditType]}</span></p>
                         <div className={styles.memberMsg}>
                         <ProFormText 
                           width="md"
