@@ -232,8 +232,8 @@ export default (props) => {
                 ele.map(item=>{
                  return <Step
                          key={item?.submitUserId} 
-                         title={"审批人 • "+{ 1: '已同意', '-1': '已驳回' }[item.status]} 
-                         description={<p>{adminName&&adminName[item?.submitUserId]}<span style={{marginLeft:'50px'}}>{{ 1: '已同意', '-1': '已驳回' }[item.auditFlag]} </span> • {moment(item?.approvalTime).format('YYYY-MM-DD HH:mm:ss')}</p>} 
+                         title={"审批人 • "+{ 2: '已同意', '-1': '已驳回' }[item.status]} 
+                         description={<p>{adminName&&adminName[item?.submitUserId]}<span style={{marginLeft:'50px'}}>{{ 2: '已同意', '-1': '已驳回' }[item.auditFlag]} </span> • {moment(item?.approvalTime).format('YYYY-MM-DD HH:mm:ss')}</p>} 
                        />
                })
               }
@@ -267,7 +267,7 @@ export default (props) => {
           options={[
             {
               label: '同意',
-              value: 1,
+              value: 2,
             },
             {
               label: '驳回',
