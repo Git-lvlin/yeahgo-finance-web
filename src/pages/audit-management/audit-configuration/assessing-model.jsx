@@ -70,7 +70,7 @@ export default props=>{
             {/* <p>排序按名称首字母，A-Z</p> */}
         </div>
         <ProFormRadio.Group
-          name="autoExecute"
+          name="auditType"
           label="审批规则"
           rules={[{ required: true, message: '审批规则必选' }]}
           options={[
