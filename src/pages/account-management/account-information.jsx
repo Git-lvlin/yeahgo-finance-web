@@ -58,7 +58,7 @@ const AccountInformation = ({dataSource, loading}) => {
       render: (_, r)=> (
         <div className={styles.totalFund}>
           <span>{amountTransform(Number(_), '/')}</span>
-          <a 
+          {/* <a 
             onClick={()=> {
               setPopup(true)
               setSn(r?.sn)
@@ -67,7 +67,7 @@ const AccountInformation = ({dataSource, loading}) => {
             }}
           >
             交易明细
-          </a>
+          </a> */}
         </div>
       )
     },
@@ -84,7 +84,7 @@ const AccountInformation = ({dataSource, loading}) => {
       render: (_, r)=> (
         <div className={styles.totalFund}>
           <span>{amountTransform(Number(_), '/')}</span>
-          <a 
+          {/* <a 
             onClick={()=> {
               setPopup(true)
               setSn(r?.sn)
@@ -93,7 +93,7 @@ const AccountInformation = ({dataSource, loading}) => {
             }}
           >
             交易明细
-          </a>
+          </a> */}
         </div>
       )
     },
@@ -110,7 +110,7 @@ const AccountInformation = ({dataSource, loading}) => {
       render: (_, r)=> (
         <div className={styles.totalFund}>
           <span>{amountTransform(Number(_), '/')}</span>
-          <a 
+          {/* <a 
             onClick={()=> {
               setPopup(true)
               setSn(r?.sn)
@@ -119,7 +119,7 @@ const AccountInformation = ({dataSource, loading}) => {
             }}
           >
             交易明细
-          </a>
+          </a> */}
         </div>
       )
     }
@@ -252,7 +252,7 @@ const AccountInformation = ({dataSource, loading}) => {
           />
         </Paragraph>
       </Typography>
-      {
+      {/* {
         popup&&
         <TransactionDrawer
           sn={sn}
@@ -261,7 +261,7 @@ const AccountInformation = ({dataSource, loading}) => {
           setVisible={setPopup}
           amountType={amountType}
         />
-      }
+      } */}
     </Spin>
   )
 }
