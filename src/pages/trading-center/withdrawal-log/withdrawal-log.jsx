@@ -98,7 +98,10 @@ const WithdrawalLog = () => {
       valueEnum: {
         'auditing': '待审核',
         'waitPay': '待打款',
-        'paid': '已打款'
+        'paid': '已打款',
+        'arrived': '已到账',
+        'unPass': '审核拒绝',
+        'failure': '提现失败'
       },
       align: 'center'
     },
