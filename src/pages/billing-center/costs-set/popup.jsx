@@ -209,7 +209,8 @@ const Popup = ({
         serviceChargeRoleId: dataSource?.serviceChargeRoleId,
         agentRecvRoleId: dataSource?.agentRecvRoleId,
         isAgentRecv: dataSource?.isAgentRecv,
-        clearingType: dataSource?.clearingRuleDesc
+        clearingType: dataSource?.clearingRuleDesc,
+        roundType: dataSource?.roundType
       })
       setRulesList(dataSource.rules.map(item=>{
         item?.conds?.forEach(res=> {
@@ -600,14 +601,35 @@ const Popup = ({
                 options={role}
               />
             </ProForm.Group>
-            <ProFormText
-              label='结算周期'
-              name='clearingType'
-              width='sm'
-              fieldProps={{
-                onClick: ()=> setShowModal(true)
-              }}
-            />
+            <Space size={185}>
+              <ProFormText
+                label='结算周期'
+                name='clearingType'
+                width='sm'
+                fieldProps={{
+                  onClick: ()=> setShowModal(true)
+                }}
+              />
+              <ProFormSelect
+                label='取整规则'
+                name='roundType'
+                width='sm'
+                options={[
+                  {
+                    label: '向下取整（如：0.119取0.11）',
+                    value: 1
+                  },
+                  {
+                    label: '四舍五入.156取0.16）',
+                    value: 2
+                  },
+                  {
+                    label: '向上取整（如：0.111取0.12）',
+                    value: 3
+                  }
+                ]}
+              />
+            </Space>
           </Paragraph>
         </Typography>
         <Typography>
