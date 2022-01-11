@@ -17,5 +17,15 @@ export default {
       path: '/trading-center/billing-details',
       component: './trading-center/billing-details'
     },
+    {
+      name: 'withdrawal-log',
+      path: '/trading-center/withdrawal-log',
+      component: './trading-center/withdrawal-log'
+    },
+    {
+      name: 'after-sales',
+      path: '/trading-center/after-sales',
+      component: './trading-center/after-sales'
+    },
   ]
 }

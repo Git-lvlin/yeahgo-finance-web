@@ -30,6 +30,8 @@ export default {
   'menu.trading-center.transaction-details': '交易明细',
   'menu.trading-center.cost-detail': '费用明细',
   'menu.trading-center.billing-details': '结算明细',
+  'menu.trading-center.withdrawal-log': '提现明细',
+  'menu.trading-center.after-sales': '售后明细',
 
   'menu.check-management': '对账管理',
   'menu.check-management.transaction-reconciliation': '交易对账',
