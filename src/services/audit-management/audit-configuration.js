@@ -55,3 +55,20 @@ export const updateFlowMain = async (params = {}, options = {}) => {
       success: res.success
   }
   }
+
+
+export const commonList = async (params = {}, options = {}) => {
+  const { ...rest } = params;
+  const res = await request('/auth/admin/account/commonList', {
+      method: 'POST',
+      data:  {
+        ...rest
+      },
+      ...options
+  })
+  return {
+      data: res.data.records,
+      code: res.code,
+      success: res.success
+  }
+  }

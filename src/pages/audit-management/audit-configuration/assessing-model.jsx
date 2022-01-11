@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { ModalForm,ProFormCheckbox,ProFormRadio,ProFormText} from '@ant-design/pro-form';
 import { Button,message,Input,Form } from 'antd';
 import styles from './style.less'
-import * as api from '@/services/setting/account-management';
+import { commonList } from '@/services/audit-management/audit-configuration'
 const { Search } = Input;
 
 const formItemLayout = {
@@ -28,7 +28,7 @@ export default props=>{
       form.setFieldsValue({
         id:detailData?.id
       })
-      api.adminList({nickname:searchName}).then(res=>{
+      commonList({nickname:searchName}).then(res=>{
         const arr=[]
         res.data.map(ele=>{
           arr.push({label:ele.nickname,value:ele.id})

@@ -7,7 +7,7 @@ import ProForm, {
 import styles from './style.less'
 import { getFlowMain,updateFlowMain } from '@/services/audit-management/audit-configuration'
 import AssessingOfficer from './assessing-model'
-import * as api from '@/services/setting/account-management';
+import { commonList } from '@/services/audit-management/audit-configuration'
 const { Step } = Steps;
 import _ from 'lodash'
 
@@ -72,7 +72,7 @@ export default (props) => {
           auditMsg:Arr
         })
       })
-      api.adminList({}).then(res=>{
+      commonList({}).then(res=>{
         const obj={}
         const nameobj={}
         res.data.map(ele=>{

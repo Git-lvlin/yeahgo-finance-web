@@ -12,7 +12,7 @@ import styles from './style.less'
 import { getInstance,process } from '@/services/audit-management/commission-audit'
 import moment from 'moment'
 import ProTable from '@ant-design/pro-table';
-import * as api from '@/services/setting/account-management';
+import { commonList } from '@/services/audit-management/audit-configuration'
 import ProCard from '@ant-design/pro-card';
 const { Step } = Steps;
 
@@ -75,7 +75,7 @@ export default (props) => {
         })
       })
 
-      api.adminList({}).then(res=>{
+      commonList({}).then(res=>{
         const obj={}
         res.data.map(ele=>{
           obj[ele.id]=ele.nickname
