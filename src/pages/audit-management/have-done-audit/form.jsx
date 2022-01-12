@@ -155,7 +155,9 @@ export default (props) => {
                                           readonly={true}
                                           labelCol={3}
                                           fieldProps={{
-                                            value:ele.value,
+                                            value:  <pre className={styles.line_feed}>
+                                                      {ele.value}
+                                                    </pre>
                                           }}
                                       />
                                       }
