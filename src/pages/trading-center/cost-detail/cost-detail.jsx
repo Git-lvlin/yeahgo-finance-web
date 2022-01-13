@@ -26,10 +26,10 @@ const CostDetail = () => {
   const getFieldValue = (form) => {
     const {settleTime, createTime, ...rest}=form.getFieldsValue()
     return {
-      settleTimeBegin: moment(settleTime?.[0]).format('YYYY-MM-DD'),
-      settleTimeEnd: moment(settleTime?.[1]).format('YYYY-MM-DD'),
-      createTimeBegin: moment(createTime?.[0]).format('YYYY-MM-DD'),
-      createTimeEnd: moment(createTime?.[1]).format('YYYY-MM-DD'),
+      settleTimeBegin: settleTime&&moment(settleTime?.[0]).format('YYYY-MM-DD'),
+      settleTimeEnd: settleTime&&moment(settleTime?.[1]).format('YYYY-MM-DD'),
+      createTimeBegin: createTime&&moment(createTime?.[0]).format('YYYY-MM-DD'),
+      createTimeEnd: createTime&&moment(createTime?.[1]).format('YYYY-MM-DD'),
       ...rest
     }
   }

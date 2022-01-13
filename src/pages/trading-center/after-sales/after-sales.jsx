@@ -17,8 +17,8 @@ const AfterSales = () => {
   const getFieldValue = (form) => {
     const {createTime, ...rest} = form.getFieldsValue()
     return {
-      startTime: moment(createTime?.[0]).format('YYYY-MM-DD'),
-      endTime: moment(createTime?.[1]).format('YYYY-MM-DD'),
+      startTime: createTime&&moment(createTime?.[0]).format('YYYY-MM-DD'),
+      endTime: createTime&&moment(createTime?.[1]).format('YYYY-MM-DD'),
       ...rest
     }
   }

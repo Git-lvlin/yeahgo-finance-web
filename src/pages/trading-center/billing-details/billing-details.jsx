@@ -28,8 +28,8 @@ const BillingDetails = () => {
   const getFieldValue = (form) => {
     const {settleTime, ...rest} = form.getFieldsValue()
     return {
-      settleTimeBegin: moment(settleTime?.[0]).format('YYYY-MM-DD'),
-      settleTimeEnd: moment(settleTime?.[1]).format('YYYY-MM-DD'),
+      settleTimeBegin: settleTime&&moment(settleTime?.[0]).format('YYYY-MM-DD'),
+      settleTimeEnd: settleTime&&moment(settleTime?.[1]).format('YYYY-MM-DD'),
       ...rest
     }
   }

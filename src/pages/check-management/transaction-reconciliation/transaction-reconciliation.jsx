@@ -26,8 +26,8 @@ const TransactionReconciliation = () => {
   const getFieldValue = (form) => {
     const {createTime, ...rest} = form.getFieldsValue()
     return {
-      createTimeBegin: moment(createTime?.[0]).format('YYYY-MM-DD'),
-      createTimeEnd: moment(createTime?.[1]).format('YYYY-MM-DD'),
+      createTimeBegin: createTime&&moment(createTime?.[0]).format('YYYY-MM-DD'),
+      createTimeEnd: createTime&&moment(createTime?.[1]).format('YYYY-MM-DD'),
       ...rest
     }
   }
