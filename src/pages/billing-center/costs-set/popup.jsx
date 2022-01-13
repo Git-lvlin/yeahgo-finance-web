@@ -541,21 +541,45 @@ const Popup = ({
                 rules={[{ required: true, message: '请输入计算优先级'}]}
               />
             </Space>
-            <ProFormSelect
-              label='费用状态'
-              name='status'
-              width='sm'
-              options={[
-                {
-                  value: 1,
-                  label: '启用'
-                },
-                {
-                  value: -1,
-                  label: '禁用'
-                }
-              ]}
-            />
+            <Space size={205}>
+              <ProFormSelect
+                label='费用状态'
+                name='status'
+                width='sm'
+                options={[
+                  {
+                    value: 1,
+                    label: '启用'
+                  },
+                  {
+                    value: -1,
+                    label: '禁用'
+                  }
+                ]}
+              />
+              {
+                type===2&&
+                <ProFormSelect
+                  label='取整规则'
+                  name='roundType'
+                  width='sm'
+                  options={[
+                    {
+                      label: '向下取整（如：0.119取0.11）',
+                      value: 1
+                    },
+                    {
+                      label: '四舍五入.156取0.16）',
+                      value: 2
+                    },
+                    {
+                      label: '向上取整（如：0.111取0.12）',
+                      value: 3
+                    }
+                  ]}
+                />
+              }
+            </Space>
             {
               type === 1&&
               <Space size={210}>
