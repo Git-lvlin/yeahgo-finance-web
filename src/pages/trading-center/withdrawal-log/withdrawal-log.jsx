@@ -19,6 +19,7 @@ const WithdrawalLog = () => {
     return {
       startTime: createTime&&moment(createTime?.[0]).format('YYYY-MM-DD'),
       endTime: createTime&&moment(createTime?.[1]).format('YYYY-MM-DD'),
+      type: '1',
       ...rest
     }
   }
