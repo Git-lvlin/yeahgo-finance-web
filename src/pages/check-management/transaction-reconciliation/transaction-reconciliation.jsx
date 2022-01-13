@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
 import { Space, Button } from 'antd'
+import moment from 'moment'
 
 import { 
   checkTradePage,
@@ -21,6 +22,15 @@ const TransactionReconciliation = () => {
   const [visit, setVisit] = useState(false)
 
   const actionRef = useRef()
+
+  const getFieldValue = (form) => {
+    const {createTime, ...rest} = form.getFieldsValue()
+    return {
+      createTimeBegin: moment(createTime?.[0]).format('YYYY-MM-DD'),
+      createTimeEnd: moment(createTime?.[1]).format('YYYY-MM-DD'),
+      ...rest
+    }
+  }
 
   const columns = [
     {
@@ -250,14 +260,14 @@ const TransactionReconciliation = () => {
             <Export
               change={(e)=> {setVisit(e)}}
               key="export"
-              type=""
-              conditions={{}}
+              type="finance-trade-verify-record-export"
+              conditions={getFieldValue(form)}
             />,
             <ExportHistory
               key="exportHistory"
               show={visit}
               setShow={setVisit}
-              type=""
+              type="finance-trade-verify-record-export"
             />
           ]
         }}

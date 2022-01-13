@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
 import { Button } from 'antd'
+import moment from 'moment'
 
 import { divideFeePage } from '@/services/trading-center/cost-detail'
 import { orderTypes } from '@/services/common'
@@ -21,6 +22,17 @@ const CostDetail = () => {
       setOrderType(null)
     }
   }, [])
+
+  const getFieldValue = (form) => {
+    const {settleTime, createTime, ...rest}=form.getFieldsValue()
+    return {
+      settleTimeBegin: moment(settleTime?.[0]).format('YYYY-MM-DD'),
+      settleTimeEnd: moment(settleTime?.[1]).format('YYYY-MM-DD'),
+      createTimeBegin: moment(createTime?.[0]).format('YYYY-MM-DD'),
+      createTimeEnd: moment(createTime?.[1]).format('YYYY-MM-DD'),
+      ...rest
+    }
+  }
 
   const columns = [
     {
@@ -179,14 +191,14 @@ const CostDetail = () => {
             <Export
               change={(e)=> {setVisit(e)}}
               key="export"
-              type=""
-              conditions={{}}
+              type="finance-cost-record-export"
+              conditions={getFieldValue(form)}
             />,
             <ExportHistory
               key="exportHistory"
               show={visit}
               setShow={setVisit}
-              type=""
+              type="finance-cost-record-export"
             />
           ]
         }}

@@ -2,13 +2,26 @@ import React, { useState } from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
 import moment from 'moment'
+import { Button } from 'antd'
 
 import { fmisWithdrawLog } from '@/services/trading-center/withdrawal-log'
 import { amountTransform } from '@/utils/utils'
 import styles from './styles.less'
+import Export from '@/components/export-excel/export'
+import ExportHistory from '@/components/export-excel/export-history'
 
 const WithdrawalLog = () => {
   const [totalAmount, setTotalAmount] = useState(0)
+  const [visit, setVisit] = useState(false)
+
+  const getFieldValue = (form) => {
+    const {createTime, ...rest} = form.getFieldsValue()
+    return {
+      startTime: moment(createTime?.[0]).format('YYYY-MM-DD'),
+      endTime: moment(createTime?.[1]).format('YYYY-MM-DD'),
+      ...rest
+    }
+  }
 
   const columns = [
     {
@@ -119,7 +132,39 @@ const WithdrawalLog = () => {
         columns={columns}
         request={fmisWithdrawLog}
         search={{
-          labelWidth: 100
+          labelWidth: 100,
+          optionRender: ({searchText, resetText}, {form}) => [
+            <Button
+              key="search"
+              type="primary"
+              onClick={() => {
+                form?.submit()
+              }}
+            >
+              {searchText}
+            </Button>,
+            <Button
+              key="rest"
+              onClick={() => {
+                form?.resetFields()
+                form?.submit()
+              }}
+            >
+              {resetText}
+            </Button>,
+            <Export
+              change={(e)=> {setVisit(e)}}
+              key="export"
+              type="finance-with-draw-record-export"
+              conditions={getFieldValue(form)}
+            />,
+            <ExportHistory
+              key="exportHistory"
+              show={visit}
+              setShow={setVisit}
+              type="finance-with-draw-record-export"
+            />
+          ]
         }}
         postData={(v)=>{
           setTotalAmount(v?.totalAmount)

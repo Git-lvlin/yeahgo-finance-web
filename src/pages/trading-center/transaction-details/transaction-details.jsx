@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
 import { Button } from 'antd'
+import moment from 'moment'
 
 import { tradePage, tradeDetail } from '@/services/trading-center/transaction-details'
 import { amountTransform } from '@/utils/utils'
 import TransactionModal from './transaction-modal'
 import Export from '@/components/export-excel/export'
 import ExportHistory from '@/components/export-excel/export-history'
-
 
 const TransactionDetails = () => {
   const [popupModal, setPopupModal] = useState(false)
@@ -23,6 +23,15 @@ const TransactionDetails = () => {
     }).finally(()=>{
       setLoading(false)
     })
+  }
+
+  const getFieldValue = (form) => {
+    const {createTime, ...rest}=form.getFieldsValue()
+    return {
+      createTimeBegin: moment(createTime?.[0]).format('YYYY-MM-DD'),
+      createTimeEnd: moment(createTime?.[1]).format('YYYY-MM-DD'),
+      ...rest
+    }
   }
 
   const columns = [
@@ -165,13 +174,14 @@ const TransactionDetails = () => {
             <Export
               change={(e)=> {setVisit(e)}}
               key="export"
-              type=""
+              type="finance-trade-record-export"
+              conditions={getFieldValue(form)}
             />,
             <ExportHistory
               key="exportHistory"
               show={visit}
               setShow={setVisit}
-              type=""
+              type="finance-trade-record-export"
             />
           ],
         }}

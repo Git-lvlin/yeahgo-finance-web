@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
 import { Button } from 'antd'
+import moment from 'moment'
 
 import { accountPage, accountDetail } from '@/services/account-management'
 import { amountTransform } from '@/utils/utils'
@@ -23,6 +24,15 @@ const AccountDetail = () => {
     }).finally(()=>{
       setLoading(false)
     })
+  }
+
+  const getFieldValue = (form) => {
+    const {settleTime, ...rest} = form.getFieldsValue()
+    return {
+      settleTimeBegin: moment(settleTime?.[0]).format('YYYY-MM-DD'),
+      settleTimeEnd: moment(settleTime?.[1]).format('YYYY-MM-DD'),
+      ...rest
+    }
   }
 
   const columns = [
@@ -155,14 +165,14 @@ const AccountDetail = () => {
             <Export
               change={(e)=> {setVisit(e)}}
               key="export"
-              type=""
-              conditions={{}}
+              type="finance-account-manage-export"
+              conditions={getFieldValue(form)}
             />,
             <ExportHistory
               key="exportHistory"
               show={visit}
               setShow={setVisit}
-              type=""
+              type="finance-account-manage-export"
             />
           ]
         }}

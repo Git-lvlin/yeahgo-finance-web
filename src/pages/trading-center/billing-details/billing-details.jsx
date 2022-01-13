@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
 import { Button } from 'antd'
+import moment from 'moment'
 
 import { settlePage, settleDetail } from '@/services/trading-center/billing-details'
 import { amountTransform } from '@/utils/utils'
@@ -24,6 +25,14 @@ const BillingDetails = () => {
     })
   }
   
+  const getFieldValue = (form) => {
+    const {settleTime, ...rest} = form.getFieldsValue()
+    return {
+      settleTimeBegin: moment(settleTime?.[0]).format('YYYY-MM-DD'),
+      settleTimeEnd: moment(settleTime?.[1]).format('YYYY-MM-DD'),
+      ...rest
+    }
+  }
 
   const columns = [
     {
@@ -157,14 +166,14 @@ const BillingDetails = () => {
             <Export
               change={(e)=> {setVisit(e)}}
               key="export"
-              type=""
-              conditions={{}}
+              type="finance-settle-account-record-export"
+              conditions={getFieldValue(form)}
             />,
             <ExportHistory
               key="exportHistory"
               show={visit}
               setShow={setVisit}
-              type=""
+              type="finance-settle-account-record-export"
             />
           ]
         }}
