@@ -310,7 +310,8 @@ const Popup = ({
           clearingType: radioValue,
           clearingPeriod: 5,
           status: 1,
-          rules
+          rules,
+          type
         },
         { 
           showSuccess: true,
