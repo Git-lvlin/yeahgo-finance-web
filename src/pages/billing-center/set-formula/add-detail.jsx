@@ -84,7 +84,8 @@ const AddDetail = ({
 
   const checkFormula = () => {
     formulaCheck({
-      express: form?.getFieldsValue()?.express
+      express: form?.getFieldsValue()?.express,
+      tradeModeId: form?.getFieldsValue()?.tradeModeId
     },
     {
       showError: false

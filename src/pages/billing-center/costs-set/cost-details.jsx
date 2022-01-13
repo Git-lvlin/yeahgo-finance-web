@@ -9,7 +9,8 @@ import {
   Button, 
   Space, 
   Tag,
-  Popconfirm
+  Popconfirm,
+  Tabs
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { useParams, history } from 'umi'
@@ -24,6 +25,8 @@ import {
   feeItemInApproval
 } from '@/services/billing-center/costs-set'
 import styles from './style.less'
+
+const { TabPane } = Tabs
 
 const DeleteItem = ({id, actionRef}) => {
   const [delLoading, setDelLoading] = useState(false)
@@ -49,16 +52,17 @@ const DeleteItem = ({id, actionRef}) => {
   )
 }
 
-const CostsSet = () => {
+const TabList = ({
+  type, 
+  isApproval, 
+  id
+}) => {
   const [visible, setVisible] = useState(false)
   const [tradeList, setTradeList ] = useState([])
-  const [approvalLoading, setApprovalLoading] = useState(false)
   const [data, setData] = useState(null)
   const [flag, setFlag] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [isApproval, setIsApproval] = useState(false)
   const actionRef = useRef(null)
-  const { id }  = useParams()
 
   useEffect(() => {
     tradeModeList({}).then(res=>{
@@ -69,14 +73,6 @@ const CostsSet = () => {
     return () => {
       setTradeList([])
     }
-  }, [])
-
-  useEffect(()=>{
-    feeItemInApproval({
-      tradeModeId: id
-    }).then(res=>{
-      setIsApproval(res?.data)
-    })
   }, [])
 
   const getDetail = (id) => {
@@ -108,26 +104,6 @@ const CostsSet = () => {
 
   const goBack = () => {
     history.goBack()
-  }
-
-  const approvalSubmit = () => {
-    setApprovalLoading(true)
-    feeItemApproveSub(
-      {
-        tradeModeId: id
-      },
-      {
-        showSuccess: true,
-        showError: true
-      }
-    ).then((res)=>{
-      if(res.success) {
-        setIsApproval(true)
-      }
-    }).finally(()=> {
-      actionRef.current.reload()
-      setApprovalLoading(false)
-    })
   }
 
   const columns = [
@@ -249,12 +225,12 @@ const CostsSet = () => {
   ]
 
   return (
-    <PageContainer title={false}>
+    <>
       <ProTable
         rowKey='name'
         headerTitle={setTitle()}
         request={feeItemPage}
-        params={{tradeModeId: id}}
+        params={{tradeModeId: id, type}}
         actionRef={actionRef}
         pagination={{
           showQuickJumper: true,
@@ -265,17 +241,6 @@ const CostsSet = () => {
           settings: false
         }}
         toolBarRender={()=>[
-          <Popconfirm
-            title="确定要执行提审操作吗？"
-            onConfirm={approvalSubmit}
-            okButtonProps={{ loading: approvalLoading }}
-            key='approval'
-            disabled={isApproval}
-          >
-            <Button disabled={isApproval}>
-              提审
-            </Button>
-          </Popconfirm>,
           <Button
             type='primary'
             icon={<PlusOutlined />}
@@ -303,13 +268,90 @@ const CostsSet = () => {
           tradeModeId={id}
           loading={loading}
           id={id}
+          type={type}
         />
       }
       <div className={styles.back}>
         <Button type='primary' onClick={()=> {goBack()}}>返回</Button>
       </div>
+    </>
+  )
+}
+
+const CostSet = () => {
+  const [approvalLoading, setApprovalLoading] = useState(false)
+  const [isApproval, setIsApproval] = useState(false)
+
+  const { id }  = useParams()
+
+  useEffect(()=>{
+    feeItemInApproval({
+      tradeModeId: id
+    }).then(res=>{
+      setIsApproval(res?.data)
+    })
+  }, [])
+
+  const approvalSubmit = () => {
+    setApprovalLoading(true)
+    feeItemApproveSub(
+      {
+        tradeModeId: id
+      },
+      {
+        showSuccess: true,
+        showError: true
+      }
+    ).then((res)=>{
+      if(res.success) {
+        setIsApproval(true)
+      }
+    }).finally(()=> {
+      setApprovalLoading(false)
+    })
+  }
+
+
+  return (
+    <PageContainer title={false}>
+      <Tabs
+        type="card"
+        defaultActiveKey="1"
+        style={{
+          background: '#fff',
+          padding: 25
+        }}
+        tabBarExtraContent={
+          <Popconfirm
+            title="确定要执行提审操作吗？"
+            onConfirm={approvalSubmit}
+            okButtonProps={{ loading: approvalLoading }}
+            key='approval'
+            disabled={isApproval}
+          >
+            <Button disabled={isApproval}>
+              提审
+            </Button>
+          </Popconfirm>
+        }
+      >
+        <TabPane tab="分账费用" key="1">
+          <TabList 
+            type={1}
+            isApproval={isApproval}
+            id={id}
+          />
+        </TabPane>
+        <TabPane tab="成本费用" key="2">
+          <TabList 
+            type={2}
+            isApproval={isApproval}
+            id={id}
+          />
+        </TabPane>
+      </Tabs>
     </PageContainer>
   )
 }
 
-export default CostsSet
+export default CostSet

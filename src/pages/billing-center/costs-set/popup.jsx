@@ -129,7 +129,8 @@ const Popup = ({
   setData,
   tradeModeId,
   loading,
-  id
+  id, 
+  type
 }) => {
   const [flag, setFlag] = useState(true)
   const [symbol, setSymbol] = useState({})
@@ -554,82 +555,91 @@ const Popup = ({
                 }
               ]}
             />
-            <Space size={210}>
-              <ProFormSelect
-                label='付款方'
-                name='payRoleId'
-                width='sm'
-                labelCol={{ span: 5 }}
-                wrapperCol={{ span: 18 }}
-                options={role}
-              />
-              <ProFormSelect
-                label='收款方'
-                name='recvRoleId'
-                width='sm'
-                options={role}
-              />
-            </Space>
-            <ProForm.Group>
-              <ProFormSelect
-                label='代收方'
-                name='agentRecvRoleId'
-                width='sm'
-                disabled={flag}
-                options={role}
-              />
-              <ProFormCheckbox
-                name='isAgentRecv'
-                fieldProps={{
-                  onChange:(e) => {
-                    if (e.target.checked) {
-                      setFlag(false)
-                    } else {
-                      setFlag(true)
+            {
+              type === 1&&
+              <Space size={210}>
+                <ProFormSelect
+                  label='付款方'
+                  name='payRoleId'
+                  width='sm'
+                  labelCol={{ span: 5 }}
+                  wrapperCol={{ span: 18 }}
+                  options={role}
+                />
+                <ProFormSelect
+                  label='收款方'
+                  name='recvRoleId'
+                  width='sm'
+                  options={role}
+                />
+              </Space>
+            }
+            {
+              type === 1&&
+              <ProForm.Group>
+                <ProFormSelect
+                  label='代收方'
+                  name='agentRecvRoleId'
+                  width='sm'
+                  disabled={flag}
+                  options={role}
+                />
+                <ProFormCheckbox
+                  name='isAgentRecv'
+                  fieldProps={{
+                    onChange:(e) => {
+                      if (e.target.checked) {
+                        setFlag(false)
+                      } else {
+                        setFlag(true)
+                      }
                     }
-                  }
-                }}
-              >
-                是否代收
-              </ProFormCheckbox>
-              <ProFormSelect
-                label='通道费承担方'
-                name='serviceChargeRoleId'
-                width='sm'
-                labelCol={{ span: 9 }}
-                wrapperCol={{ span: 13 }}
-                options={role}
-              />
-            </ProForm.Group>
-            <Space size={185}>
-              <ProFormText
-                label='结算周期'
-                name='clearingType'
-                width='sm'
-                fieldProps={{
-                  onClick: ()=> setShowModal(true)
-                }}
-              />
-              <ProFormSelect
-                label='取整规则'
-                name='roundType'
-                width='sm'
-                options={[
-                  {
-                    label: '向下取整（如：0.119取0.11）',
-                    value: 1
-                  },
-                  {
-                    label: '四舍五入.156取0.16）',
-                    value: 2
-                  },
-                  {
-                    label: '向上取整（如：0.111取0.12）',
-                    value: 3
-                  }
-                ]}
-              />
-            </Space>
+                  }}
+                >
+                  是否代收
+                </ProFormCheckbox>
+                <ProFormSelect
+                  label='通道费承担方'
+                  name='serviceChargeRoleId'
+                  width='sm'
+                  labelCol={{ span: 9 }}
+                  wrapperCol={{ span: 13 }}
+                  options={role}
+                />
+              </ProForm.Group>
+            }
+            {
+              type === 1&&
+              <Space size={185}>
+                <ProFormText
+                  label='结算周期'
+                  name='clearingType'
+                  width='sm'
+                  fieldProps={{
+                    onClick: ()=> setShowModal(true)
+                  }}
+                />
+                <ProFormSelect
+                  label='取整规则'
+                  name='roundType'
+                  width='sm'
+                  options={[
+                    {
+                      label: '向下取整（如：0.119取0.11）',
+                      value: 1
+                    },
+                    {
+                      label: '四舍五入.156取0.16）',
+                      value: 2
+                    },
+                    {
+                      label: '向上取整（如：0.111取0.12）',
+                      value: 3
+                    }
+                  ]}
+                />
+              </Space>
+            }
           </Paragraph>
         </Typography>
         <Typography>
