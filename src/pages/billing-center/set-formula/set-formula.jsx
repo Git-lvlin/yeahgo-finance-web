@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { PageContainer } from '@ant-design/pro-layout'
 import ProTable from '@ant-design/pro-table'
 import { Button, Popconfirm } from 'antd'
@@ -6,6 +6,7 @@ import { PlusOutlined } from '@ant-design/icons'
 
 import AddDetail from './add-detail'
 import { formula, formulaDelete } from '@/services/billing-center/set-formula'
+import { tradeModeList } from '@/services/common'
 
 const DeleteDormula = ({id, actref}) => {
 
@@ -34,7 +35,20 @@ const DeleteDormula = ({id, actref}) => {
 const SetFormula = () => {
   const [showAdd, setShowAdd] = useState(false)
   const [data, setData] = useState(null)
+  const [orderType, setOrderType] = useState(null)
+
   const actionRef = useRef(null)
+
+  useEffect(() => {
+    tradeModeList({}).then(res=> {
+      setOrderType(res.data.map(item => ({
+        label: item.name, value: item.id
+      })))
+    })
+    return () => {
+      setOrderType(null)
+    }
+  }, [])
 
   const columns = [
     {
@@ -54,6 +68,15 @@ const SetFormula = () => {
       width: '20%',
       hideInSearch: true,
       align: 'center'
+    },
+    {
+      title: '业务模式',
+      dataIndex: 'tradeModeId',
+      valueType: 'select',
+      fieldProps: {
+        options: orderType
+      },
+      hideInTable: true
     },
     {
       title: '公式状态',
