@@ -8,6 +8,12 @@ const ChannelInformation = () =>{
 
   const columns = [
     {
+      title: 'ID',
+      dataIndex: 'id',
+      hideInSearch: true,
+      align: 'center'
+    },
+    {
       title: '渠道编号',
       dataIndex: 'code',
       align: 'center'
@@ -56,6 +62,11 @@ const ChannelInformation = () =>{
         }}
         toolbar={{
           settings: false
+        }}
+        search={{
+          optionRender: (searchConfig, formProps, dom)=> [
+            ...dom.reverse()
+          ]
         }}
       />
     </PageContainer>
