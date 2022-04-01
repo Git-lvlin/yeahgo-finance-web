@@ -14,8 +14,7 @@ const DeleteDormula = ({id, actref}) => {
     formulaDelete(
       { id },
       {
-        showSuccess: true,
-        showError: true
+        showSuccess: true
       }
     ).finally(()=> {
       actref?.current?.reload()
@@ -79,18 +78,15 @@ const SetFormula = () => {
       hideInTable: true
     },
     {
-      title: '公式状态',
-      dataIndex: 'status',
+      title: '公式关联状态',
+      dataIndex: 'isUsed',
       align: 'center',
       valueType: 'select',
       width: '10%',
       valueEnum: {
-        '1': '启用',
-        '-1': '停用',
-        '0': '审批中',
-        '2': '保存'
-      },
-      hideInSearch: true
+        true: '已关联',
+        false: '未关联'
+      }
     },
     {
       title: '公式内容',
@@ -102,7 +98,13 @@ const SetFormula = () => {
     {
       title: '操作',
       valueType: 'option',
-      render: (_, records)=> <DeleteDormula id={records.id} actref={actionRef}/>,
+      render: (_, records)=> {
+        if(records.isUsed) {
+          return ''
+        } else {
+          return <DeleteDormula id={records.id} actref={actionRef}/>
+        }
+      },
       align: 'center'
     }
   ]
@@ -115,6 +117,9 @@ const SetFormula = () => {
         params={{}}
         actionRef={actionRef}
         request={formula}
+        search={{
+          labelWidth: 120
+        }}
         pagination={{
           showQuickJumper: true,
           pageSize: 10
