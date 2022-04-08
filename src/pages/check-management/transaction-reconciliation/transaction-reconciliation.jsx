@@ -124,12 +124,15 @@ const TransactionReconciliation = () => {
       valueType: 'option',
       align: 'center',
       render: (_, r)=> {
-        if(!r.checkStatus) return <span>详情</span>
-        return (
-          <a onClick={()=>{ setShowPopup(true); setId(r?.id) }}>
-            详情
-          </a>
-        )
+        if(!r.checkStatus || r.checkStatus === 'unCheck') {
+          return <span>详情</span>
+        } else {
+          return (
+            <a onClick={()=>{ setShowPopup(true); setId(r?.id) }}>
+              详情
+            </a>
+          )
+        }
       }
     },
   ]
