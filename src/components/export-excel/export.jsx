@@ -3,16 +3,16 @@ import {
   Button, 
   message, 
 } from 'antd'
-
+import { paramsEmptyFilter } from '@/utils/utils'
 import { createExportTask } from '@/services/export-excel/export-template'
 
 const Export = ({type, change, conditions})=> {
   const downExcel = ()=> {
     let str;
     if (typeof conditions === 'function') {
-      str = JSON.stringify(conditions())
+      str = JSON.stringify(paramsEmptyFilter(conditions()))
     } else {
-      str = JSON.stringify(conditions)
+      str = JSON.stringify(paramsEmptyFilter(conditions))
     }
     createExportTask({
       code: type,
