@@ -175,7 +175,7 @@ const TransactionDetails = () => {
               change={(e)=> {setVisit(e)}}
               key="export"
               type="finance-trade-record-export"
-              conditions={getFieldValue(form)}
+              conditions={() => getFieldValue(form)}
             />,
             <ExportHistory
               key="exportHistory"

@@ -192,7 +192,7 @@ const CostDetail = () => {
               change={(e)=> {setVisit(e)}}
               key="export"
               type="finance-cost-record-export"
-              conditions={getFieldValue(form)}
+              conditions={() => getFieldValue(form)}
             />,
             <ExportHistory
               key="exportHistory"

@@ -167,7 +167,7 @@ const BillingDetails = () => {
               change={(e)=> {setVisit(e)}}
               key="export"
               type="finance-settle-account-record-export"
-              conditions={getFieldValue(form)}
+              conditions={() => getFieldValue(form)}
             />,
             <ExportHistory
               key="exportHistory"

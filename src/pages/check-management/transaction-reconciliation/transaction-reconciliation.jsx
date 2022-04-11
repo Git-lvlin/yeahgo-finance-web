@@ -264,7 +264,7 @@ const TransactionReconciliation = () => {
               change={(e)=> {setVisit(e)}}
               key="export"
               type="finance-trade-verify-record-export"
-              conditions={getFieldValue(form)}
+              conditions={() => getFieldValue(form)}
             />,
             <ExportHistory
               key="exportHistory"

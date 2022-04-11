@@ -166,7 +166,7 @@ const AccountDetail = () => {
               change={(e)=> {setVisit(e)}}
               key="export"
               type="finance-account-manage-export"
-              conditions={getFieldValue(form)}
+              conditions={() => getFieldValue(form)}
             />,
             <ExportHistory
               key="exportHistory"

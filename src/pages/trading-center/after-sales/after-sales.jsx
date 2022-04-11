@@ -184,7 +184,7 @@ const AfterSales = () => {
               change={(e)=> {setVisit(e)}}
               key="export"
               type="finance-after-sale-record-export"
-              conditions={getFieldValue(form)}
+              conditions={() => getFieldValue(form)}
             />,
             <ExportHistory
               key="exportHistory"
