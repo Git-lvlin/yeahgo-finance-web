@@ -126,6 +126,22 @@
     react-color "2.19.3"
     swr "^0.3.6"
 
+"@ant-design/pro-field@1.22.7":
+  version "1.22.7"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-field/-/pro-field-1.22.7.tgz#184483bfd66da0806b30da19b610ce9d55411811"
+  integrity sha512-WCXsMOf/2bIgHsj3hK3MHRUzux2BJZEYrKeYp8HOa/C7TtOliNsrdxaCtREzc7ZOBI2DsE7w0ECCgEjDk3f7HQ==
+  dependencies:
+    "@ant-design/icons" "^4.2.1"
+    "@ant-design/pro-provider" "1.4.19"
+    "@ant-design/pro-utils" "1.24.7"
+    classnames "^2.2.6"
+    lodash.tonumber "^4.0.3"
+    moment "^2.27.0"
+    omit.js "^2.0.2"
+    rc-util "^5.4.0"
+    react-color "2.19.3"
+    swr "^1.1.0-beta.0"
+
 "@ant-design/pro-form@1.18.4", "@ant-design/pro-form@^1.3.0":
   version "1.18.4"
   resolved "https://registry.yarnpkg.com/@ant-design/pro-form/-/pro-form-1.18.4.tgz#641a287b8f12091ca872981be7aad06b80664aae"
@@ -137,6 +153,23 @@
     "@ant-design/pro-utils" "1.15.0"
     "@umijs/use-params" "^1.0.2"
     classnames "^2.2.6"
+    omit.js "^2.0.2"
+    rc-resize-observer "^0.2.3"
+    rc-util "^5.0.6"
+    use-media-antd-query "^1.0.6"
+
+"@ant-design/pro-form@1.43.2":
+  version "1.43.2"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-form/-/pro-form-1.43.2.tgz#0e51d99a8946d427808f2af50d72088e624487cd"
+  integrity sha512-smTN8hhzR3OW5BC5kQuIj/78yeVOb3qWVcia3c5JLal74JZWofSjLR29soP6Q+HhMunjWS/t/wEwkkl1i21DqA==
+  dependencies:
+    "@ant-design/icons" "^4.2.1"
+    "@ant-design/pro-field" "1.22.7"
+    "@ant-design/pro-provider" "1.4.19"
+    "@ant-design/pro-utils" "1.24.7"
+    "@umijs/use-params" "^1.0.2"
+    classnames "^2.2.6"
+    lodash.merge "^4.6.2"
     omit.js "^2.0.2"
     rc-resize-observer "^0.2.3"
     rc-util "^5.0.6"
@@ -162,6 +195,13 @@
     use-media-antd-query "^1.0.6"
     warning "^4.0.3"
 
+"@ant-design/pro-provider@1.4.19":
+  version "1.4.19"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-provider/-/pro-provider-1.4.19.tgz#d0b1815d2db0c16556a2528ca88b372b5e2ff46b"
+  integrity sha512-0cIRwHGxZ5fXuwEyzZbAKXE8eJ732Whh2pEy/1MfPAvFujtC5OwZQbAzRmVoKYeLYyBtfOBhgk96Bvii9taWoA==
+  dependencies:
+    rc-util "^5.0.1"
+
 "@ant-design/pro-provider@1.4.8":
   version "1.4.8"
   resolved "https://registry.yarnpkg.com/@ant-design/pro-provider/-/pro-provider-1.4.8.tgz#6dd5c293f1f4ae79a12c75a8a99356220c69f3de"
@@ -176,23 +216,24 @@
   dependencies:
     use-media-antd-query "^1.0.6"
 
-"@ant-design/pro-table@^2.17.0":
-  version "2.31.0"
-  resolved "https://registry.yarnpkg.com/@ant-design/pro-table/-/pro-table-2.31.0.tgz#caf305c31b8db0a09fd6044c8e6fe4093aeba181"
-  integrity sha512-84mCvkGCWmeeAPEbAT3AjrNO2seH1gcaBfTNjU78qkaVvXz7VeCi+PbLcaHT0brgE9JAASU0hfN28OiJUsXjwg==
+"@ant-design/pro-table@2.56.0":
+  version "2.56.0"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-table/-/pro-table-2.56.0.tgz#7dc976a6670e542ae71dcc154902ae44355d896b"
+  integrity sha512-idM1w9enp4NGYy9l8Ya6F2GQtCSivFR75u7AMYlX7ju/9/v8yfQVzaLbgXe8Dtf01b1nWTZ0zhB4zNnkStnHGw==
   dependencies:
     "@ant-design/icons" "^4.1.0"
-    "@ant-design/pro-field" "1.12.0"
-    "@ant-design/pro-form" "1.18.4"
-    "@ant-design/pro-provider" "1.4.8"
-    "@ant-design/pro-utils" "1.15.0"
+    "@ant-design/pro-field" "1.22.7"
+    "@ant-design/pro-form" "1.43.2"
+    "@ant-design/pro-provider" "1.4.19"
+    "@ant-design/pro-utils" "1.24.7"
     classnames "^2.2.6"
     moment "^2.24.0"
     omit.js "^2.0.2"
     rc-util "^5.0.1"
+    react-sortable-hoc "^2.0.0"
     unstated-next "^1.1.0"
     use-json-comparison "^1.0.5"
-    use-media-antd-query "1.0.6"
+    use-media-antd-query "^1.1.0"
 
 "@ant-design/pro-utils@1.15.0":
   version "1.15.0"
@@ -205,6 +246,20 @@
     fast-deep-equal "^3.1.3"
     moment "^2.27.0"
     rc-util "^5.0.6"
+
+"@ant-design/pro-utils@1.24.7":
+  version "1.24.7"
+  resolved "https://registry.yarnpkg.com/@ant-design/pro-utils/-/pro-utils-1.24.7.tgz#db4ca35d2294df53e1b4f2b4eb33110f874e7bab"
+  integrity sha512-P3xIeTTN4NLxmkgiIO2Y+4g4xDMS5DpERjVYLr4UAhL3UUllpy/ZqvHSr7MVnaVIMA8LSA2zYp0os7hZVWSLYQ==
+  dependencies:
+    "@ant-design/icons" "^4.3.0"
+    "@ant-design/pro-provider" "1.4.19"
+    classnames "^2.2.6"
+    lodash.merge "^4.6.2"
+    moment "^2.27.0"
+    rc-util "^5.0.6"
+    react-sortable-hoc "^2.0.0"
+    swr "^1.1.0-beta.0"
 
 "@ant-design/react-slick@~0.28.1":
   version "0.28.2"
@@ -11161,6 +11216,11 @@ lodash.memoize@4.1.2:
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
 
+lodash.merge@^4.6.2:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
+  integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
+
 lodash.mergewith@^4.6.0:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/lodash.mergewith/-/lodash.mergewith-4.6.2.tgz#617121f89ac55f59047c7aec1ccd6654c6590f55"
@@ -16747,6 +16807,11 @@ swr@^0.3.6:
   dependencies:
     dequal "2.0.2"
 
+swr@^1.1.0-beta.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/swr/-/swr-1.1.1.tgz#f13346cc830d7950183af57b341bfabb4cc90d43"
+  integrity sha512-ZpUHyU3N3snj2QGFeE2Fd3BXl1CVS6YQIQGb1ttPAkTmvwZqDyV3GRMNPsaeAYCBM74tfn4XbKx28FVQR0mS7Q==
+
 sylvanas@^0.4.0:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/sylvanas/-/sylvanas-0.4.4.tgz#27819537420eddfaebfbf0f74081a492402f6827"
@@ -17566,10 +17631,15 @@ use-json-comparison@^1.0.3, use-json-comparison@^1.0.5:
   resolved "https://registry.yarnpkg.com/use-json-comparison/-/use-json-comparison-1.0.5.tgz#d41a72d65fcf4cf72acc85c8f3980e2173809d63"
   integrity sha512-P/AgEKXphcN0L/8G5wLfbEz88mZQ9ayHS1OVESZaS2nxkN/msDWTGE8E1e9HXOWCZ9yoAfDrbVKAmTYpsYupFA==
 
-use-media-antd-query@1.0.6, use-media-antd-query@^1.0.6:
+use-media-antd-query@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/use-media-antd-query/-/use-media-antd-query-1.0.6.tgz#2395fc52a9bc810fa7360bff43eb84609eee1b2f"
   integrity sha512-uEP116w7LH2z4MatYM0UMKD0lI4awPtXh2WrbeUfG5mCS1UD9D7lZVz9QsRThTIButxNnx9LjPSBEBD8G3Z5BA==
+
+use-media-antd-query@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/use-media-antd-query/-/use-media-antd-query-1.1.0.tgz#f083ad7e292c1c0261b6bbfaac0edc3e0920d85d"
+  integrity sha512-B6kKZwNV4R+l4Rl11sWO7HqOay9alzs1Vp1b4YJqjz33YxbltBCZtt/yxXxkXN9rc1S7OeEL/GbwC30Wmqhw6Q==
 
 use-subscription@1.4.1:
   version "1.4.1"

@@ -17,9 +17,7 @@ const Export = ({type, change, conditions})=> {
     createExportTask({
       code: type,
       fileName: type + +new Date() + '.xlsx',
-      // TODO:条件
-      queryParamStr: str,
-      // querydesc: ''
+      queryParamStr: str
     }).then(res=> {
       if(res?.success) {
         message.success('导出任务创建成功')

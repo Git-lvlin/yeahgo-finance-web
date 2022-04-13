@@ -18,4 +18,25 @@ export default {
   'menu.setting.authority-management': '权限管理',
   'menu.setting.password': '设置密码',
 
+  'menu.channel-management' : '渠道管理',
+  'menu.channel-management.channel-information' : '渠道信息',
+
+  'menu.billing-center' : '计费中心',
+  'menu.billing-center.costs-set' : '费用设定',
+  'menu.billing-center.cost-details' : '费用明细',
+  'menu.billing-center.set-formula' : '计费公式',
+
+  'menu.trading-center': '交易中心',
+  'menu.trading-center.transaction-details': '交易明细',
+  'menu.trading-center.cost-detail': '分账明细',
+  'menu.trading-center.billing-details': '结算明细',
+  'menu.trading-center.withdrawal-log': '提现明细',
+  'menu.trading-center.after-sales': '售后明细',
+
+  'menu.check-management': '对账管理',
+  'menu.check-management.transaction-reconciliation': '交易对账',
+
+  'menu.account-management': '账户管理',
+  'menu.account-management.account-detail': '账户管理',
+
 };

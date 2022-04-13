@@ -4,6 +4,11 @@ import defaultSettings from './defaultSettings'
 import proxy from './proxy'
 import user from './routes/user'
 import setting from './routes/setting'
+import channelManagement from './routes/channel-management'
+import billingCenter from './routes/billing-center'
+import tradingCenter from './routes/trading-center'
+import checkManagement from './routes/check-management'
+import accountManagement from './routes/account-management'
 
 const { REACT_APP_ENV } = process.env;
 const config = {
@@ -42,13 +47,18 @@ const config = {
           routes: [
             {
               path: '/',
-              redirect: '/setting/account-management',
+              redirect: '/channel-management/channel-information',
             },
             // {
             //   path: '/workplace',
             //   name: 'workplace',
             //   component: './workplace',
             // },
+            channelManagement,
+            billingCenter,
+            tradingCenter,
+            checkManagement,
+            accountManagement,
             setting,
             {
               component: '404',

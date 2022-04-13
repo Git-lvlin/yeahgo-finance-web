@@ -8,6 +8,14 @@ export function login(params, options = {}) {
   });
 }
 
+export function logout(params, options = {}) {
+  return request('/open/login/logout', {
+    method: 'POST',
+    data: params,
+    ...options
+  });
+}
+
 export function getCaptcha(params, options = {}) {
   return request('/open/login/captcha', {
     method: 'POST',

@@ -85,8 +85,8 @@ const BasicLayout = (props) => {
           ...item,
           children: item.children ? menuDataRender(item.children) : undefined,
         };
-        return auth.find(it => it.url === item.path.substring(1)) ? localItem : null;
         // return localItem;
+        return auth.find(it => it.url === item.path.substring(1)) ? localItem : null;
       });
     },
     [auth],

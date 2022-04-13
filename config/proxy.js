@@ -8,14 +8,21 @@
 export default {
   dev: {
     '/open/': {
-      target: 'https://operationapi-dev.yeahgo.com',
+      target: 'https://financeapi-dev.yeahgo.com',
       changeOrigin: true,
       pathRewrite: {
         '^': ''
       }
     },
     '/auth/': {
-      target: 'https://operationapi-dev.yeahgo.com',
+      target: 'https://financeapi-dev.yeahgo.com',
+      changeOrigin: true,
+      pathRewrite: {
+        '^': '',
+      }
+    },
+    '/java-admin/': {
+      target: 'https://financeapi-dev.yeahgo.com',
       changeOrigin: true,
       pathRewrite: {
         '^': '',
