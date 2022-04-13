@@ -100,7 +100,7 @@ const SetFormula = () => {
       valueType: 'option',
       render: (_, records)=> {
         if(records.isUsed) {
-          return ''
+          return <span style={{color: '#d9d9d9', cursor: 'not-allowed'}}>删除</span>
         } else {
           return <DeleteDormula id={records.id} actref={actionRef}/>
         }
