@@ -1,5 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Form, message } from 'antd'
+import React, {
+  useState, 
+  useRef,
+  useEffect
+} from 'react'
+import { 
+  Button,
+  Form,
+  message, 
+  Tag
+} from 'antd'
+import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons'
 import ProForm, {
   ModalForm,
   ProFormText,
@@ -10,7 +20,8 @@ import ProForm, {
 import { 
   formulaAdd,
   formulaUpdate,
-  feeItemAll
+  feeItemAll,
+  formulaCheck
 } from '@/services/billing-center/set-formula'
 import { tradeModeList } from '@/services/common'
 
@@ -24,7 +35,9 @@ const AddDetail = ({
   const [selectData, setSelectData] = useState([])
   const [list, setList] = useState([])
   const [tradeMode, setTradeMode] = useState(undefined)
-  const areaInput = useRef(null)
+  const [flag, setFlag] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const areaInput = useRef()
   const [form] = Form.useForm()
 
   useEffect(() => {
@@ -39,16 +52,19 @@ const AddDetail = ({
   }, [])
 
   useEffect(() => {
-    data?
-    form.setFieldsValue({
-      name: data.name,
-      status: data.status,
-      express: data.express,
-      tradeModeId: data.tradeModeId
-    }):
-    form.setFieldsValue({
-      tradeModeId: list?.[0]?.value
-    })
+    if(data){
+      setTradeMode(data.tradeModeId)
+      form.setFieldsValue({
+        name: data.name,
+        status: data.status,
+        express: data.express,
+        tradeModeId: data.tradeModeId
+      })
+    } else {
+      form.setFieldsValue({
+        tradeModeId: list?.[0]?.value
+      })
+    }
   }, [data, list])
 
   useEffect(()=>{
@@ -57,14 +73,31 @@ const AddDetail = ({
       tradeModeId: data
     }).then(res=>{
       setSelectData(res?.data?.map(item=>({
-        label: item.name,
-        value: '${' + item.name + '}'
+        label: item.label,
+        value: '${' + item.value + '}'
       })))
     })
     return ()=>{
       setSelectData([])
     }
   }, [data, tradeMode])
+
+  const checkFormula = () => {
+    formulaCheck({
+      express: form?.getFieldsValue()?.express,
+      tradeModeId: form?.getFieldsValue()?.tradeModeId
+    },
+    {
+      showError: false
+    }).then(res => {
+      setFlag(true)
+      if(res.success) {
+        setSuccess(true)
+      } else {
+        setSuccess(false)
+      }
+    })
+  }
 
   return (
     <ModalForm
@@ -75,6 +108,8 @@ const AddDetail = ({
         if(!data) {
           formulaAdd(values).then(res=>{
             if(res.success) message.success('公式添加成功')
+          }).finally(()=> {
+            actRef.current.reload()
           })
         } else {
           formulaUpdate({
@@ -82,9 +117,10 @@ const AddDetail = ({
             ...values
           }).then(res=>{
             if(res.success) message.success('公式修改成功')
+          }).finally(()=> {
+            actRef.current.reload()
           })
         }
-        actRef.current.reload()
         return true
       }}
       layout='horizontal'
@@ -95,7 +131,7 @@ const AddDetail = ({
       }}
       submitter={{
         searchConfig: {
-          submitText: '提交审批',
+          submitText: '保存',
           resetText: '取消',
         },
       }}
@@ -128,28 +164,7 @@ const AddDetail = ({
       </ProForm.Group>
       <ProForm.Group>
         <ProFormSelect
-          label='公式状态'
-          name='status'
-          width='sm'
-          rules={[
-            {
-              required: true,
-              message: '请选择公式状态'
-            }
-          ]}
-          options={[
-            {
-              value: 1,
-              label: '启用'
-            },
-            {
-              value: -1,
-              label: '禁用'
-            }
-          ]}
-        />
-        <ProFormSelect
-          label='公式设定'
+          label='变量选择'
           width='sm'
           name='set'
           allowClear={false}
@@ -160,6 +175,7 @@ const AddDetail = ({
                 const arr = data.split('')
                 arr.splice(client, 0, e)
                 const str = arr.join('')
+                console.log(e)
                 form.setFieldsValue({
                   express: str
                 })
@@ -177,6 +193,30 @@ const AddDetail = ({
           }}
           options={selectData}
         />
+        {
+          data&&
+          <ProFormSelect
+            label='公式状态'
+            name='status'
+            width='sm'
+            rules={[
+              {
+                required: true,
+                message: '请选择公式状态'
+              }
+            ]}
+            options={[
+              {
+                value: 1,
+                label: '启用'
+              },
+              {
+                value: -1,
+                label: '禁用'
+              }
+            ]}
+          />
+        }
       </ProForm.Group>
       <ProFormTextArea
         label='公式脚本'
@@ -191,10 +231,32 @@ const AddDetail = ({
         fieldProps={{
           ref: areaInput,
           onBlur: ()=>{
-            setClient(areaInput.current.resizableTextArea.textArea.selectionEnd)
+            setClient(areaInput?.current?.resizableTextArea?.textArea?.selectionEnd)
           }
         }}
       />
+      <div style={{display: 'flex', justifyContent: 'space-between'}}>
+        <Button 
+          type='primary'
+          onClick={()=>{
+            checkFormula()
+          }}
+        >
+          校验公式
+        </Button>
+        {
+          flag&&
+          (
+            success?
+            <div>
+              <Tag icon={<CheckCircleOutlined />} color="success">通过</Tag>
+            </div>:
+            <div>
+              <Tag icon={<CloseCircleOutlined  />} color="error">失败</Tag>
+            </div>
+          )
+        }
+      </div>
     </ModalForm>
   )
 }

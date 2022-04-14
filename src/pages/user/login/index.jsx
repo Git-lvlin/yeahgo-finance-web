@@ -18,7 +18,7 @@ import agreementText from './agreement';
 const Login = () => {
   const [randstr, setRandstr] = useState(Math.random());
   const [isVertyfy, setIsVertyfy] = useState(false);
-  const [agreementVisible, setAgreementVisible] = useState(false);
+  // const [agreementVisible, setAgreementVisible] = useState(false);
   // const [account] = useState(JSON.parse(window.localStorage.getItem('account')) || {});
   const [captchaUrl, setCaptchaUrl] = useState()
 
@@ -111,9 +111,9 @@ const Login = () => {
           render: (props) => {
             return (
               <div className={styles.submit_wrap}>
-                <ProFormCheckbox noStyle name="agreement">
+                {/* <ProFormCheckbox noStyle name="agreement">
                   已阅读并同意<a onClick={() => { setAgreementVisible(true) }}>《运营商服务协议》</a>
-                </ProFormCheckbox>
+                </ProFormCheckbox> */}
                 <Button size="large" style={{ marginBottom: 10, width: '100%', marginTop: 10 }} key="1" type="primary" onClick={() => props.form?.submit?.()}>
                   登录
                 </Button>
@@ -125,12 +125,12 @@ const Login = () => {
           },
         }}
         onFinish={(values) => {
-          const { password, agreement } = values
+          const { password } = values
 
-          if (!agreement) {
-            message.error('请先阅读并同意《运营商服务协议》')
-            return Promise.reject()
-          }
+          // if (!agreement) {
+          //   message.error('请先阅读并同意《运营商服务协议》')
+          //   return Promise.reject()
+          // }
 
           const md = md5(password)
           const val = {
@@ -196,7 +196,7 @@ const Login = () => {
           />
         </div>}
       </ProForm>
-      <Modal
+      {/* <Modal
         visible={agreementVisible}
         footer={null}
         onCancel={() => {
@@ -214,7 +214,7 @@ const Login = () => {
         >
 
         </pre>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

@@ -3,9 +3,10 @@ import request from '@/utils/request'
 // 费用分页列表
 export const feeItemPage = async (params, options = {}) => {
   const { pageSize, current, ...rest } = params
-  const res = await request('/fmis/feeItem/page', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
     data: {
+      requestUrl: '/java-admin/fmis/feeItem/page',
       page: current,
       size: pageSize,
       ...rest
@@ -21,39 +22,118 @@ export const feeItemPage = async (params, options = {}) => {
 
 // 费用详细
 export const feeItemId = async (params = {}, options = {}) => {
-  const res = await request('/fmis/feeItem/id', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
-    data: params,
+    data: {
+      requestUrl: '/java-admin/fmis/feeItem/id',
+      ...params
+    },
     ...options
   })
   return {
-    data: res?.data,
+    data: res?.data?.records,
     success: res?.success
   }
 }
 
 // 新增费用
 export const feeItemAdd = async (params = {}, options = {}) => {
-  const res = await request('/fmis/feeItem/add', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
-    data: params,
+    data: {
+      requestUrl: '/java-admin/fmis/feeItem/add',
+      ...params
+    },
     ...options
   })
   return {
-    data: res?.data,
+    data: res?.data?.records,
     success: res?.success
   }
 }
 
 // 修改费用
 export const feeItemUpdate = async (params = {}, options = {}) => {
-  const res = await request('/fmis/feeItem/update', {
+  const res = await request('/auth/jump/url', {
     method: 'POST',
-    data: params,
+    data: {
+      requestUrl: '/java-admin/fmis/feeItem/update',
+      ...params
+    },
     ...options
   })
   return {
-    data: res?.data,
+    data: res?.data?.records,
+    success: res?.success
+  }
+}
+
+// 业务模式费用
+export const feeItemTradeMode = async (params = {}, options = {}) => {
+  const { pageSize, current, ...rest } = params
+  const res = await request('/auth/jump/url', {
+    method: 'POST',
+    data: {
+      requestUrl: '/java-admin/fmis/feeItem/tradeMode',
+      page: pageSize,
+      size: current,
+      ...rest
+    },
+    ...options
+  })
+  return {
+    data: res?.data?.records,
+    success: res?.success
+  }
+}
+
+// 费用提交审批
+export const feeItemApproveSub = async (params = {}, options = {}) => {
+  const { pageSize, current, ...rest } = params
+  const res = await request('/auth/jump/url', {
+    method: 'POST',
+    data: {
+      requestUrl: '/java-admin/fmis/feeItem/approve/sub',
+      page: pageSize,
+      size: current,
+      ...rest
+    },
+    ...options
+  })
+  return {
+    data: res?.data?.records,
+    success: res?.success
+  }
+}
+
+// 删除费用
+export const feeItemDelete = async (params = {}, options = {}) => {
+  const res = await request('/auth/jump/url', {
+    method: 'POST',
+    data: {
+      requestUrl: '/java-admin/fmis/feeItem/delete',
+      ...params
+    },
+    ...options
+  })
+  return {
+    data: res?.data?.records,
+    success: res?.success
+  }
+}
+
+// 费用否在审批
+export const feeItemInApproval = async (params = {}, options = {}) => {
+  const res = await request('/auth/jump/url', {
+    method: 'POST',
+    data: {
+      requestUrl: '/java-admin/fmis/feeItem/inApproval',
+      ...params
+    },
+    ...options
+  })
+  return {
+    data: res?.data?.records,
     success: res?.success
   }
 }

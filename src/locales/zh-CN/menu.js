@@ -23,15 +23,27 @@ export default {
 
   'menu.billing-center' : '计费中心',
   'menu.billing-center.costs-set' : '费用设定',
+  'menu.billing-center.cost-details' : '费用明细',
   'menu.billing-center.set-formula' : '计费公式',
 
   'menu.trading-center': '交易中心',
-  'menu.trading-center.cost-detail': '交易明细',
+
 
   'menu.audit-management': '审批管理',
   'menu.audit-management.commission-audit': '待办审批',
   'menu.audit-management.have-done-audit': '已办审批',
   'menu.audit-management.submitted-audit': '我提交的',
   'menu.audit-management.audit-configuration': '审批配置',
+  'menu.trading-center.transaction-details': '交易明细',
+  'menu.trading-center.cost-detail': '分账明细',
+  'menu.trading-center.billing-details': '结算明细',
+  'menu.trading-center.withdrawal-log': '提现明细',
+  'menu.trading-center.after-sales': '售后明细',
+
+  'menu.check-management': '对账管理',
+  'menu.check-management.transaction-reconciliation': '交易对账',
+
+  'menu.account-management': '账户管理',
+  'menu.account-management.account-detail': '账户管理',
 
 };

@@ -7,12 +7,12 @@ import {
   Typography,
   Divider,
   Tooltip,
-  message,
   Spin,
   Modal,
   Radio,
   Space,
-  Select
+  Select,
+  Input
 } from 'antd'
 import ProForm, {
   DrawerForm,
@@ -26,12 +26,12 @@ import { PlusOutlined, DeleteOutlined } from '@ant-design/icons'
 
 import styles from './style.less'
 import {
-  tradeModeList,
   roleList,
   formulaList,
   ruleCondList
 } from '@/services/common'
 import { feeItemAdd, feeItemUpdate } from '@/services/billing-center/costs-set'
+import FormWarp from './form-wrap'
 
 const { Title, Paragraph } = Typography
 const { Option } = Select
@@ -44,15 +44,78 @@ const MSelect = ({
     <Select 
       style={{ width: 120 }}
       onChange={(e)=> handleChange(e, state)}
-      defaultValue='1'
+      defaultValue={1}
     >
-      <Option value="1">1</Option>
-      <Option value="2">2</Option>
-      <Option value="3">3</Option>
-      <Option value="4">4</Option>
-      <Option value="5">5</Option>
-      <Option value="6">6</Option>
-      <Option value="7">7</Option>
+      <Option value={1}>1</Option>
+      <Option value={2}>2</Option>
+      <Option value={3}>3</Option>
+      <Option value={4}>4</Option>
+      <Option value={5}>5</Option>
+      <Option value={6}>6</Option>
+      <Option value={7}>7</Option>
+    </Select>
+  )
+}
+
+const OrderSelect = ({
+  handleChange,
+  state
+}) => {
+  return (
+    <Select 
+      style={{ width: 120 }}
+      onChange={(e)=> handleChange(e, state)}
+      defaultValue={0}
+    >
+      <Option value={0}>0</Option>
+      <Option value={1}>1</Option>
+      <Option value={2}>2</Option>
+      <Option value={3}>3</Option>
+      <Option value={4}>4</Option>
+      <Option value={5}>5</Option>
+      <Option value={6}>6</Option>
+      <Option value={7}>7</Option>
+    </Select>
+  )
+}
+
+const DaySelect = ({
+  handleChange
+}) => {
+  return (
+    <Select 
+      style={{ width: 70 }}
+      onChange={(e)=> handleChange(e)}
+      defaultValue={1}
+    >
+      <Option value={1}>1号</Option>
+      <Option value={2}>2号</Option>
+      <Option value={3}>3号</Option>
+      <Option value={4}>4号</Option>
+      <Option value={5}>5号</Option>
+      <Option value={6}>6号</Option>
+      <Option value={7}>7号</Option>
+      <Option value={8}>8号</Option>
+      <Option value={9}>9号</Option>
+      <Option value={10}>10号</Option>
+      <Option value={11}>11号</Option>
+      <Option value={12}>12号</Option>
+      <Option value={13}>13号</Option>
+      <Option value={14}>14号</Option>
+      <Option value={15}>15号</Option>
+      <Option value={16}>16号</Option>
+      <Option value={17}>17号</Option>
+      <Option value={18}>18号</Option>
+      <Option value={19}>19号</Option>
+      <Option value={20}>20号</Option>
+      <Option value={21}>21号</Option>
+      <Option value={22}>22号</Option>
+      <Option value={23}>23号</Option>
+      <Option value={24}>24号</Option>
+      <Option value={25}>25号</Option>
+      <Option value={26}>26号</Option>
+      <Option value={27}>27号</Option>
+      <Option value={28}>28号</Option>
     </Select>
   )
 }
@@ -62,54 +125,41 @@ const Popup = ({
   setShow,
   actionRef,
   dataSource,
-  isEdit
+  isEdit,
+  setData,
+  tradeModeId,
+  loading,
+  id, 
+  type
 }) => {
   const [flag, setFlag] = useState(true)
   const [symbol, setSymbol] = useState({})
-  const [status, setStatus] = useState(false)
-  const [loading, setLoading] = useState(true)
   const [ruleCond, setRuleCond] = useState([])
   const [editableKeys, setEditableRowKeys] = useState()
-  const [list, setList] = useState([])
   const [role, setRole] = useState([])
-  const [clear, setClear] = useState()
-  const [value, setValue] = useState([])
+  const [clear, setClear] = useState(1)
+  const [optionValueObj, setOptionValueObj] = useState({})
   const [radioValue, setRadioValue] = useState(1)
   const [selectData, setSelectData] = useState([])
   const [formula, setFormula] = useState([])
-  const [tradeModeId, setTradeModeId] = useState(null)
+  const [formulaExpress, setFormulaExpress] = useState([])
+  const [formulaId, setFormulaId] = useState({})
   const [showModal, setShowModal] = useState(false)
   const [obj, setObj] = useState({})
   const [selectObj, setSelectObj] = useState({})
   const [rulesList, setRulesList] = useState([])
 
   const [form] = Form.useForm()
-  const data = tradeModeId ? tradeModeId : list?.[0]?.value
-  
-
-  useEffect(() => {
-    setLoading(true)
-    tradeModeList({}).then(res => {
-      setList(res?.data?.map(item => (
-        { label: item.name, value: item.id }
-      )))
-    }).finally(()=>{
-      setLoading(false)
-    })
-    return () => {
-      setList([])
-    }
-  }, [])
 
   useEffect(() => {
     form.setFieldsValue({
-      tradeModeId: list?.[0]?.value
+      tradeModeId
     })
-  }, [list])
+  }, [])
 
   useEffect(() => {
     roleList({
-      tradeModeId: data
+      tradeModeId
     }).then(res => {
       setRole(res?.data?.map(item => (
         { label: item.name, value: item.id }
@@ -118,23 +168,27 @@ const Popup = ({
     return () => {
       setRole([])
     }
-  }, [tradeModeId, list])
+  }, [tradeModeId])
 
   useEffect(() => {
     formulaList({
-      tradeModeId: data
+      tradeModeId
     }).then(res => {
+      setFormulaExpress(res.data)
       setFormula(res?.data?.map(item => (
         { label: item.name, value: item.id }
       )))
     })
     return () => {
       setFormula([])
+      setFormulaExpress([])
     }
   }, [tradeModeId])
 
   useEffect(() => {
-    ruleCondList().then(res => {
+    ruleCondList({
+      tradeModeId: id
+    }).then(res => {
       setSelectData(res.data)
       setRuleCond(res.data?.map(item => (
         {label: item.name, value: item.code}
@@ -144,24 +198,32 @@ const Popup = ({
 
   useEffect(()=>{
     if(dataSource){
+      if(dataSource.isAgentRecv) {
+        setFlag(false)
+      }
       form.setFieldsValue({
         name: dataSource?.name,
-        tradeModeId: dataSource?.tradeModeId,
+        orderIndex: dataSource?.orderIndex,
         status: dataSource?.status,
         recvRoleId: dataSource?.recvRoleId,
         payRoleId: dataSource?.payRoleId,
         serviceChargeRoleId: dataSource?.serviceChargeRoleId,
         agentRecvRoleId: dataSource?.agentRecvRoleId,
         isAgentRecv: dataSource?.isAgentRecv,
-        clearingType: dataSource?.clearingRuleDesc
+        clearingType: dataSource?.clearingRuleDesc,
+        roundType: dataSource?.roundType
       })
-      setRulesList(dataSource?.rules?.map(item=>{
+      setRulesList(dataSource.rules.map(item=>{
         item?.conds?.forEach(res=> {
           selectObj[res.id] = {name: res.configRuleCondName, id: res.configRuleCondId}
         })
         setSelectObj(selectObj)
         return ({
-          formText: {ruleName: item.name, formulaId: item.formulaId},
+          formText: {
+            ruleName: item.name, 
+            formulaId: item.formulaId,
+            formulaExpress: item.formulaExpress
+          },
           table: item?.conds
         })
       }))
@@ -170,7 +232,7 @@ const Popup = ({
         {formText: {}, table: []}
       ])
     }
-  }, [dataSource, list])
+  }, [dataSource])
 
   const formTransform = (rulesList) => {
     if (!Array.isArray(rulesList)) {
@@ -204,6 +266,9 @@ const Popup = ({
 
   const onChange = (e) => {
     setRadioValue(e.target.value)
+    if(e.target.value === 4 || e.target.value === 5) {
+      setClear('0')
+    }
   }
 
   const handleChange = (e, state) => {
@@ -213,13 +278,18 @@ const Popup = ({
     setClear(e)
   }
 
+  const changeDay = (e) => {
+    setClear(e)
+  }
+
   const handleOk = () => {
     const formObj = {
       '1': '实时',
       '2': 'T+' + (obj[radioValue] || '1'),
       '3': 'D+' + (obj[radioValue] || '1'),
-      '4': '确认收货',
-      '5': '确认收货+' + (obj[radioValue] || '1')
+      '4': '确认收货+' + (obj[radioValue] || '0'),
+      '5': '确认售后+' + (obj[radioValue] || '0'),
+      '6': '每月' + clear + '号结算上一自然月'
     }
     form.setFieldsValue({
       clearingType: formObj[radioValue]
@@ -229,6 +299,59 @@ const Popup = ({
 
   const cancel = () => {
     setShowModal(false)
+  }
+
+  const submit = (rules, e) => {
+    if(!isEdit) {
+      return new Promise((resolve, reject)=>{
+        feeItemAdd({
+          ...e, 
+          clearingPeriodInterval: clear,
+          clearingType: radioValue,
+          clearingPeriod: 5,
+          status: 1,
+          rules,
+          type
+        },
+        { 
+          showSuccess: true,
+          showError: true,
+          noFilterParams: true,
+          paramsUndefinedToEmpty: true
+        }).then(res=>{
+          if(res.success) {
+            actionRef.current.reload()
+            resolve()
+          } else {
+            reject()
+          }
+        })
+      })
+    } else {
+      return new Promise((resolve, reject)=>{
+        feeItemUpdate({
+          id: dataSource?.id,
+          ...e, 
+          clearingPeriodInterval: clear,
+          clearingType: radioValue,
+          clearingPeriod: 5,
+          rules
+        },
+        {
+          showSuccess: true,
+          showError: true,
+          noFilterParams: true,
+          paramsUndefinedToEmpty: true
+        }).then(res=> {
+          if(res.success) {
+            actionRef.current.reload()
+            resolve()
+          } else {
+            reject()
+          }
+        })
+      })
+    }
   }
 
   const columns = [
@@ -244,10 +367,11 @@ const Popup = ({
             selectObj[records.rowKey] = arr
             setSelectObj(selectObj)
             if(arr?.assignType === 2) {
-              setValue(arr.optionValueList)
-              setStatus(true)
+              optionValueObj[records.rowKey] = {data: arr?.optionValueList, status: true}
+              setOptionValueObj(optionValueObj)
             } else {
-              setStatus(false)
+              optionValueObj[records.rowKey] = {data: null, status: false}
+              setOptionValueObj(optionValueObj)
             }
           },
           options: ruleCond
@@ -271,10 +395,10 @@ const Popup = ({
         return {
           onChange: (e) => {
             if(e === 'between') {
-              symbol[r?.rowKey] = false
+              symbol[r?.entity?.id] = false
               setSymbol(symbol)
             } else {
-              symbol[r?.rowKey] = true
+              symbol[r?.entity?.id] = true
               setSymbol(symbol)
             }
           }
@@ -287,44 +411,65 @@ const Popup = ({
       dataIndex: 'value',
       width: '20%',
       align: 'center',
-      hideInTable: status
-    },
-    {
-      title: '值1',
-      dataIndex: 'value',
-      width: '20%',
-      align: 'center',
-      valueType: 'select',
-      fieldProps: {
-        options: value
+      renderFormItem: (_, r) => {
+        if(optionValueObj[r?.recordKey]?.status) {
+          return (
+            <Select
+              options={optionValueObj[r?.recordKey]?.data}
+              allowClear
+              placeholder="请选择"
+            />
+          )
+        } else {
+          return (
+            <Input
+              placeholder="请输入"
+              allowClear
+              value={_}
+            />
+          )
+        }
       },
-      hideInTable: !status
+      render: (_, r) =>{
+        const obj = optionValueObj[r?.id]?.data?.find(item=> item.value === _)
+        if(optionValueObj[r?.id]?.status) {
+          return obj?.['label']
+        }
+        return _
+      }
     },
     {
       title: '值2',
       dataIndex: 'maxValue',
       width: '20%',
       align: 'center',
-      fieldProps: (e, r)=> {
-        return {
-          disabled: symbol[r.rowKey]
+      renderFormItem: (_, r) => {
+        if(optionValueObj[r?.recordKey]?.status) {
+          return (
+            <Select
+              options={optionValueObj[r?.recordKey]?.data}
+              placeholder="请选择"
+              allowClear
+              disabled={symbol[r.recordKey]}
+            />
+          )
+        } else {
+          return (
+            <Input
+              placeholder="请输入"
+              allowClear
+              disabled={symbol[r.recordKey]}
+            />
+          )
         }
       },
-      hideInTable: status
-    },
-    {
-      title: '值2',
-      dataIndex: 'maxValue',
-      width: '20%',
-      align: 'center',
-      valueType: 'select',
-      fieldProps:(e, r)=> {
-        return {
-          options: value,
-          disabled: symbol[r.rowKey]
+      render: (_, r) =>{
+        const obj = optionValueObj[r?.id]?.data?.find(item=> item.value === _)
+        if(optionValueObj[r?.id]?.status) {
+          return obj?.['label']
         }
-      },
-      hideInTable: !status
+        return _
+      }
     },
     {
       title: '操作',
@@ -350,45 +495,22 @@ const Popup = ({
       onVisibleChange={setShow}
       onFinish={async (e) => {
         const rules = formTransform(rulesList)
-        if(!isEdit) {
-          feeItemAdd({
-            ...e, 
-            clearingPeriodInterval: clear,
-            clearingType: radioValue,
-            status: 1,
-            rules
-          }).then(res=>{
-            if(res.success) {
-              actionRef.current.reload()
-              message.success('费用新建成功')
-            }
-          })
-        } else {
-          feeItemUpdate({
-            id: dataSource?.id,
-            ...e, 
-            clearingPeriodInterval: clear,
-            clearingType: radioValue,
-            rules
-          }).then(res=> {
-            if(res.success) {
-              actionRef.current.reload()
-              message.success('费用修改成功')
-            }
-          })
-        }
+        await submit(rules, e)
         return true
       }}
       layout='horizontal'
       form={form}
       drawerProps={{
         destroyOnClose: true,
-        closable: false
+        closable: false,
+        onClose: ()=>{
+          setData(null)
+        }
       }}
       width={900}
       submitter={{
         searchConfig: {
-          submitText: '提交审批',
+          submitText: '保存',
           resetText: '取消',
         },
       }}
@@ -398,32 +520,28 @@ const Popup = ({
           <Title level={4}>基本信息</Title>
           <Divider />
           <Paragraph>
-            <ProForm.Group>
+            <ProFormSelect
+              label='业务模式'
+              name='tradeModeId'
+              value={tradeModeId}
+              hidden={true}
+            />
+            <Space size={170}>
               <ProFormText
                 label='费用名称'
                 name='name'
                 width='sm'
+                readonly={isEdit}
+                rules={[{ required: true, message: '请输入费用名称'}]}
               />
-              <ProFormSelect
-                label='业务模式'
-                name='tradeModeId'
+              <ProFormText
+                label='计算优先级'
+                name='orderIndex'
                 width='sm'
-                options={list}
-                allowClear={false}
-                proFieldProps={{
-                  onChange: (e) => {
-                    setTradeModeId(e)
-                  }
-                }}
+                rules={[{ required: true, message: '请输入计算优先级'}]}
               />
-            </ProForm.Group>
-            <ProForm.Group>
-              <ProFormSelect
-                label='收款方'
-                name='recvRoleId'
-                width='sm'
-                options={role}
-              />
+            </Space>
+            <Space size={205}>
               <ProFormSelect
                 label='费用状态'
                 name='status'
@@ -434,62 +552,119 @@ const Popup = ({
                     label: '启用'
                   },
                   {
-                    value: 2,
-                    label: '保存'
+                    value: -1,
+                    label: '禁用'
                   }
                 ]}
-                hidden={!dataSource}
               />
-            </ProForm.Group>
-            <ProForm.Group>
-              <ProFormSelect
-                label='付款方'
-                name='payRoleId'
-                width='sm'
-                labelCol={{ span: 5 }}
-                wrapperCol={{ span: 18 }}
-                options={role}
-              />
-              <ProFormSelect
-                label='手续费承担方'
-                name='serviceChargeRoleId'
-                width='sm'
-                labelCol={{ span: 9 }}
-                wrapperCol={{ span: 13 }}
-                options={role}
-              />
-            </ProForm.Group>
-            <ProForm.Group>
-              <ProFormSelect
-                label='代收方'
-                name='agentRecvRoleId'
-                width='sm'
-                disabled={flag}
-                options={role}
-              />
-              <ProFormCheckbox
-                name='isAgentRecv'
-                fieldProps={{
-                  onChange:(e) => {
-                    if (e.target.checked) {
-                      setFlag(false)
-                    } else {
-                      setFlag(true)
+              {
+                type===2&&
+                <ProFormSelect
+                  label='取整规则'
+                  name='roundType'
+                  width='sm'
+                  options={[
+                    {
+                      label: '向下取整（如：0.119取0.11）',
+                      value: 1
+                    },
+                    {
+                      label: '四舍五入（如：0.156取0.16）',
+                      value: 2
+                    },
+                    {
+                      label: '向上取整（如：0.111取0.12）',
+                      value: 3
                     }
-                  }
-                }}
-              >
-                是否代收
-              </ProFormCheckbox>
-            </ProForm.Group>
-            <ProFormText
-              label='结算周期'
-              name='clearingType'
-              width='sm'
-              fieldProps={{
-                onClick: ()=> setShowModal(true)
-              }}
-            />
+                  ]}
+                />
+              }
+            </Space>
+            {
+              type === 1&&
+              <Space size={210}>
+                <ProFormSelect
+                  label='付款方'
+                  name='payRoleId'
+                  width='sm'
+                  labelCol={{ span: 5 }}
+                  wrapperCol={{ span: 18 }}
+                  options={role}
+                />
+                <ProFormSelect
+                  label='收款方'
+                  name='recvRoleId'
+                  width='sm'
+                  options={role}
+                />
+              </Space>
+            }
+            {
+              type === 1&&
+              <ProForm.Group>
+                <ProFormSelect
+                  label='代收方'
+                  name='agentRecvRoleId'
+                  width='sm'
+                  disabled={flag}
+                  options={role}
+                />
+                <ProFormCheckbox
+                  name='isAgentRecv'
+                  fieldProps={{
+                    onChange:(e) => {
+                      if (e.target.checked) {
+                        setFlag(false)
+                      } else {
+                        setFlag(true)
+                      }
+                    }
+                  }}
+                >
+                  是否代收
+                </ProFormCheckbox>
+                <ProFormSelect
+                  label='通道费承担方'
+                  name='serviceChargeRoleId'
+                  width='sm'
+                  labelCol={{ span: 9 }}
+                  wrapperCol={{ span: 13 }}
+                  options={role}
+                />
+              </ProForm.Group>
+            }
+            {
+              type === 1&&
+              <Space size={185}>
+                <ProFormText
+                  label='结算周期'
+                  name='clearingType'
+                  width='sm'
+                  fieldProps={{
+                    onClick: ()=> setShowModal(true)
+                  }}
+                />
+                <ProFormSelect
+                  label='取整规则'
+                  name='roundType'
+                  width='sm'
+                  options={[
+                    {
+                      label: '向下取整（如：0.119取0.11）',
+                      value: 1
+                    },
+                    {
+                      label: '四舍五入（如：0.156取0.16）',
+                      value: 2
+                    },
+                    {
+                      label: '向上取整（如：0.111取0.12）',
+                      value: 3
+                    }
+                  ]}
+                />
+              </Space>
+            }
           </Paragraph>
         </Typography>
         <Typography>
@@ -547,8 +722,22 @@ const Popup = ({
                       name='formulaId'
                       width='sm'
                       options={formula}
+                      fieldProps={{
+                        onChange: (e)=> {
+                          formulaId[index] = e
+                          setFormulaId(formulaId)
+                        }}
+                      }
                     />
                   </ProForm.Group>
+                  <ProFormText
+                    name='formulaExpress'
+                    readonly
+                    label='公式内容'
+                    fieldProps={{
+                      value: formulaExpress?.find(item=> item.id === formulaId[index])?.express
+                    }}
+                  />
                 </ProForm>
                 <EditableProTable
                   rowKey="id"
@@ -619,15 +808,35 @@ const Popup = ({
                   initValue={1}
                 />
               </div>
-              <Radio value={4}>确认收货</Radio>
               <div style={{display: 'flex', alignItems: 'center'}}>
-                <Radio value={5}>
+                <Radio value={4}>
                   确认收货+
                 </Radio>
-                <MSelect
+                <OrderSelect
+                  handleChange={handleChange}
+                  state={4}
+                />
+              </div>
+              <div style={{display: 'flex', alignItems: 'center'}}>
+                <Radio value={5}>
+                  确认售后+
+                </Radio>
+                <OrderSelect
                   handleChange={handleChange}
                   state={5}
-                  initValue={1}
+                />
+              </div>
+              <div style={{display: 'flex', alignItems: 'center'}}>
+                <Radio value={6}>
+                  每月
+                </Radio>
+                <FormWarp
+                  content={()=>(
+                    <DaySelect handleChange={changeDay}/>
+                  )}
+                  right={()=>(
+                    <div>结算上一自然月（已过售后的）</div>
+                  )}
                 />
               </div>
             </Space>

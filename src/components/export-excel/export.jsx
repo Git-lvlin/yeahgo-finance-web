@@ -3,23 +3,21 @@ import {
   Button, 
   message, 
 } from 'antd'
-
+import { paramsEmptyFilter } from '@/utils/utils'
 import { createExportTask } from '@/services/export-excel/export-template'
 
 const Export = ({type, change, conditions})=> {
   const downExcel = ()=> {
     let str;
     if (typeof conditions === 'function') {
-      str = JSON.stringify(conditions())
+      str = JSON.stringify(paramsEmptyFilter(conditions()))
     } else {
-      str = JSON.stringify(conditions)
+      str = JSON.stringify(paramsEmptyFilter(conditions))
     }
     createExportTask({
       code: type,
       fileName: type + +new Date() + '.xlsx',
-      // TODO:条件
-      queryParamStr: str,
-      // querydesc: ''
+      queryParamStr: str
     }).then(res=> {
       if(res?.success) {
         message.success('导出任务创建成功')
